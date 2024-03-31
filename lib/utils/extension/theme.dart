@@ -1,17 +1,27 @@
 
 
 import 'package:flutter/material.dart';
-
 import '../color/app_color.dart';
 import '../values/app_constant.dart';
 
-AppBar customAppBar(){
-  return AppBar(
-    backgroundColor: AppColor.timberGreen,
-    iconTheme: IconThemeData(color: AppColor.white),
-    elevation: 0,
-  );
+class CustomAppBar extends StatelessWidget implements PreferredSizeWidget{
+  CustomAppBar({super.key,required this.title});
+  String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      backgroundColor: AppColor.timberGreen,
+      iconTheme: IconThemeData(color: AppColor.white),
+      elevation: 0,
+      title: Text(title,style: TextStyle(color: AppColor.white),),
+    );
+  }
+
+  @override
+  Size get preferredSize => Size.fromHeight(kToolbarHeight);
 }
+
 
 class CustomHeader extends StatelessWidget {
   CustomHeader({super.key,required this.title,required this.subtitle});
@@ -67,6 +77,32 @@ class CustomTile extends StatelessWidget {
       leading: Image.asset(imagePath,fit: BoxFit.fill,width: 40),
       title: Text(title,style: TextStyle(color:AppColor.sepiaBlack,fontSize: 20),),
       trailing: Icon(Icons.arrow_forward_ios),
+    );
+  }
+}
+
+class MyBusinessTileUi extends StatelessWidget {
+  MyBusinessTileUi({super.key,required this.title,required this.imagePath,required this.context});
+  BuildContext context;
+  String title, imagePath;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      color: AppColor.white,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          PopupMenuButton(
+            icon: Icon(Icons.more_horiz),
+            itemBuilder: (context) {
+              return [
+                PopupMenuItem(child: Text('Ste')),
+              ];
+            },)
+        ],
+      ),
     );
   }
 }

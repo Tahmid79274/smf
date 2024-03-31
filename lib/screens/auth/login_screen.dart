@@ -24,7 +24,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.white,
-      appBar: customAppBar(),
+      appBar: CustomAppBar(title: ''),
       body: initBuildUi(),
     );
   }
@@ -93,7 +93,7 @@ class _LoginScreenState extends State<LoginScreen> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         CustomButton(content: AppConstant.loginPlainText, contentColor: AppColor.white, backgroundColor: AppColor.killarney, onPressed: (){
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>NavigationScreen()));
         }),
         SizedBox(height: 10,),
         orTextUI(),

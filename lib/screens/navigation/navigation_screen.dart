@@ -3,33 +3,32 @@ import '../../utils/extension/theme.dart';
 import '../../utils/values/app_constant.dart';
 
 import '../../utils/color/app_color.dart';
+import 'home_screen.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class NavigationScreen extends StatefulWidget {
+  const NavigationScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<NavigationScreen> createState() => _NavigationScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _NavigationScreenState extends State<NavigationScreen> {
 
   int currentIndex = 0 ;
+
+  static const List<Widget> _widgetOptions = <Widget>[
+    HomeScreen(),
+    Text('Search Page'),
+    Text('Profile Page'),
+    Text('Settings Page'),
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.aquaHaze,
-      appBar: customAppBar(),
-      body: ListView(
-        padding: EdgeInsets.all(10),
-        children: [
-          CustomTile(title: AppConstant.accountPlainText,imagePath: AppConstant.basePath+AppConstant.accountLogoPath,onTapAction: (){}),
-          SizedBox(height: 10,),
-          CustomTile(title: AppConstant.bloodDonationDirectoryPlainText,imagePath: AppConstant.basePath+AppConstant.bloodDonationLogoPath,onTapAction: (){}),
-          SizedBox(height: 10,),
-          CustomTile(title: AppConstant.manPowerListPlainText,imagePath: AppConstant.basePath+AppConstant.manPowerLogoPath,onTapAction: (){}),
-        ],
-      ),
+      appBar: CustomAppBar(title: ''),
+      body: Center(child: _widgetOptions.elementAt(currentIndex)),
       bottomNavigationBar: BottomNavigationBar(
         onTap: (value) {
           setState(() {

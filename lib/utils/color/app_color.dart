@@ -14,4 +14,6 @@ abstract class AppColor{
   static Color aquaHaze = Color(0xFFEDF4F2);
   static Color nebula = Color(0xFFDAE6E2);
   static Color blueSmoke = Color(0xFF6B847B);
+  static Color noble = Color(0xFFB9B3B3);
+  static Color fruitSalad = Color(0xFF4CAF50);
 }

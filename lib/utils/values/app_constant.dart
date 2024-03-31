@@ -24,6 +24,9 @@ abstract class AppConstant{
   static String accountPlainText = 'অ্যাকাউন্ট';
   static String bloodDonationDirectoryPlainText = 'রক্ত দান ডিরেক্টরি';
   static String manPowerListPlainText = 'জনশক্তি তালিকা';
+  static String searchBloodDonorPlainText = 'একজন রক্তদাতা খুঁজুন';
+  static String bloodGroupPlainText = 'রক্তের গ্রুপ';
+  static String searchPlainText = 'অনুসন্ধান করুন';
 
   //path
 
