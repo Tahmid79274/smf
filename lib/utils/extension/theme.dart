@@ -95,12 +95,30 @@ class MyBusinessTileUi extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           PopupMenuButton(
+            offset: Offset.zero,
             icon: Icon(Icons.more_horiz),
             itemBuilder: (context) {
               return [
                 PopupMenuItem(child: Text('Ste')),
               ];
-            },)
+            },),
+          Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                child: Container(
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.all(10),
+                  child: Image.asset(AppConstant.basePath+AppConstant.fbLogoPath,alignment: Alignment.center,fit: BoxFit.fill,),),
+              ),
+              SizedBox(width: 10,),
+              Expanded(
+                child: Text('Business Name')
+              )
+            ]
+          )
         ],
       ),
     );
