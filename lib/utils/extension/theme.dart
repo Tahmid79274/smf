@@ -88,13 +88,15 @@ class MyBusinessTileUi extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: AppColor.white,
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 10),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),color: AppColor.white,),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         mainAxisSize: MainAxisSize.min,
         children: [
           PopupMenuButton(
+            padding: EdgeInsets.zero,
             offset: Offset.zero,
             icon: Icon(Icons.more_horiz),
             itemBuilder: (context) {
@@ -107,15 +109,19 @@ class MyBusinessTileUi extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Expanded(
-                child: Container(
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.all(10),
-                  child: Image.asset(AppConstant.basePath+AppConstant.fbLogoPath,alignment: Alignment.center,fit: BoxFit.fill,),),
+              Container(
+                width: 50,
+                height: 50,
+                decoration: BoxDecoration(
+                    color: AppColor.fruitSalad,
+                    borderRadius: BorderRadius.circular(50)),
+                alignment: Alignment.center,
+                padding: EdgeInsets.all(10),
+                // child: Image.asset(AppConstant.basePath+AppConstant.fbLogoPath,alignment: Alignment.center,fit: BoxFit.fill,),
               ),
               SizedBox(width: 10,),
               Expanded(
-                child: Text('Business Name')
+                child: Text(AppConstant.manPowerListPlainText,style: TextStyle(fontSize: 20),)
               )
             ]
           )
@@ -125,6 +131,39 @@ class MyBusinessTileUi extends StatelessWidget {
   }
 }
 
+class AddEntryButtonUi extends StatelessWidget {
+  AddEntryButtonUi({super.key,required this.whatToDo});
+  VoidCallback whatToDo;
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      padding: EdgeInsets.zero,
+      onPressed: whatToDo, icon: Icon(Icons.add,size: 25,),style: ButtonStyle(
+        padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(10)),
+        shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
+        side: MaterialStatePropertyAll<BorderSide>(BorderSide(color: AppColor.fruitSalad))),);
+  }
+}
+
+class CustomTextFormField extends StatelessWidget {
+  CustomTextFormField({super.key,required this.hint,required this.controller});
+  String hint;
+  TextEditingController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      controller: controller,
+      decoration: InputDecoration(
+          isDense: true,
+          contentPadding: EdgeInsets.all(10),
+          hintText: hint,border: OutlineInputBorder(
+          borderSide: BorderSide(color: AppColor.grey),
+          borderRadius: BorderRadius.circular(5))),
+    );
+  }
+}
 
 
 Text orTextUI()

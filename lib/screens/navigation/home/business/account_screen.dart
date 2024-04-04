@@ -1,8 +1,12 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
+import 'package:flutter/rendering.dart';
 import 'package:smf/utils/extension/theme.dart';
 
-import '../../../utils/color/app_color.dart';
-import '../../../utils/values/app_constant.dart';
+import '../../../../../../utils/color/app_color.dart';
+import '../../../../../../utils/values/app_constant.dart';
+import 'add_business_screen.dart';
 
 class AccountScreen extends StatefulWidget {
   const AccountScreen({super.key});
@@ -43,6 +47,8 @@ class _AccountScreenState extends State<AccountScreen> {
       children: [
         Expanded(child: TextFormField(
           decoration: InputDecoration(
+            isDense: true,
+            contentPadding: EdgeInsets.symmetric(horizontal: 10),
             suffixIcon: Icon(Icons.search,color: AppColor.alto,),
             hintText: AppConstant.searchPlainText,
             hintStyle: TextStyle(color: AppColor.alto),
@@ -52,9 +58,9 @@ class _AccountScreenState extends State<AccountScreen> {
           ),
         )),
         SizedBox(width: 10,),
-        IconButton(onPressed: (){}, icon: Icon(Icons.add),style: ButtonStyle(
-            shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
-            side: MaterialStatePropertyAll<BorderSide>(BorderSide(color: AppColor.fruitSalad))),)
+        AddEntryButtonUi(whatToDo: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>AddBusinessScreen()));
+        },)
       ],
     );
   }
@@ -65,7 +71,8 @@ class _AccountScreenState extends State<AccountScreen> {
         shrinkWrap: true,
         scrollDirection: Axis.vertical,
         physics: AlwaysScrollableScrollPhysics(),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,crossAxisSpacing: 10,mainAxisSpacing: 10,childAspectRatio: 1.5),
       children: [
         MyBusinessTileUi(title: 'Text',imagePath: 'text',context: context),
         MyBusinessTileUi(title: 'Text',imagePath: 'text',context: context),
