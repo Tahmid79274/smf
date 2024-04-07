@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 abstract class AppColor{
   static Color white = Colors.white;
   static Color grey = Colors.blueGrey;
+  static Color red = Colors.red;
   static Color timberGreen = Color(0xFF182C25);
   static Color grannySmith = Color(0xFF859D95);
   static Color downy = Color(0xFF69CE9F);
@@ -16,4 +17,5 @@ abstract class AppColor{
   static Color blueSmoke = Color(0xFF6B847B);
   static Color noble = Color(0xFFB9B3B3);
   static Color fruitSalad = Color(0xFF4CAF50);
+  static Color butterCup = Color(0xFFF0AD1D);
 }

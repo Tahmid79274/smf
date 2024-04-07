@@ -72,7 +72,7 @@ class WelcomeScreen extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(AppConstant.dontHaveAccountPlainText,style: TextStyle(color: AppColor.grannySmith),),
+            Text(AppConstant.donotHaveAccountPlainText,style: TextStyle(color: AppColor.grannySmith),),
             SizedBox(width: 10,),
             InkWell(
                 onTap: (){

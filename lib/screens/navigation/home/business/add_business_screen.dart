@@ -20,16 +20,6 @@ class _AddBusinessScreenState extends State<AddBusinessScreen> {
   TextEditingController addressController = TextEditingController();
   TextEditingController ownershipController = TextEditingController();
 
-  //late File selectedImage;
-
-  // Future getImage() async {
-  //   var image = await ImagePicker().pickMedia();
-  //
-  //   setState(() {
-  //     selectedImage = File(image!.path);
-  //   });
-  // }
-
   String? _imagePath;
 
   Future<void> _pickImage() async {

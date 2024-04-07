@@ -7,6 +7,7 @@ import 'package:smf/utils/extension/theme.dart';
 import '../../../../../../utils/color/app_color.dart';
 import '../../../../../../utils/values/app_constant.dart';
 import 'add_business_screen.dart';
+import 'business_account_information_screen.dart';
 
 class AccountScreen extends StatefulWidget {
   const AccountScreen({super.key});
@@ -74,12 +75,30 @@ class _AccountScreenState extends State<AccountScreen> {
 
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,crossAxisSpacing: 10,mainAxisSpacing: 10,childAspectRatio: 1.5),
       children: [
-        MyBusinessTileUi(title: 'Text',imagePath: 'text',context: context),
-        MyBusinessTileUi(title: 'Text',imagePath: 'text',context: context),
-        MyBusinessTileUi(title: 'Text',imagePath: 'text',context: context),
-        MyBusinessTileUi(title: 'Text',imagePath: 'text',context: context),
-        MyBusinessTileUi(title: 'Text',imagePath: 'text',context: context),
-        MyBusinessTileUi(title: 'Text',imagePath: 'text',context: context),
+        MyBusinessTileUi(title: 'Text',imagePath: 'text',context: context,onTapAction: (){
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>BusinessAccountInformationScreen()));
+        }),
+        MyBusinessTileUi(title: 'Text',imagePath: 'text',context: context,onTapAction: (){
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>BusinessAccountInformationScreen()));
+        }),
+        MyBusinessTileUi(title: 'Text',imagePath: 'text',context: context,onTapAction: (){
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>BusinessAccountInformationScreen()));
+        }),
+        MyBusinessTileUi(title: 'Text',imagePath: 'text',context: context,onTapAction: (){
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>BusinessAccountInformationScreen()));
+        }),
+        MyBusinessTileUi(title: 'Text',imagePath: 'text',context: context,onTapAction: (){
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>BusinessAccountInformationScreen()));
+        }),
+        MyBusinessTileUi(title: 'Text',imagePath: 'text',context: context,onTapAction: (){
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>BusinessAccountInformationScreen()));
+        }),
+        MyBusinessTileUi(title: 'Text',imagePath: 'text',context: context,onTapAction: (){
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>BusinessAccountInformationScreen()));
+        }),
+        MyBusinessTileUi(title: 'Text',imagePath: 'text',context: context,onTapAction: (){
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>BusinessAccountInformationScreen()));
+        }),
       ],
       ),
     );

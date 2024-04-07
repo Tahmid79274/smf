@@ -7,7 +7,7 @@ abstract class AppConstant{
   static String surahBayinahArabicPlainText = 'إِنَّ الَّذِينَ آمَنُوا وَعَمِلُوا الصَّالِحَاتِ أُولَٰئِكَ هُمْ خَيْرُ الْبَرِيَّةِ';
   static String loginPlainText = 'লগ ইন';
   static String signUpPlainText = 'সাইন আপ';
-  static String dontHaveAccountPlainText = 'অ্যাকাউন্ট নেই?';
+  static String donotHaveAccountPlainText = 'অ্যাকাউন্ট নেই?';
   static String welcomePlainText = 'ফিরে আসার জন্য স্বাগতম';
   static String loginToYourAccountPlainText = 'আপনার অ্যাকাউন্ট লগইন করুন';
   static String emailPlainText = 'ইমেইল';
@@ -33,6 +33,22 @@ abstract class AppConstant{
   static String ownershipPlainText = 'স্বত্বাধিকারী';
   static String addressPlainText = 'ঠিকানা';
   static String logoPlainText = 'লোগো';
+  static String reportPlainText = 'রিপোর্ট ';
+  static String removePlainText = 'মুছে ফেলুন';
+  static String editPlainText = 'ইডিট করুন';
+  static String remainingBalancePlainText = 'অবশিষ্ট্য ব্যালেন্স ';
+  static String expensePlainText = 'ব্যয়';
+  static String incomePlainText = 'আয়';
+  static String datePlainText = 'তারিখ';
+  static String moneyAmountPlainText = 'টাকার পরিমাণ';
+  static String productNamePlainText = 'প্রোডাক্ট এর নাম';
+  static String entryTitlePlainText = 'এন্ট্রি টাইটেল';
+  static String addNewEntryPlainText = 'নতুন এন্ট্রি তৈরি করুন';
+  static String entryTypePlainText = 'এন্ট্রি টাইপ';
+  static String creditPlainText = 'ক্রেডিট';
+  static String debitPlainText = 'ডেবিট';
+  static String entryDetailsPlainText = 'এন্ট্রি বিস্তারিত';
+  static String addImagePlainText = 'অ্যাড ইমেজ';
 
   //path
 
@@ -44,6 +60,10 @@ abstract class AppConstant{
   static String accountLogoPath = 'account_logo.png';
   static String bloodDonationLogoPath = 'blood_donation_logo.png';
   static String manPowerLogoPath = 'man_power_logo.png';
+  static String takaLogoPath = 'taka_logo.png';
+  static String remainingBalanceLogoPath = 'remaining_balance_logo.png';
+  static String expenseLogoPath = 'expense_logo.png';
+  static String incomeLogoPath = 'income_logo.png';
 
   //path
 

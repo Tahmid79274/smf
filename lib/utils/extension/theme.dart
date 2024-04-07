@@ -82,50 +82,70 @@ class CustomTile extends StatelessWidget {
 }
 
 class MyBusinessTileUi extends StatelessWidget {
-  MyBusinessTileUi({super.key,required this.title,required this.imagePath,required this.context});
+  MyBusinessTileUi({super.key,required this.title,required this.imagePath,required this.context,required this.onTapAction});
   BuildContext context;
   String title, imagePath;
+  VoidCallback onTapAction;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10),
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),color: AppColor.white,),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          PopupMenuButton(
-            padding: EdgeInsets.zero,
-            offset: Offset.zero,
-            icon: Icon(Icons.more_horiz),
-            itemBuilder: (context) {
-              return [
-                PopupMenuItem(child: Text('Ste')),
-              ];
-            },),
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                width: 50,
-                height: 50,
-                decoration: BoxDecoration(
-                    color: AppColor.fruitSalad,
-                    borderRadius: BorderRadius.circular(50)),
-                alignment: Alignment.center,
-                padding: EdgeInsets.all(10),
-                // child: Image.asset(AppConstant.basePath+AppConstant.fbLogoPath,alignment: Alignment.center,fit: BoxFit.fill,),
-              ),
-              SizedBox(width: 10,),
-              Expanded(
-                child: Text(AppConstant.manPowerListPlainText,style: TextStyle(fontSize: 20),)
-              )
-            ]
-          )
-        ],
+    return InkWell(
+      onTap: onTapAction,
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 10),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),color: AppColor.white,),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            PopupMenuButton(
+              padding: EdgeInsets.zero,
+              offset: Offset.zero,
+              icon: Icon(Icons.more_horiz),
+              color: AppColor.white,
+              itemBuilder: (context) {
+                return [
+                  PopupMenuItem(
+                      child: Row(
+                    children: [
+                      Icon(Icons.edit_note,color: AppColor.killarney,),
+                      SizedBox(width: 10,),
+                      Text(AppConstant.editPlainText,style: TextStyle(color: AppColor.killarney)),
+                    ],
+                  )),
+                  PopupMenuItem(
+                      child: Row(
+                    children: [
+                      Icon(Icons.delete,color: AppColor.butterCup,),
+                      SizedBox(width: 10,),
+                      Text(AppConstant.removePlainText,style: TextStyle(color: AppColor.butterCup),),
+                    ],
+                  )),
+                ];
+              },),
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  width: 50,
+                  height: 50,
+                  decoration: BoxDecoration(
+                      color: AppColor.fruitSalad,
+                      borderRadius: BorderRadius.circular(50)),
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.all(10),
+                  // child: Image.asset(AppConstant.basePath+AppConstant.fbLogoPath,alignment: Alignment.center,fit: BoxFit.fill,),
+                ),
+                SizedBox(width: 10,),
+                Expanded(
+                  child: Text(AppConstant.manPowerListPlainText,style: TextStyle(fontSize: 20),)
+                )
+              ]
+            )
+          ],
+        ),
       ),
     );
   }
@@ -164,6 +184,169 @@ class CustomTextFormField extends StatelessWidget {
     );
   }
 }
+
+class BasicAquaHazeBGUi extends StatelessWidget {
+  BasicAquaHazeBGUi({super.key,required this.appBarTitle,required this.child});
+  String appBarTitle;
+  Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColor.aquaHaze,
+      appBar: CustomAppBar(title: appBarTitle),
+      body: child,
+    );
+  }
+}
+
+class ReportStatusDetailsUi extends StatelessWidget {
+  ReportStatusDetailsUi({super.key,required this.title,required this.amount,required this.imagePath});
+  String title,amount,imagePath;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        decoration: BoxDecoration(
+            border: Border.all(color: AppColor.grey),
+            borderRadius: BorderRadius.all(Radius.circular(5))
+        ),
+      child: Row(
+        children: [
+          Expanded(
+              flex: 2,
+              child: Padding(
+                padding: const EdgeInsets.all(10),
+                child: Row(
+                  children: [
+                    Image.asset(AppConstant.basePath+imagePath,width: 20,),
+                    SizedBox(width: 10,),
+                    Text(title,style: TextStyle(fontSize: 20),)
+                  ],
+                ),
+              )),
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 10),
+              height: 45,
+              width: 1,
+              color: AppColor.grey,
+            ),
+          Expanded(child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              takaLogo(),
+              SizedBox(width: 5,),
+              Text(amount,style: TextStyle(fontSize: 20)),
+            ],
+          )),
+        ],
+      ),
+    );
+  }
+}
+
+class CardAquaHazeWithColumnIconAndTitle extends StatelessWidget {
+  CardAquaHazeWithColumnIconAndTitle({super.key,required this.title,required this.action});
+  String title;
+  VoidCallback action;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      color: AppColor.aquaHaze,
+      child: InkWell(
+        onTap: action,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.book,color: AppColor.fruitSalad,),
+              SizedBox(height: 10,),
+              Text('মালামাল ক্রয়ের হিসাব ',textAlign: TextAlign.center,maxLines: 2,style: TextStyle(fontSize: 17),)
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+
+Widget takaLogo(){
+  return Image.asset(AppConstant.basePath+AppConstant.takaLogoPath,width: 18,);
+}
+
+class TitleIconButtonWithWhiteBackground extends StatelessWidget {
+  TitleIconButtonWithWhiteBackground({super.key,required this.headline,required this.actionIcon,required this.whatToShow,required this.action});
+  Widget whatToShow;
+  String headline;
+  IconData actionIcon;
+  VoidCallback action;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(10),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),color: AppColor.white,),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // Text(AppConstant.reportPlainText,style: TextStyle(fontSize: 20),),
+                Text(headline,style: TextStyle(fontSize: 20),),
+                IconButton(onPressed: action, icon: Icon(actionIcon),style: ButtonStyle(
+                  //elevation: MaterialStatePropertyAll(10),
+                    shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
+                    side: MaterialStatePropertyAll(BorderSide(color: AppColor.grey))
+                ),)
+              ]
+          ),
+          SizedBox(height: 10,),
+          whatToShow
+        ],
+      ),
+    );
+  }
+}
+
+class BusinessTitleWithIcon extends StatelessWidget {
+  BusinessTitleWithIcon({super.key,required this.title});
+  String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(5),color: AppColor.white,),
+      child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              width: 50,
+              height: 50,
+              decoration: BoxDecoration(
+                  color: AppColor.fruitSalad,
+                  borderRadius: BorderRadius.circular(50)),
+              alignment: Alignment.center,
+              padding: const EdgeInsets.all(10),
+              // child: Image.asset(AppConstant.basePath+AppConstant.fbLogoPath,alignment: Alignment.center,fit: BoxFit.fill,),
+            ),
+            const SizedBox(width: 10,),
+            Text('মালামাল ক্রয়ের হিসাব ',style: const TextStyle(fontSize: 20),)
+          ]
+      ),
+    );
+  }
+}
+
 
 
 Text orTextUI()
