@@ -23,7 +23,7 @@ abstract class AppConstant{
   static String alreadyHaveAnAccountPlainText = 'ইতিমধ্যে একটি অ্যাকাউন্ট  আছে?';
   static String accountPlainText = 'অ্যাকাউন্ট';
   static String bloodDonationDirectoryPlainText = 'রক্ত দান ডিরেক্টরি';
-  static String manPowerListPlainText = 'জনশক্তি তালিকা';
+  static String manPowerListPlainText = 'জনশক্তির তালিকা';
   static String searchBloodDonorPlainText = 'একজন রক্তদাতা খুঁজুন';
   static String bloodGroupPlainText = 'রক্তের গ্রুপ';
   static String searchPlainText = 'অনুসন্ধান করুন';
@@ -49,6 +49,11 @@ abstract class AppConstant{
   static String debitPlainText = 'ডেবিট';
   static String entryDetailsPlainText = 'এন্ট্রি বিস্তারিত';
   static String addImagePlainText = 'অ্যাড ইমেজ';
+  static String manpowerListPlainText = 'জনশক্তির তালিকা';
+  static String manpowerGroupListPlainText = 'জনশক্তির গ্রুপ সমূহ';
+  static String locationPlainText = 'লোকেশান';
+  static String nameOrNumberPlainText = 'নাম বা নাম্বার';
+  static String addManpowerPlainText = 'জনশক্তি যুক্ত করুন';
 
   //path
 

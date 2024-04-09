@@ -3,6 +3,7 @@ import 'package:smf/utils/color/app_color.dart';
 import 'package:smf/utils/values/app_constant.dart';
 
 import '../../../../../utils/extension/theme.dart';
+import 'add_new_transaction_entry_screen.dart';
 
 class BusinessTransactionDetailsScreen extends StatefulWidget {
   const BusinessTransactionDetailsScreen({super.key});
@@ -76,7 +77,9 @@ class _BusinessTransactionDetailsScreenState extends State<BusinessTransactionDe
     return TitleIconButtonWithWhiteBackground(
       headline: AppConstant.entryTitlePlainText,
       actionIcon: Icons.add,
-      action: (){},
+      action: (){
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>AddNewBusinessTransactionEntryScreen()));
+      },
       whatToShow: Table(
         border: TableBorder.all(
             color: AppColor.nebula,

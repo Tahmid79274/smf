@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../utils/color/app_color.dart';
 import '../../../../utils/extension/theme.dart';
 import '../../../../utils/values/app_constant.dart';
+import 'add_business_screen.dart';
 import 'business_transaction/business_transaction_details.dart';
 
 class BusinessAccountInformationScreen extends StatefulWidget {
@@ -87,7 +88,9 @@ class _BusinessAccountInformationScreenState extends State<BusinessAccountInform
     return TitleIconButtonWithWhiteBackground(
       headline: AppConstant.accountPlainText,
       actionIcon: Icons.add,
-      action: (){},
+      action: (){
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>AddBusinessScreen()));
+      },
       whatToShow: GridView(
           shrinkWrap: true,
           physics: const AlwaysScrollableScrollPhysics(),

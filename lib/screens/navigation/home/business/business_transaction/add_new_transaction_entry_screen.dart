@@ -7,14 +7,14 @@ import 'package:smf/utils/values/app_constant.dart';
 import '../../../../../utils/color/app_color.dart';
 import '../../../../../utils/extension/theme.dart';
 
-class AddNewBusinessEntryScreen extends StatefulWidget {
-  const AddNewBusinessEntryScreen({super.key});
+class AddNewBusinessTransactionEntryScreen extends StatefulWidget {
+  const AddNewBusinessTransactionEntryScreen({super.key});
 
   @override
-  State<AddNewBusinessEntryScreen> createState() => _AddNewBusinessEntryScreenState();
+  State<AddNewBusinessTransactionEntryScreen> createState() => _AddNewBusinessTransactionEntryScreenState();
 }
 
-class _AddNewBusinessEntryScreenState extends State<AddNewBusinessEntryScreen> {
+class _AddNewBusinessTransactionEntryScreenState extends State<AddNewBusinessTransactionEntryScreen> {
 
   String? _imagePath;
   bool isDebit = true;

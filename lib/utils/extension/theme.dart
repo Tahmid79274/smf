@@ -195,7 +195,10 @@ class BasicAquaHazeBGUi extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColor.aquaHaze,
       appBar: CustomAppBar(title: appBarTitle),
-      body: child,
+      body: Padding(
+        padding: const EdgeInsets.all(10),
+        child: child,
+      ),
     );
   }
 }
@@ -252,7 +255,8 @@ class CardAquaHazeWithColumnIconAndTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return Card(margin: EdgeInsets.zero,
+      clipBehavior: Clip.antiAliasWithSaveLayer,
       color: AppColor.aquaHaze,
       child: InkWell(
         onTap: action,
@@ -340,7 +344,7 @@ class BusinessTitleWithIcon extends StatelessWidget {
               // child: Image.asset(AppConstant.basePath+AppConstant.fbLogoPath,alignment: Alignment.center,fit: BoxFit.fill,),
             ),
             const SizedBox(width: 10,),
-            Text('মালামাল ক্রয়ের হিসাব ',style: const TextStyle(fontSize: 20),)
+            Text(title,style: const TextStyle(fontSize: 20),)
           ]
       ),
     );
