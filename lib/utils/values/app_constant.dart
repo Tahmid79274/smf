@@ -54,6 +54,17 @@ abstract class AppConstant{
   static String locationPlainText = 'লোকেশান';
   static String nameOrNumberPlainText = 'নাম বা নাম্বার';
   static String addManpowerPlainText = 'জনশক্তি যুক্ত করুন';
+  static String addPicturePlainText = 'ছবি যুক্ত করুন';
+  static String addPlainText = 'যুক্ত করুন';
+  static String divisionPlainText = 'বিভাগ';
+  static String postCodePlainText = 'পোস্ট কোড';
+  static String districtNamePlainText = 'জেলার নাম';
+  static String cityNamePlainText = 'শহরের নাম';
+  static String mobileNumberPlainText = 'মোবাইল নাম্বার';
+  static String addBloodDonorPlainText = 'একজন রক্তদাতা যুক্ত করুন';
+  static String dateOfBirthPlainText = 'জন্ম তারিখ';
+  static String rhPlainText = 'আরএইচ';
+  static String phoneNumberPlainText = 'ফোন নাম্বার';
 
   //path
 

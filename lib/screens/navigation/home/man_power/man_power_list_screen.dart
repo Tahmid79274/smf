@@ -96,7 +96,9 @@ class _ManPowerGroupListScreenState extends State<ManPowerGroupListScreen> {
     return TitleIconButtonWithWhiteBackground(
       headline: 'মোট জনশক্তি ১৫৬ জন',
       actionIcon: Icons.add,
-      action: (){},
+      action: (){
+      Navigator.push(context,MaterialPageRoute(builder: (context)=>AddManpowerScreen()));
+    },
       whatToShow: Column(
           children: [
             ManPowerTile(imagePath: '',name: 'Tahmid',address: 'Dhaka',phone: '328939428'),
@@ -120,9 +122,6 @@ class ManPowerTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      onTap: (){
-        Navigator.push(context,MaterialPageRoute(builder: (context)=>AddManpowerScreen()));
-      },
       leading: CircleAvatar(
       ),
       title: Text(name,style: TextStyle(fontSize: 20,color: AppColor.sepiaBlack),),

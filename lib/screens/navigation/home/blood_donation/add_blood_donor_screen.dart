@@ -1,5 +1,3 @@
-
-
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -9,21 +7,25 @@ import 'package:smf/utils/values/app_constant.dart';
 
 import '../../../../utils/color/app_color.dart';
 
-class AddManpowerScreen extends StatefulWidget {
-  const AddManpowerScreen({super.key});
+class AddBloodDonorScreen extends StatefulWidget {
+  const AddBloodDonorScreen({super.key});
 
   @override
-  State<AddManpowerScreen> createState() => _AddManpowerScreenState();
+  State<AddBloodDonorScreen> createState() => _AddBloodDonorScreenState();
 }
 
-class _AddManpowerScreenState extends State<AddManpowerScreen> {
+class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
 
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   TextEditingController nameController = TextEditingController();
-  TextEditingController mobileNumberController = TextEditingController();
+  TextEditingController dateOfBirthController = TextEditingController();
+  TextEditingController bloodGroupController = TextEditingController();
+  TextEditingController rhController = TextEditingController();
+  TextEditingController phoneNumberController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
   TextEditingController cityNameController = TextEditingController();
   TextEditingController districtNameController = TextEditingController();
-  TextEditingController postCodeController = TextEditingController();
+  TextEditingController postController = TextEditingController();
   TextEditingController divisionController = TextEditingController();
 
   String? _imagePath;
@@ -42,17 +44,22 @@ class _AddManpowerScreenState extends State<AddManpowerScreen> {
   @override
   void dispose(){
     nameController.dispose();
-    mobileNumberController.dispose();
+    dateOfBirthController.dispose();
+    bloodGroupController.dispose();
+    rhController.dispose();
+    phoneNumberController.dispose();
+    emailController.dispose();
     cityNameController.dispose();
     districtNameController.dispose();
-    postCodeController.dispose();
+    postController.dispose();
     divisionController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BasicAquaHazeBGUi(appBarTitle: AppConstant.addManpowerPlainText, child: initBuildUi());
+    return BasicAquaHazeBGUi(
+        appBarTitle: AppConstant.addBloodDonorPlainText, child: SingleChildScrollView(child: initBuildUi()));
   }
 
   Widget initBuildUi(){
@@ -86,15 +93,33 @@ class _AddManpowerScreenState extends State<AddManpowerScreen> {
                 const SizedBox(height: 10,),
                 CustomTextFormField(hint: AppConstant.namePlainText,controller: nameController),
                 SizedBox(height: 10,),
-                CustomTextFormField(hint: AppConstant.mobileNumberPlainText,controller: mobileNumberController),
+                CustomTextFormField(hint: AppConstant.dateOfBirthPlainText,controller: dateOfBirthController,onTap: (){
+
+
+                  setState(() {
+
+                  });
+                },),
                 SizedBox(height: 10,),
-                CustomTextFormField(hint: AppConstant.cityNamePlainText,controller: cityNameController),
+                CustomTextFormField(hint: AppConstant.bloodGroupPlainText,controller: bloodGroupController),
                 SizedBox(height: 10,),
-                CustomTextFormField(hint: AppConstant.districtNamePlainText,controller: districtNameController),
+                CustomTextFormField(hint: AppConstant.rhPlainText,controller: rhController),
                 SizedBox(height: 10,),
-                CustomTextFormField(hint: AppConstant.postCodePlainText,controller: postCodeController),
+                CustomTextFormField(hint: AppConstant.phoneNumberPlainText,controller: phoneNumberController),
                 SizedBox(height: 10,),
-                CustomTextFormField(hint: AppConstant.divisionPlainText,controller: divisionController),
+                CustomTextFormField(hint: AppConstant.emailPlainText,controller: emailController),
+                SizedBox(height: 10,),
+                GridView(
+                  shrinkWrap: true,
+                  physics: AlwaysScrollableScrollPhysics(),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,),
+                  children: [
+                    CustomTextFormField(hint: AppConstant.cityNamePlainText,controller: cityNameController),
+                    CustomTextFormField(hint: AppConstant.districtNamePlainText,controller: districtNameController),
+                    CustomTextFormField(hint: AppConstant.postCodePlainText,controller: postController),
+                    CustomTextFormField(hint: AppConstant.divisionPlainText,controller: divisionController),
+                  ],
+                ),
               ],
             ),
             CustomButton(
@@ -105,5 +130,4 @@ class _AddManpowerScreenState extends State<AddManpowerScreen> {
           ],
         ));
   }
-
 }

@@ -167,13 +167,15 @@ class AddEntryButtonUi extends StatelessWidget {
 }
 
 class CustomTextFormField extends StatelessWidget {
-  CustomTextFormField({super.key,required this.hint,required this.controller});
+  CustomTextFormField({super.key,required this.hint,required this.controller,this.onTap});
   String hint;
   TextEditingController controller;
+  VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      onTap: onTap,
       controller: controller,
       decoration: InputDecoration(
           isDense: true,

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'screens/auth/welcome_screen.dart';
-import 'screens/navigation/home/man_power/man_power_group.dart';
-import 'screens/navigation/home/man_power/man_power_list_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -20,7 +18,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: const ManPowerGroupListScreen(),
+        home: const WelcomeScreen(),
       );
   }
 }

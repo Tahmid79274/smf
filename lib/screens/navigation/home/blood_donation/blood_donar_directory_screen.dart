@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:smf/utils/extension/theme.dart';
 
-import '../../../utils/color/app_color.dart';
-import '../../../utils/values/app_constant.dart';
+import '../../../../utils/color/app_color.dart';
+import '../../../../utils/values/app_constant.dart';
+import 'add_blood_donor_screen.dart';
 
 class BloodDonorDirectoryScreen extends StatefulWidget {
   const BloodDonorDirectoryScreen({super.key});
@@ -18,11 +19,8 @@ class _BloodDonorDirectoryScreenState extends State<BloodDonorDirectoryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColor.white,
-      appBar: CustomAppBar(title: AppConstant.searchBloodDonorPlainText),
-      body: initBuildUi(),
-    );
+    return BasicAquaHazeBGUi(appBarTitle: AppConstant.searchBloodDonorPlainText,
+        child: initBuildUi());
   }
 
   Widget initBuildUi(){
@@ -32,7 +30,7 @@ class _BloodDonorDirectoryScreenState extends State<BloodDonorDirectoryScreen> {
         mainAxisSize: MainAxisSize.max,
         children: [
           initBloodDonorFilter(),
-          //initBloodDonorList(),
+          initBloodDonorList(),
         ],
       ),
     );
@@ -125,6 +123,12 @@ class _BloodDonorDirectoryScreenState extends State<BloodDonorDirectoryScreen> {
   }
 
   Widget initBloodDonorList(){
-    return ListView();
+    return TitleIconButtonWithWhiteBackground(headline: 'মোট রক্তদাতা ১৫৬ জন',
+    actionIcon: Icons.add,
+      action: (){
+      Navigator.push(context, MaterialPageRoute(builder: (context)=>AddBloodDonorScreen()));
+      },
+      whatToShow: Column(),
+    );
   }
 }
