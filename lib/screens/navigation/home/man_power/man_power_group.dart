@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../utils/color/app_color.dart';
 import '../../../../utils/extension/theme.dart';
 import '../../../../utils/values/app_constant.dart';
+import 'add_man_power_screen.dart';
 import 'man_power_list_screen.dart';
 
 class ManPowerGroupScreen extends StatefulWidget {
@@ -50,44 +51,46 @@ class _ManPowerGroupScreenState extends State<ManPowerGroupScreen> {
     return TitleIconButtonWithWhiteBackground(
       headline: AppConstant.manpowerGroupListPlainText,
       actionIcon: Icons.add,
-      action: (){},
+      action: (){
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>AddManpowerScreen()));
+      },
       whatToShow: GridView(
         physics: AlwaysScrollableScrollPhysics(),
         shrinkWrap: true,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3,crossAxisSpacing: 10,mainAxisSpacing: 10,childAspectRatio: 1),
         children: [
           CardAquaHazeWithColumnIconAndTitle(
-            title: '',
+            title: 'রেজা ওভারসিস',
             action: (){
               Navigator.push(context, MaterialPageRoute(builder: (context)=>ManPowerGroupListScreen()));
             },
           ),
           CardAquaHazeWithColumnIconAndTitle(
-            title: '',
+            title: 'রেজা ওভারসিস',
             action: (){
               Navigator.push(context, MaterialPageRoute(builder: (context)=>ManPowerGroupListScreen()));
             },
           ),
           CardAquaHazeWithColumnIconAndTitle(
-            title: '',
+            title: 'রেজা ওভারসিস',
             action: (){
               Navigator.push(context, MaterialPageRoute(builder: (context)=>ManPowerGroupListScreen()));
             },
           ),
           CardAquaHazeWithColumnIconAndTitle(
-            title: '',
+            title: 'রেজা ওভারসিস',
             action: (){
               Navigator.push(context, MaterialPageRoute(builder: (context)=>ManPowerGroupListScreen()));
             },
           ),
           CardAquaHazeWithColumnIconAndTitle(
-            title: '',
+            title: 'রেজা ওভারসিস',
             action: (){
               Navigator.push(context, MaterialPageRoute(builder: (context)=>ManPowerGroupListScreen()));
             },
           ),
           CardAquaHazeWithColumnIconAndTitle(
-            title: '',
+            title: 'রেজা ওভারসিস',
             action: (){
               Navigator.push(context, MaterialPageRoute(builder: (context)=>ManPowerGroupListScreen()));
             },

@@ -270,7 +270,7 @@ class CardAquaHazeWithColumnIconAndTitle extends StatelessWidget {
             children: [
               Icon(Icons.book,color: AppColor.fruitSalad,),
               SizedBox(height: 10,),
-              Text('মালামাল ক্রয়ের হিসাব ',textAlign: TextAlign.center,maxLines: 2,style: TextStyle(fontSize: 17),)
+              Text(title,textAlign: TextAlign.center,maxLines: 2,style: TextStyle(fontSize: 17),)
             ],
           ),
         ),

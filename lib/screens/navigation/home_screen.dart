@@ -6,6 +6,7 @@ import '../../utils/extension/theme.dart';
 import '../../utils/values/app_constant.dart';
 import 'home/business/account_screen.dart';
 import 'home/blood_donation/blood_donar_directory_screen.dart';
+import 'home/man_power/man_power_group.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -25,7 +26,9 @@ class HomeScreen extends StatelessWidget {
               Navigator.push(context, MaterialPageRoute(builder: (context)=>BloodDonorDirectoryScreen()));
             }),
             SizedBox(height: 10,),
-            CustomTile(title: AppConstant.manPowerListPlainText,imagePath: AppConstant.basePath+AppConstant.manPowerLogoPath,onTapAction: (){}),
+            CustomTile(title: AppConstant.manPowerListPlainText,imagePath: AppConstant.basePath+AppConstant.manPowerLogoPath,onTapAction: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>ManPowerGroupScreen()));
+            }),
           ],
         )
     );

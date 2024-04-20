@@ -14,22 +14,23 @@ class NavigationScreen extends StatefulWidget {
 
 class _NavigationScreenState extends State<NavigationScreen> {
 
-  int currentIndex = 0 ;
-
-  static const List<Widget> _widgetOptions = <Widget>[
-    HomeScreen(),
-    Text('Search Page'),
-    Text('Profile Page'),
-    Text('Settings Page'),
-  ];
+  // int currentIndex = 0 ;
+  //
+  // static const List<Widget> _widgetOptions = <Widget>[
+  //   HomeScreen(),
+  //   Text('Search Page'),
+  //   Text('Profile Page'),
+  //   Text('Settings Page'),
+  // ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.aquaHaze,
       appBar: CustomAppBar(title: ''),
-      body: Center(child: _widgetOptions.elementAt(currentIndex)),
-      bottomNavigationBar: BottomNavigationBar(
+      //body: Center(child: HomeScreen()),
+      body: HomeScreen(),
+      /*bottomNavigationBar: BottomNavigationBar(
         onTap: (value) {
           setState(() {
             currentIndex=value;
@@ -46,7 +47,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
           BottomNavigationBarItem(icon: Icon(Icons.person),label: '',backgroundColor: AppColor.timberGreen,),
           BottomNavigationBarItem(icon: Icon(Icons.search),label: '',backgroundColor: AppColor.timberGreen,),
         ],
-      ),
+      ),*/
     );
   }
 }

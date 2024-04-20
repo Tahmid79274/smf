@@ -94,21 +94,21 @@ class _BusinessAccountInformationScreenState extends State<BusinessAccountInform
       whatToShow: GridView(
           shrinkWrap: true,
           physics: const AlwaysScrollableScrollPhysics(),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),padding: const EdgeInsets.all(10),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, mainAxisSpacing: 10,crossAxisSpacing: 10),padding: const EdgeInsets.all(10),
       children: [
-        CardAquaHazeWithColumnIconAndTitle(title: '',action: (){
+        CardAquaHazeWithColumnIconAndTitle(title: 'লাভ/ ক্ষতি হিসাব',action: (){
           Navigator.push(context, MaterialPageRoute(builder: (context)=> const BusinessTransactionDetailsScreen()));
         }),
-        CardAquaHazeWithColumnIconAndTitle(title: '',action: (){
+        CardAquaHazeWithColumnIconAndTitle(title: 'লাভ/ ক্ষতি হিসাব',action: (){
           Navigator.push(context, MaterialPageRoute(builder: (context)=> const BusinessTransactionDetailsScreen()));
         }),
-        CardAquaHazeWithColumnIconAndTitle(title: '',action: (){
+        CardAquaHazeWithColumnIconAndTitle(title: 'লাভ/ ক্ষতি হিসাব',action: (){
           Navigator.push(context, MaterialPageRoute(builder: (context)=> const BusinessTransactionDetailsScreen()));
         }),
-        CardAquaHazeWithColumnIconAndTitle(title: '',action: (){
+        CardAquaHazeWithColumnIconAndTitle(title: 'লাভ/ ক্ষতি হিসাব',action: (){
           Navigator.push(context, MaterialPageRoute(builder: (context)=> const BusinessTransactionDetailsScreen()));
         }),
-        CardAquaHazeWithColumnIconAndTitle(title: '',action: (){
+        CardAquaHazeWithColumnIconAndTitle(title: 'লাভ/ ক্ষতি হিসাব',action: (){
           Navigator.push(context, MaterialPageRoute(builder: (context)=> const BusinessTransactionDetailsScreen()));
         }),
       ],
