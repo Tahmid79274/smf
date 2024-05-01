@@ -65,10 +65,19 @@ abstract class AppConstant{
   static String dateOfBirthPlainText = 'জন্ম তারিখ';
   static String rhPlainText = 'আরএইচ';
   static String phoneNumberPlainText = 'ফোন নাম্বার';
+  static String eligiblePlainText = 'যোগ্য';
+  static String notEligiblePlainText = 'অযোগ্য';
+  static String dateTodayPlainText = 'আজকের তারিখ';
+  static String selectDatePlainText = 'তারিখ সিলেক্ট করুন';
+  static String nextDateToAbleToDonateBloodPlainText = 'নতুন রক্তদানের তারিখ';
+  static String notAbleToDonateBloodPlainText = 'রক্তদানে অযোগ্য';
+  static String ableToDonateBloodPlainText = 'রক্তদানে যোগ্য';
+  static String abilityToDonateBloodPlainText = 'রক্তদানের ক্ষমতা';
+  static String lastDateOfBloodDonationPlainText = 'শেষ রক্তদানের তারিখ';
 
-  //path
+  //image_path
 
-  static String basePath = 'assets/images/';
+  static String imageBasePath = 'assets/images/';
   static String smfLogoPath = 'smf_logo.png';
   static String welcomeLogoPath = 'welcome_img.png';
   static String fbLogoPath = 'facebook.png';
@@ -76,11 +85,29 @@ abstract class AppConstant{
   static String accountLogoPath = 'account_logo.png';
   static String bloodDonationLogoPath = 'blood_donation_logo.png';
   static String manPowerLogoPath = 'man_power_logo.png';
+  static String manPowerGroupLogoPath = 'manpowerLogo.png';
   static String takaLogoPath = 'taka_logo.png';
   static String remainingBalanceLogoPath = 'remaining_balance_logo.png';
   static String expenseLogoPath = 'expense_logo.png';
   static String incomeLogoPath = 'income_logo.png';
+  static String ableToDonateBloodLogoPath = 'able_to_donate_blood_logo.png';
+  static String notAbleToDonateBloodLogoPath = 'not_able_to_donate_blood_logo.png';
 
-  //path
+  //db_path
+  //table_path
+  static String manPowerGroupPath = 'man_power_groups';
+  static String bloodDonorGroupPath = 'blood_donor_list';
 
+  static String nameColumnText = 'name';
+  static String dateOfBirthColumnText = 'date_of_birth';
+  static String bloodGroupColumnText = 'blood_group';
+  static String rhFactorColumnText = 'rh_factor';
+  static String emailColumnText = 'email';
+  static String mobileColumnText = 'mobile';
+  static String cityNameColumnText = 'city_name';
+  static String districtNameColumnText = 'district_name';
+  static String postCodeColumnText = 'post_code';
+  static String divisionColumnText = 'division_name';
+  static String lastDateOfBloodDonationColumnText = 'last_date_of_blood_donation';
+  static String profileImageColumnText = 'profile_image';
 }

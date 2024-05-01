@@ -1,11 +1,15 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:smf/utils/extension/theme.dart';
 import '../../../../utils/color/app_color.dart';
+import '../../../../utils/functionalities/functions.dart';
 import '../../../../utils/values/app_constant.dart';
 import './add_man_power_screen.dart';
 
 class ManPowerGroupListScreen extends StatefulWidget {
-  const ManPowerGroupListScreen({super.key});
+  ManPowerGroupListScreen({super.key,required this.selectedGroup});
+  String selectedGroup;
 
   @override
   State<ManPowerGroupListScreen> createState() => _ManPowerGroupListScreenState();
@@ -15,6 +19,46 @@ class _ManPowerGroupListScreenState extends State<ManPowerGroupListScreen> {
 
   List<String> locations = ['Dhaka','Barisal','Chittagong'];
 
+  List<String> groups = [];
+  Map<String,String> groupMap = {};
+
+  Future<List<String>>? _groupMemberFuture;
+
+  Future<List<String>> getGroupMemberList() async {
+    print('Initiated Man Power Group List of ${widget.selectedGroup}');
+    FirebaseDatabase database = FirebaseDatabase.instance;
+    final firebaseApp = Firebase.app();
+    final rtdb = FirebaseDatabase.instanceFor(
+        app: firebaseApp,
+        databaseURL: 'https://smfmobileapp-5b74e-default-rtdb.firebaseio.com/');
+
+    //database.ref("${AppConstant.manPowerGroupPath}/${groupNameController.text}/people0");
+    DatabaseReference ref = database.ref("${AppConstant.manPowerGroupPath}/${widget.selectedGroup}/");
+    //print(ref.);
+    groups.clear();
+    await ref.once().then((event) {
+      if (event.snapshot.exists) {
+        // Extract the data as a Map
+        Map<dynamic, dynamic> groupData =
+        event.snapshot.value as Map<dynamic, dynamic>;
+        print('Memeber List:$groupData}');
+        for (var key in groupData.keys) {
+
+        }
+        print('Group Map:$groupMap');
+      } else {
+        print("Group with ID '123' does not exist.");
+      }
+    });
+    return groups;
+  }
+
+
+  @override
+  void initState(){
+    super.initState();
+    _groupMemberFuture = getGroupMemberList();
+  }
   @override
   Widget build(BuildContext context) {
     return BasicAquaHazeBGUi(appBarTitle: AppConstant.manPowerListPlainText,
@@ -36,7 +80,7 @@ class _ManPowerGroupListScreenState extends State<ManPowerGroupListScreen> {
   }
 
   Widget initManPowerGroupNameUi(){
-    return BusinessTitleWithIcon(title: AppConstant.manPowerListPlainText);
+    return BusinessTitleWithIcon(title: GlobalVar.customNameDecoder(widget.selectedGroup));
   }
 
   Widget initSearchDonorUi(){
@@ -97,9 +141,10 @@ class _ManPowerGroupListScreenState extends State<ManPowerGroupListScreen> {
       headline: 'মোট জনশক্তি ১৫৬ জন',
       actionIcon: Icons.add,
       action: (){
-      Navigator.push(context,MaterialPageRoute(builder: (context)=>AddManpowerScreen()));
+      Navigator.push(context,MaterialPageRoute(builder: (context)=>AddManpowerScreen(groupName: widget.selectedGroup,)));
     },
-      whatToShow: Column(
+      whatToShow:
+      Column(
           children: [
             ManPowerTile(imagePath: '',name: 'Tahmid',address: 'Dhaka',phone: '328939428'),
             ManPowerTile(imagePath: '',name: 'Tahmid',address: 'Dhaka',phone: '328939428'),

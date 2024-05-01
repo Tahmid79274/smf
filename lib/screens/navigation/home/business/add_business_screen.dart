@@ -62,11 +62,11 @@ class _AddBusinessScreenState extends State<AddBusinessScreen> {
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  CustomTextFormField(hint: AppConstant.companyNamePlainText,controller: companyNameController),
+                  CustomTextFormField(hint: AppConstant.companyNamePlainText,controller: companyNameController,keyboardInputType: TextInputType.text),
                   SizedBox(height: 10,),
-                  CustomTextFormField(hint: AppConstant.addressPlainText,controller: addressController),
+                  CustomTextFormField(hint: AppConstant.addressPlainText,controller: addressController,keyboardInputType: TextInputType.text),
                   SizedBox(height: 10,),
-                  CustomTextFormField(hint: AppConstant.ownershipPlainText,controller: ownershipController),
+                  CustomTextFormField(hint: AppConstant.ownershipPlainText,controller: ownershipController,keyboardInputType: TextInputType.text),
                   SizedBox(height: 10,),
                   _imagePath == null ? InkWell(
                     onTap: _pickImage,

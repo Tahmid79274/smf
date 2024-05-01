@@ -18,4 +18,5 @@ abstract class AppColor{
   static Color noble = Color(0xFFB9B3B3);
   static Color fruitSalad = Color(0xFF4CAF50);
   static Color butterCup = Color(0xFFF0AD1D);
+  static Color carnation = Color(0xFFFA5252);
 }

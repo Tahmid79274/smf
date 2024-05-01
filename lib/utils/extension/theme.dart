@@ -1,5 +1,6 @@
 
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../color/app_color.dart';
 import '../values/app_constant.dart';
@@ -167,17 +168,27 @@ class AddEntryButtonUi extends StatelessWidget {
 }
 
 class CustomTextFormField extends StatelessWidget {
-  CustomTextFormField({super.key,required this.hint,required this.controller,this.onTap});
+  CustomTextFormField({super.key,required this.hint,required this.controller,this.onTap,required this.keyboardInputType,this.suffixIcon});
   String hint;
   TextEditingController controller;
   VoidCallback? onTap;
+  TextInputType keyboardInputType;
+  IconData? suffixIcon;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      validator: (value) {
+        if(value == null || value.isEmpty){
+          return "Please don't leave this field.";
+        }
+        return null;
+      },
+      keyboardType: keyboardInputType,
       onTap: onTap,
       controller: controller,
       decoration: InputDecoration(
+        suffixIcon: suffixIcon!=null?Icon(suffixIcon!):null,
           isDense: true,
           contentPadding: EdgeInsets.all(10),
           hintText: hint,border: OutlineInputBorder(
@@ -224,7 +235,7 @@ class ReportStatusDetailsUi extends StatelessWidget {
                 padding: const EdgeInsets.all(10),
                 child: Row(
                   children: [
-                    Image.asset(AppConstant.basePath+imagePath,width: 20,),
+                    Image.asset(AppConstant.imageBasePath+imagePath,width: 20,),
                     SizedBox(width: 10,),
                     Text(title,style: TextStyle(fontSize: 20),)
                   ],
@@ -265,12 +276,12 @@ class CardAquaHazeWithColumnIconAndTitle extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.book,color: AppColor.fruitSalad,),
+              Image.asset(AppConstant.imageBasePath+AppConstant.manPowerGroupLogoPath,width: 30,height: 30,),
               SizedBox(height: 10,),
-              Text(title,textAlign: TextAlign.center,maxLines: 2,style: TextStyle(fontSize: 17),)
+              Text(title,textAlign: TextAlign.center,maxLines: 2,style: TextStyle(fontSize: 17),overflow: TextOverflow.visible,)
             ],
           ),
         ),
@@ -281,7 +292,7 @@ class CardAquaHazeWithColumnIconAndTitle extends StatelessWidget {
 
 
 Widget takaLogo(){
-  return Image.asset(AppConstant.basePath+AppConstant.takaLogoPath,width: 18,);
+  return Image.asset(AppConstant.imageBasePath+AppConstant.takaLogoPath,width: 18,);
 }
 
 class TitleIconButtonWithWhiteBackground extends StatelessWidget {
@@ -294,24 +305,27 @@ class TitleIconButtonWithWhiteBackground extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(10),
+      // padding: EdgeInsets.all(10),
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),color: AppColor.white,),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                // Text(AppConstant.reportPlainText,style: TextStyle(fontSize: 20),),
-                Text(headline,style: TextStyle(fontSize: 20),),
-                IconButton(onPressed: action, icon: Icon(actionIcon),style: ButtonStyle(
-                  //elevation: MaterialStatePropertyAll(10),
-                    shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
-                    side: MaterialStatePropertyAll(BorderSide(color: AppColor.grey))
-                ),)
-              ]
+          Padding(
+            padding: EdgeInsets.all(10),
+            child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  // Text(AppConstant.reportPlainText,style: TextStyle(fontSize: 20),),
+                  Text(headline,style: TextStyle(fontSize: 20),),
+                  IconButton(onPressed: action, icon: Icon(actionIcon),style: ButtonStyle(
+                    //elevation: MaterialStatePropertyAll(10),
+                      shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
+                      side: MaterialStatePropertyAll(BorderSide(color: AppColor.grey))
+                  ),)
+                ]
+            ),
           ),
           SizedBox(height: 10,),
           whatToShow
@@ -335,16 +349,7 @@ class BusinessTitleWithIcon extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Container(
-              width: 50,
-              height: 50,
-              decoration: BoxDecoration(
-                  color: AppColor.fruitSalad,
-                  borderRadius: BorderRadius.circular(50)),
-              alignment: Alignment.center,
-              padding: const EdgeInsets.all(10),
-              // child: Image.asset(AppConstant.basePath+AppConstant.fbLogoPath,alignment: Alignment.center,fit: BoxFit.fill,),
-            ),
+            Image.asset(AppConstant.imageBasePath+AppConstant.manPowerGroupLogoPath,width: 30,height: 30,),
             const SizedBox(width: 10,),
             Text(title,style: const TextStyle(fontSize: 20),)
           ]
@@ -366,9 +371,9 @@ Widget socialLoginUi(){
     crossAxisAlignment: CrossAxisAlignment.start,
     mainAxisSize: MainAxisSize.min,
     children: [
-      InkWell(child: Image.asset(AppConstant.basePath+AppConstant.googleLogoPath,width: 50),),
+      InkWell(child: Image.asset(AppConstant.imageBasePath+AppConstant.googleLogoPath,width: 50),),
       SizedBox(width: 20,),
-      InkWell(child: Image.asset(AppConstant.basePath+AppConstant.fbLogoPath,width: 50),),
+      InkWell(child: Image.asset(AppConstant.imageBasePath+AppConstant.fbLogoPath,width: 50),),
     ],
   );
 }
@@ -402,4 +407,165 @@ Column headerWithTextFormField(String headline,String hintText,TextEditingContro
       ),
     ],
   );
+}
+
+class CustomDropdownButton extends StatelessWidget {
+  CustomDropdownButton({super.key,required this.hintText,required this.dropdownList,required this.onChangedAction});
+  List<String> dropdownList;
+  String hintText;
+  void Function(String?)? onChangedAction;
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButtonFormField<String>(
+      icon: Icon(Icons.keyboard_arrow_down),
+      padding: EdgeInsets.zero,
+      hint: Text(hintText,overflow: TextOverflow.ellipsis,),
+      isDense: true,
+      decoration: InputDecoration(
+        isDense: true,
+        contentPadding: EdgeInsets.only(left: 5,top: 10 ,bottom: 7),
+        border: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.red),
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+      ),
+      //value: selectedBloodGroup, // Set the currently selected value
+      items: dropdownList.map((String dropDownValues) {
+        return DropdownMenuItem<String>(
+          alignment: Alignment.center,
+          value: dropDownValues,
+          child: Text(dropDownValues,overflow: TextOverflow.ellipsis),
+        );
+      }).toList(),
+      onChanged: onChangedAction,
+    );
+  }
+}
+
+class BloodDonorInformationTab extends StatelessWidget {
+  BloodDonorInformationTab({super.key,required this.donorName,required this.bloodGroupWithRh, required this.isEligible});
+  String donorName,bloodGroupWithRh;
+  bool isEligible;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        // boxShadow: [BoxShadow(color: AppColor.grey,spreadRadius: 5,blurRadius: BorderSide.strokeAlignOutside,offset: Offset.fromDirection(5))],
+        color: AppColor.white,
+        border: Border.all(color: AppColor.grey,width: 0.5),
+        borderRadius: BorderRadius.all(Radius.circular(5))
+      ),
+      margin: const EdgeInsets.symmetric(vertical: 8.0,horizontal: 5),
+      child: Row(
+        children: [
+          Container(
+            margin: EdgeInsets.only(left: 10,top: 10,bottom: 10,),
+            width: 50,
+            height: 50,
+            decoration: BoxDecoration(shape: BoxShape.circle,color: AppColor.sepiaBlack),
+          ),
+          SizedBox(width: 10,),
+          Text('Shraban Ahmed',style: TextStyle(fontWeight: FontWeight.bold),),
+          SizedBox(width: 10,),
+          Container(color: AppColor.grey,width: 0.5,height: 70,),
+          SizedBox(width: 10,),
+          Text('A+',style: TextStyle(fontWeight: FontWeight.bold),),
+          SizedBox(width: 10,),
+          Container(color: AppColor.grey,width: 0.5,height: 70,),
+          SizedBox(width: 10,),
+          Text(AppConstant.eligiblePlainText,style: TextStyle(fontWeight: FontWeight.bold,color: AppColor.fruitSalad),),
+          SizedBox(width: 10,),
+          Container(color: AppColor.grey,width: 0.5,height: 70,),
+          SizedBox(width: 10,),
+          PopupMenuButton(
+            padding: EdgeInsets.zero,
+            itemBuilder: (context) {
+              return [
+                PopupMenuItem(
+                    padding: EdgeInsets.zero,
+                    child: Row(mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.edit_note,color: AppColor.killarney,),
+                        const SizedBox(width: 10,),
+                        Text(AppConstant.editPlainText,style: TextStyle(color: AppColor.killarney),)
+                      ],
+                    )),
+                PopupMenuItem(
+                    padding: EdgeInsets.zero,
+                    child: Row(mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.delete,color: AppColor.butterCup,),
+                        const SizedBox(width: 10,),
+                        Text(AppConstant.removePlainText,style: TextStyle(color: AppColor.butterCup),)
+                      ],
+                    )),
+              ];
+            },
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class CustomCalendar extends StatelessWidget {
+  CustomCalendar({super.key,required this.today,required this.dateChangeFunction,required this.saveFunction});
+  String today;
+  void Function(DateTime? selectedDate) dateChangeFunction;
+  VoidCallback saveFunction;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            IconButton(onPressed: (){
+              Navigator.of(context,rootNavigator: true).pop();
+            }, icon: Icon(Icons.arrow_back)),
+            Text(AppConstant.selectDatePlainText,style: TextStyle(fontSize: 20),)
+          ],
+        ),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(AppConstant.dateTodayPlainText,style: TextStyle(color: AppColor.grey,fontSize: 15),),
+                Text(today,style: TextStyle(color: AppColor.grey,fontSize: 15),),
+              ],
+            ),
+          ),
+        ),
+
+        Expanded(
+          child: CalendarDatePicker(initialDate: DateTime.now(), firstDate: DateTime(1950), lastDate: DateTime.now(),
+        onDateChanged: dateChangeFunction,
+        //     onDateChanged: (value) {
+        //       setState(() {
+        //         today = '${value.day}/${value.month}/${value.year}';
+        //       });
+        //       print('Onchanged value is :$value');
+        //     },
+             ),
+         ),
+        CustomButton(
+            content: AppConstant.saveEntryPlainText,
+            contentColor: AppColor.white,
+            backgroundColor: AppColor.killarney,
+            onPressed: saveFunction)
+      ],
+    );
+  }
 }

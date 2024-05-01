@@ -18,15 +18,15 @@ class HomeScreen extends StatelessWidget {
         body: ListView(
           padding: EdgeInsets.all(10),
           children: [
-            CustomTile(title: AppConstant.accountPlainText,imagePath: AppConstant.basePath+AppConstant.accountLogoPath,onTapAction: (){
+            CustomTile(title: AppConstant.accountPlainText,imagePath: AppConstant.imageBasePath+AppConstant.accountLogoPath,onTapAction: (){
               Navigator.push(context, MaterialPageRoute(builder: (context)=>AccountScreen()));
             }),
             SizedBox(height: 10,),
-            CustomTile(title: AppConstant.bloodDonationDirectoryPlainText,imagePath: AppConstant.basePath+AppConstant.bloodDonationLogoPath,onTapAction: (){
+            CustomTile(title: AppConstant.bloodDonationDirectoryPlainText,imagePath: AppConstant.imageBasePath+AppConstant.bloodDonationLogoPath,onTapAction: (){
               Navigator.push(context, MaterialPageRoute(builder: (context)=>BloodDonorDirectoryScreen()));
             }),
             SizedBox(height: 10,),
-            CustomTile(title: AppConstant.manPowerListPlainText,imagePath: AppConstant.basePath+AppConstant.manPowerLogoPath,onTapAction: (){
+            CustomTile(title: AppConstant.manPowerListPlainText,imagePath: AppConstant.imageBasePath+AppConstant.manPowerLogoPath,onTapAction: (){
               Navigator.push(context, MaterialPageRoute(builder: (context)=>ManPowerGroupScreen()));
             }),
           ],

@@ -34,7 +34,7 @@ class WelcomeScreen extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Image.asset(AppConstant.basePath+AppConstant.smfLogoPath,width: 70,),
+        Image.asset(AppConstant.imageBasePath+AppConstant.smfLogoPath,width: 70,),
         Text(AppConstant.smfPlainText,style: TextStyle(fontSize: 30,color: AppColor.white,fontWeight: FontWeight.bold),)
       ],
     );
@@ -47,7 +47,7 @@ class WelcomeScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Image.asset(AppConstant.basePath+AppConstant.welcomeLogoPath,width: 200,),
+          Image.asset(AppConstant.imageBasePath+AppConstant.welcomeLogoPath,width: 200,),
           SizedBox(height: 40,),
           Text(AppConstant.surahBayinahArabicPlainText,style: TextStyle(fontSize: 15,color: AppColor.downy,fontWeight: FontWeight.bold),),
           Text(AppConstant.surahBayinahBanglaTranslationPlainText,style: TextStyle(fontSize: 20,color: AppColor.white),textAlign: TextAlign.center),

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "419448879355",
+    "project_id": "smfmobileapp-5b74e",
+    "storage_bucket": "smfmobileapp-5b74e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:419448879355:android:4cbe3c48fe72c7ba00585e",
+        "android_client_info": {
+          "package_name": "com.example.smf"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7cj4uk1NZgK23Z3jS_gkFCye31RPe9CQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
