@@ -92,7 +92,7 @@ class _BloodDonorDirectoryScreenState extends State<BloodDonorDirectoryScreen> {
             SizedBox(
               width: width / 4,
               child: CustomDropdownButton(
-                hintText: AppConstant.rhPlainText,
+                hintText: AppConstant.rhFactorPlainText,
                 dropdownList: rhFactorList,
                 onChangedAction: (String? newValue) {
                   // Handle dropdown value change
