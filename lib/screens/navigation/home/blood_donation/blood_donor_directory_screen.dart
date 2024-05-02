@@ -1,10 +1,16 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:smf/models/blood_donor_model.dart';
 import 'package:smf/utils/extension/theme.dart';
+import 'package:smf/utils/functionalities/functions.dart';
 import '../../../../utils/color/app_color.dart';
 import '../../../../utils/values/app_constant.dart';
 import 'add_blood_donor_screen.dart';
+import '../../../../utils/functionalities/functions.dart';
 
 class BloodDonorDirectoryScreen extends StatefulWidget {
   const BloodDonorDirectoryScreen({super.key});
@@ -32,6 +38,69 @@ class _BloodDonorDirectoryScreenState extends State<BloodDonorDirectoryScreen> {
   double height = 0;
   double width = 0;
 
+  List<BloodDonorModel> bloodDonorList = [];
+  Map<String,String> groupMap = {};
+
+  Future<List<BloodDonorModel>>? donorList;
+
+  Future<List<BloodDonorModel>> getBloodDonorList() async {
+    print('Initiated');
+    FirebaseDatabase database = FirebaseDatabase.instance;
+    final firebaseApp = Firebase.app();
+    final rtdb = FirebaseDatabase.instanceFor(
+        app: firebaseApp,
+        databaseURL: 'https://smfmobileapp-5b74e-default-rtdb.firebaseio.com/');
+
+    //database.ref("${AppConstant.manPowerGroupPath}/${groupNameController.text}/people0");
+    DatabaseReference ref = database.ref("${AppConstant.bloodDonorGroupPath}/");
+    //print(ref.);
+    bloodDonorList.clear();
+    await ref.once().then((event) {
+      if (event.snapshot.exists) {
+        // Extract the data as a Map
+        Map<dynamic, dynamic> groupData =
+        event.snapshot.value as Map<dynamic, dynamic>;
+        for (var key in groupData.keys) {
+          String nextTime = GlobalVar.nextDateToDonateBlood(groupData[key][AppConstant.lastDateOfBloodDonationColumnText].toString());
+          print('$key and the name is ${GlobalVar.customNameDecoder(key).toString()}');
+          print('$key and the dob is ${groupData[key][AppConstant.dateOfBirthColumnText].toString()}');
+          print('$key and the last date is ${groupData[key][AppConstant.lastDateOfBloodDonationColumnText].toString()}');
+          print('$key and the next date is $nextTime');
+          print('$key and the blood group with rh is ${groupData[key][AppConstant.bloodGroupColumnText].toString()}');
+          print('$key is able to donate blood is ${groupData[key][AppConstant.bloodGroupColumnText].toString()}');
+          setState(() {
+            bloodDonorList.add(BloodDonorModel(key: key.toString(),
+                name: GlobalVar.customNameDecoder(key).toString(),
+                rhFactor: groupData[key][AppConstant.rhFactorColumnText].toString(),
+                bloodGroup: groupData[key][AppConstant.bloodGroupColumnText].toString(),
+                dateOfBirth: groupData[key][AppConstant.dateOfBirthColumnText].toString(),
+                nextDateOfBloodDonated: nextTime,
+                cityName: groupData[key][AppConstant.cityNameColumnText].toString(),
+                divisionName: groupData[key][AppConstant.divisionColumnText].toString(),
+                districtName: groupData[key][AppConstant.districtNameColumnText].toString(),
+                postCode: groupData[key][AppConstant.postCodeColumnText].toString(),
+                photoUrl: groupData[key][AppConstant.profileImageColumnText].toString(),
+                lastDateOfBloodDonated: groupData[key][AppConstant.lastDateOfBloodDonationColumnText].toString(),
+                isAbleToDonateBlood: GlobalVar.bloodDonorStatus(groupData[key][AppConstant.lastDateOfBloodDonationColumnText].toString())
+            ));
+          });
+        }
+      } else {
+        print("No Data exist.");
+      }
+    });
+    for(var donor in bloodDonorList){
+      print('Donor Info:${donor.name}');
+    }
+    return bloodDonorList;
+  }
+  
+
+  @override
+  void initState(){
+    super.initState();
+    donorList = getBloodDonorList();
+  }
   @override
   void dispose() {
     searchController.dispose();
@@ -159,13 +228,58 @@ class _BloodDonorDirectoryScreenState extends State<BloodDonorDirectoryScreen> {
 
   Widget initBloodDonorList() {
     return TitleIconButtonWithWhiteBackground(
-      headline: 'মোট রক্তদাতা ১৫৬ জন',
+      headline: 'মোট রক্তদাতা ${GlobalVar.englishNumberToBengali(bloodDonorList.length.toString())} জন',
       actionIcon: Icons.add,
       action: () {
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => AddBloodDonorScreen()));
       },
-      whatToShow: ListView(
+      whatToShow: FutureBuilder<List<BloodDonorModel>>(
+        future: donorList,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          }
+          else{
+            return ListView.builder(
+                shrinkWrap: true,
+                physics: AlwaysScrollableScrollPhysics(),
+                itemCount: snapshot.data!.length,
+                itemBuilder: (context, index) {
+                  return BloodDonorInformationTab(
+                    photo: snapshot.data![index].photoUrl,
+                      donorName: snapshot.data![index].name,
+                      bloodGroupWithRh: '${snapshot.data![index].bloodGroup}${snapshot.data![index].rhFactor}',
+                      isEligible: snapshot.data![index].isAbleToDonateBlood,
+                      editFunction : (){
+                        print('Edit Pressed');
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>AddBloodDonorScreen()));
+                      },
+                    deleteFunction: ()async{
+                      DatabaseReference ref = FirebaseDatabase.instance.ref("${AppConstant.bloodDonorGroupPath}/${snapshot.data![index].key}");
+
+                      await ref.remove();
+                      Navigator.popUntil(context, (route) => false);
+
+                      // print('Photo URL:${snapshot.data![index].photoUrl}');
+                      // final storageRef = FirebaseStorage.instance.refFromURL(snapshot.data![index].photoUrl);
+                      // print('Reference fullPath:${storageRef.fullPath}');
+                      // print('Reference name:${storageRef.name}');
+                      // print('Reference delete:${storageRef.delete()}');
+                        // final desertRef = storageRef.child("${AppConstant.bloodGroupColumnText}/${snapshot.data![index].photoUrl}");
+                        //
+                        // await desertRef.delete();
+                    },
+                  );
+                },
+            );
+          }
+        },
+      )
+
+      /*ListView(
         shrinkWrap: true,
         physics: AlwaysScrollableScrollPhysics(),
         children: [
@@ -215,7 +329,7 @@ class _BloodDonorDirectoryScreenState extends State<BloodDonorDirectoryScreen> {
             isEligible: true,
           ),
         ],
-      ),
+      ),*/
     );
   }
 }

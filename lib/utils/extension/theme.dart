@@ -1,12 +1,10 @@
-
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../color/app_color.dart';
 import '../values/app_constant.dart';
 
-class CustomAppBar extends StatelessWidget implements PreferredSizeWidget{
-  CustomAppBar({super.key,required this.title});
+class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+  CustomAppBar({super.key, required this.title});
   String title;
 
   @override
@@ -15,7 +13,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget{
       backgroundColor: AppColor.timberGreen,
       iconTheme: IconThemeData(color: AppColor.white),
       elevation: 0,
-      title: Text(title,style: TextStyle(color: AppColor.white),),
+      title: Text(
+        title,
+        style: TextStyle(color: AppColor.white),
+      ),
     );
   }
 
@@ -23,28 +24,40 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget{
   Size get preferredSize => Size.fromHeight(kToolbarHeight);
 }
 
-
 class CustomHeader extends StatelessWidget {
-  CustomHeader({super.key,required this.title,required this.subtitle});
-  String title,subtitle;
+  CustomHeader({super.key, required this.title, required this.subtitle});
+  String title, subtitle;
 
   @override
   Widget build(BuildContext context) {
-      return Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text(title,style: TextStyle(color: AppColor.sepiaBlack,fontWeight: FontWeight.bold,fontSize: 30),),
-          Text(subtitle,style: TextStyle(color: AppColor.dustyGray,fontSize: 20),),
-        ],
-      );
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Text(
+          title,
+          style: TextStyle(
+              color: AppColor.sepiaBlack,
+              fontWeight: FontWeight.bold,
+              fontSize: 30),
+        ),
+        Text(
+          subtitle,
+          style: TextStyle(color: AppColor.dustyGray, fontSize: 20),
+        ),
+      ],
+    );
   }
 }
 
-
 class CustomButton extends StatelessWidget {
-  CustomButton({super.key,required this.content, required this.contentColor, required this.backgroundColor,required this.onPressed});
+  CustomButton(
+      {super.key,
+      required this.content,
+      required this.contentColor,
+      required this.backgroundColor,
+      required this.onPressed});
   String content;
   VoidCallback onPressed;
   Color contentColor;
@@ -52,19 +65,29 @@ class CustomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(onPressed: onPressed,
-        child: Text(content,style: TextStyle(fontSize:20,fontWeight: FontWeight.bold,color: contentColor),),
+    return ElevatedButton(
+        onPressed: onPressed,
+        child: Text(
+          content,
+          style: TextStyle(
+              fontSize: 20, fontWeight: FontWeight.bold, color: contentColor),
+        ),
         style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all<Color>(backgroundColor),
-            minimumSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width-40, 40)),
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)))
-        )
-    );
+            backgroundColor: MaterialStateProperty.all<Color>(backgroundColor),
+            minimumSize: MaterialStateProperty.all(
+                Size(MediaQuery.of(context).size.width - 40, 40)),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5)))));
   }
 }
 
 class CustomTile extends StatelessWidget {
-  CustomTile({super.key,required this.title,required this.imagePath,required this.onTapAction});
+  CustomTile(
+      {super.key,
+      required this.title,
+      required this.imagePath,
+      required this.onTapAction});
   String title, imagePath;
   VoidCallback onTapAction;
 
@@ -72,18 +95,28 @@ class CustomTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       onTap: onTapAction,
-      shape: RoundedRectangleBorder(side: BorderSide(color: AppColor.nebula),borderRadius: BorderRadius.all(Radius.circular(5))),
-      contentPadding: EdgeInsets.symmetric(vertical: 5,horizontal: 10),
+      shape: RoundedRectangleBorder(
+          side: BorderSide(color: AppColor.nebula),
+          borderRadius: BorderRadius.all(Radius.circular(5))),
+      contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
       tileColor: AppColor.white,
-      leading: Image.asset(imagePath,fit: BoxFit.fill,width: 40),
-      title: Text(title,style: TextStyle(color:AppColor.sepiaBlack,fontSize: 20),),
+      leading: Image.asset(imagePath, fit: BoxFit.fill, width: 40),
+      title: Text(
+        title,
+        style: TextStyle(color: AppColor.sepiaBlack, fontSize: 20),
+      ),
       trailing: Icon(Icons.arrow_forward_ios),
     );
   }
 }
 
 class MyBusinessTileUi extends StatelessWidget {
-  MyBusinessTileUi({super.key,required this.title,required this.imagePath,required this.context,required this.onTapAction});
+  MyBusinessTileUi(
+      {super.key,
+      required this.title,
+      required this.imagePath,
+      required this.context,
+      required this.onTapAction});
   BuildContext context;
   String title, imagePath;
   VoidCallback onTapAction;
@@ -94,7 +127,10 @@ class MyBusinessTileUi extends StatelessWidget {
       onTap: onTapAction,
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 10),
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),color: AppColor.white,),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: AppColor.white,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           mainAxisSize: MainAxisSize.min,
@@ -109,42 +145,60 @@ class MyBusinessTileUi extends StatelessWidget {
                   PopupMenuItem(
                       child: Row(
                     children: [
-                      Icon(Icons.edit_note,color: AppColor.killarney,),
-                      SizedBox(width: 10,),
-                      Text(AppConstant.editPlainText,style: TextStyle(color: AppColor.killarney)),
+                      Icon(
+                        Icons.edit_note,
+                        color: AppColor.killarney,
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(AppConstant.editPlainText,
+                          style: TextStyle(color: AppColor.killarney)),
                     ],
                   )),
                   PopupMenuItem(
                       child: Row(
                     children: [
-                      Icon(Icons.delete,color: AppColor.butterCup,),
-                      SizedBox(width: 10,),
-                      Text(AppConstant.removePlainText,style: TextStyle(color: AppColor.butterCup),),
+                      Icon(
+                        Icons.delete,
+                        color: AppColor.butterCup,
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        AppConstant.removePlainText,
+                        style: TextStyle(color: AppColor.butterCup),
+                      ),
                     ],
                   )),
                 ];
-              },),
+              },
+            ),
             Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  width: 50,
-                  height: 50,
-                  decoration: BoxDecoration(
-                      color: AppColor.fruitSalad,
-                      borderRadius: BorderRadius.circular(50)),
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.all(10),
-                  // child: Image.asset(AppConstant.basePath+AppConstant.fbLogoPath,alignment: Alignment.center,fit: BoxFit.fill,),
-                ),
-                SizedBox(width: 10,),
-                Expanded(
-                  child: Text(AppConstant.manPowerListPlainText,style: TextStyle(fontSize: 20),)
-                )
-              ]
-            )
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                        color: AppColor.fruitSalad,
+                        borderRadius: BorderRadius.circular(50)),
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(10),
+                    // child: Image.asset(AppConstant.basePath+AppConstant.fbLogoPath,alignment: Alignment.center,fit: BoxFit.fill,),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Expanded(
+                      child: Text(
+                    AppConstant.manPowerListPlainText,
+                    style: TextStyle(fontSize: 20),
+                  ))
+                ])
           ],
         ),
       ),
@@ -153,22 +207,36 @@ class MyBusinessTileUi extends StatelessWidget {
 }
 
 class AddEntryButtonUi extends StatelessWidget {
-  AddEntryButtonUi({super.key,required this.whatToDo});
+  AddEntryButtonUi({super.key, required this.whatToDo});
   VoidCallback whatToDo;
 
   @override
   Widget build(BuildContext context) {
     return IconButton(
       padding: EdgeInsets.zero,
-      onPressed: whatToDo, icon: Icon(Icons.add,size: 25,),style: ButtonStyle(
-        padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(10)),
-        shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
-        side: MaterialStatePropertyAll<BorderSide>(BorderSide(color: AppColor.fruitSalad))),);
+      onPressed: whatToDo,
+      icon: Icon(
+        Icons.add,
+        size: 25,
+      ),
+      style: ButtonStyle(
+          padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(10)),
+          shape: MaterialStateProperty.all(
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
+          side: MaterialStatePropertyAll<BorderSide>(
+              BorderSide(color: AppColor.fruitSalad))),
+    );
   }
 }
 
 class CustomTextFormField extends StatelessWidget {
-  CustomTextFormField({super.key,required this.hint,required this.controller,this.onTap,required this.keyboardInputType,this.suffixIcon});
+  CustomTextFormField(
+      {super.key,
+      required this.hint,
+      required this.controller,
+      this.onTap,
+      required this.keyboardInputType,
+      this.suffixIcon});
   String hint;
   TextEditingController controller;
   VoidCallback? onTap;
@@ -179,7 +247,7 @@ class CustomTextFormField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       validator: (value) {
-        if(value == null || value.isEmpty){
+        if (value == null || value.isEmpty) {
           return "Please don't leave this field.";
         }
         return null;
@@ -188,18 +256,20 @@ class CustomTextFormField extends StatelessWidget {
       onTap: onTap,
       controller: controller,
       decoration: InputDecoration(
-        suffixIcon: suffixIcon!=null?Icon(suffixIcon!):null,
+          suffixIcon: suffixIcon != null ? Icon(suffixIcon!) : null,
           isDense: true,
           contentPadding: EdgeInsets.all(10),
-          hintText: hint,border: OutlineInputBorder(
-          borderSide: BorderSide(color: AppColor.grey),
-          borderRadius: BorderRadius.circular(5))),
+          hintText: hint,
+          border: OutlineInputBorder(
+              borderSide: BorderSide(color: AppColor.grey),
+              borderRadius: BorderRadius.circular(5))),
     );
   }
 }
 
 class BasicAquaHazeBGUi extends StatelessWidget {
-  BasicAquaHazeBGUi({super.key,required this.appBarTitle,required this.child});
+  BasicAquaHazeBGUi(
+      {super.key, required this.appBarTitle, required this.child});
   String appBarTitle;
   Widget child;
 
@@ -217,16 +287,19 @@ class BasicAquaHazeBGUi extends StatelessWidget {
 }
 
 class ReportStatusDetailsUi extends StatelessWidget {
-  ReportStatusDetailsUi({super.key,required this.title,required this.amount,required this.imagePath});
-  String title,amount,imagePath;
+  ReportStatusDetailsUi(
+      {super.key,
+      required this.title,
+      required this.amount,
+      required this.imagePath});
+  String title, amount, imagePath;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        decoration: BoxDecoration(
-            border: Border.all(color: AppColor.grey),
-            borderRadius: BorderRadius.all(Radius.circular(5))
-        ),
+      decoration: BoxDecoration(
+          border: Border.all(color: AppColor.grey),
+          borderRadius: BorderRadius.all(Radius.circular(5))),
       child: Row(
         children: [
           Expanded(
@@ -235,24 +308,35 @@ class ReportStatusDetailsUi extends StatelessWidget {
                 padding: const EdgeInsets.all(10),
                 child: Row(
                   children: [
-                    Image.asset(AppConstant.imageBasePath+imagePath,width: 20,),
-                    SizedBox(width: 10,),
-                    Text(title,style: TextStyle(fontSize: 20),)
+                    Image.asset(
+                      AppConstant.imageBasePath + imagePath,
+                      width: 20,
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      title,
+                      style: TextStyle(fontSize: 20),
+                    )
                   ],
                 ),
               )),
           Container(
             margin: EdgeInsets.symmetric(horizontal: 10),
-              height: 45,
-              width: 1,
-              color: AppColor.grey,
-            ),
-          Expanded(child: Row(
+            height: 45,
+            width: 1,
+            color: AppColor.grey,
+          ),
+          Expanded(
+              child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               takaLogo(),
-              SizedBox(width: 5,),
-              Text(amount,style: TextStyle(fontSize: 20)),
+              SizedBox(
+                width: 5,
+              ),
+              Text(amount, style: TextStyle(fontSize: 20)),
             ],
           )),
         ],
@@ -262,13 +346,15 @@ class ReportStatusDetailsUi extends StatelessWidget {
 }
 
 class CardAquaHazeWithColumnIconAndTitle extends StatelessWidget {
-  CardAquaHazeWithColumnIconAndTitle({super.key,required this.title,required this.action});
+  CardAquaHazeWithColumnIconAndTitle(
+      {super.key, required this.title, required this.action});
   String title;
   VoidCallback action;
 
   @override
   Widget build(BuildContext context) {
-    return Card(margin: EdgeInsets.zero,
+    return Card(
+      margin: EdgeInsets.zero,
       clipBehavior: Clip.antiAliasWithSaveLayer,
       color: AppColor.aquaHaze,
       child: InkWell(
@@ -279,9 +365,21 @@ class CardAquaHazeWithColumnIconAndTitle extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Image.asset(AppConstant.imageBasePath+AppConstant.manPowerGroupLogoPath,width: 30,height: 30,),
-              SizedBox(height: 10,),
-              Text(title,textAlign: TextAlign.center,maxLines: 2,style: TextStyle(fontSize: 17),overflow: TextOverflow.visible,)
+              Image.asset(
+                AppConstant.imageBasePath + AppConstant.manPowerGroupLogoPath,
+                width: 30,
+                height: 30,
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                title,
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                style: TextStyle(fontSize: 17),
+                overflow: TextOverflow.visible,
+              )
             ],
           ),
         ),
@@ -290,13 +388,20 @@ class CardAquaHazeWithColumnIconAndTitle extends StatelessWidget {
   }
 }
 
-
-Widget takaLogo(){
-  return Image.asset(AppConstant.imageBasePath+AppConstant.takaLogoPath,width: 18,);
+Widget takaLogo() {
+  return Image.asset(
+    AppConstant.imageBasePath + AppConstant.takaLogoPath,
+    width: 18,
+  );
 }
 
 class TitleIconButtonWithWhiteBackground extends StatelessWidget {
-  TitleIconButtonWithWhiteBackground({super.key,required this.headline,required this.actionIcon,required this.whatToShow,required this.action});
+  TitleIconButtonWithWhiteBackground(
+      {super.key,
+      required this.headline,
+      required this.actionIcon,
+      required this.whatToShow,
+      required this.action});
   Widget whatToShow;
   String headline;
   IconData actionIcon;
@@ -306,7 +411,10 @@ class TitleIconButtonWithWhiteBackground extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       // padding: EdgeInsets.all(10),
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),color: AppColor.white,),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: AppColor.white,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -318,16 +426,25 @@ class TitleIconButtonWithWhiteBackground extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   // Text(AppConstant.reportPlainText,style: TextStyle(fontSize: 20),),
-                  Text(headline,style: TextStyle(fontSize: 20),),
-                  IconButton(onPressed: action, icon: Icon(actionIcon),style: ButtonStyle(
-                    //elevation: MaterialStatePropertyAll(10),
-                      shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
-                      side: MaterialStatePropertyAll(BorderSide(color: AppColor.grey))
-                  ),)
-                ]
-            ),
+                  Text(
+                    headline,
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  IconButton(
+                    onPressed: action,
+                    icon: Icon(actionIcon),
+                    style: ButtonStyle(
+                        //elevation: MaterialStatePropertyAll(10),
+                        shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5))),
+                        side: MaterialStatePropertyAll(
+                            BorderSide(color: AppColor.grey))),
+                  )
+                ]),
           ),
-          SizedBox(height: 10,),
+          SizedBox(
+            height: 10,
+          ),
           whatToShow
         ],
       ),
@@ -336,52 +453,77 @@ class TitleIconButtonWithWhiteBackground extends StatelessWidget {
 }
 
 class BusinessTitleWithIcon extends StatelessWidget {
-  BusinessTitleWithIcon({super.key,required this.title});
+  BusinessTitleWithIcon({super.key, required this.title});
   String title;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(5),color: AppColor.white,),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(5),
+        color: AppColor.white,
+      ),
       child: Row(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Image.asset(AppConstant.imageBasePath+AppConstant.manPowerGroupLogoPath,width: 30,height: 30,),
-            const SizedBox(width: 10,),
-            Text(title,style: const TextStyle(fontSize: 20),)
-          ]
-      ),
+            Image.asset(
+              AppConstant.imageBasePath + AppConstant.manPowerGroupLogoPath,
+              width: 30,
+              height: 30,
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            Text(
+              title,
+              style: const TextStyle(fontSize: 20),
+            )
+          ]),
     );
   }
 }
 
-
-
-Text orTextUI()
-{
-  return Text(AppConstant.orPlainText,style: TextStyle(fontWeight: FontWeight.bold,color: AppColor.sepiaBlack,fontSize: 20),);
+Text orTextUI() {
+  return Text(
+    AppConstant.orPlainText,
+    style: TextStyle(
+        fontWeight: FontWeight.bold, color: AppColor.sepiaBlack, fontSize: 20),
+  );
 }
 
-Widget socialLoginUi(){
+Widget socialLoginUi() {
   return Row(
     mainAxisAlignment: MainAxisAlignment.start,
     crossAxisAlignment: CrossAxisAlignment.start,
     mainAxisSize: MainAxisSize.min,
     children: [
-      InkWell(child: Image.asset(AppConstant.imageBasePath+AppConstant.googleLogoPath,width: 50),),
-      SizedBox(width: 20,),
-      InkWell(child: Image.asset(AppConstant.imageBasePath+AppConstant.fbLogoPath,width: 50),),
+      InkWell(
+        child: Image.asset(
+            AppConstant.imageBasePath + AppConstant.googleLogoPath,
+            width: 50),
+      ),
+      SizedBox(
+        width: 20,
+      ),
+      InkWell(
+        child: Image.asset(AppConstant.imageBasePath + AppConstant.fbLogoPath,
+            width: 50),
+      ),
     ],
   );
 }
 
-Widget forgotPasswordUi(VoidCallback onPressed){
-  return Align(alignment: Alignment.centerRight,child: TextButton(
-      onPressed: onPressed,
-      child: Text(AppConstant.forgotPasswordPlainText,style: TextStyle(color: AppColor.dustyGray,fontSize: 15),textAlign: TextAlign.end)));
+Widget forgotPasswordUi(VoidCallback onPressed) {
+  return Align(
+      alignment: Alignment.centerRight,
+      child: TextButton(
+          onPressed: onPressed,
+          child: Text(AppConstant.forgotPasswordPlainText,
+              style: TextStyle(color: AppColor.dustyGray, fontSize: 15),
+              textAlign: TextAlign.end)));
 }
 
 OutlineInputBorder borderColorAltoRadius5() {
@@ -390,18 +532,23 @@ OutlineInputBorder borderColorAltoRadius5() {
       borderSide: BorderSide(color: AppColor.alto));
 }
 
-Column headerWithTextFormField(String headline,String hintText,TextEditingController controller){
+Column headerWithTextFormField(
+    String headline, String hintText, TextEditingController controller) {
   return Column(
     mainAxisSize: MainAxisSize.min,
     mainAxisAlignment: MainAxisAlignment.start,
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      Text(headline,style: TextStyle(color: AppColor.sepiaBlack,fontWeight: FontWeight.bold,fontSize: 30)),
+      Text(headline,
+          style: TextStyle(
+              color: AppColor.sepiaBlack,
+              fontWeight: FontWeight.bold,
+              fontSize: 30)),
       TextFormField(
         controller: controller,
         decoration: InputDecoration(
             hintText: hintText,
-            contentPadding: EdgeInsets.symmetric(vertical: 0,horizontal: 20),
+            contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
             isDense: false,
             border: borderColorAltoRadius5()),
       ),
@@ -410,7 +557,11 @@ Column headerWithTextFormField(String headline,String hintText,TextEditingContro
 }
 
 class CustomDropdownButton extends StatelessWidget {
-  CustomDropdownButton({super.key,required this.hintText,required this.dropdownList,required this.onChangedAction});
+  CustomDropdownButton(
+      {super.key,
+      required this.hintText,
+      required this.dropdownList,
+      required this.onChangedAction});
   List<String> dropdownList;
   String hintText;
   void Function(String?)? onChangedAction;
@@ -420,11 +571,14 @@ class CustomDropdownButton extends StatelessWidget {
     return DropdownButtonFormField<String>(
       icon: Icon(Icons.keyboard_arrow_down),
       padding: EdgeInsets.zero,
-      hint: Text(hintText,overflow: TextOverflow.ellipsis,),
+      hint: Text(
+        hintText,
+        overflow: TextOverflow.ellipsis,
+      ),
       isDense: true,
       decoration: InputDecoration(
         isDense: true,
-        contentPadding: EdgeInsets.only(left: 5,top: 10 ,bottom: 7),
+        contentPadding: EdgeInsets.only(left: 5, top: 10, bottom: 7),
         border: OutlineInputBorder(
           borderSide: BorderSide(color: Colors.red),
           borderRadius: BorderRadius.circular(8.0),
@@ -435,7 +589,7 @@ class CustomDropdownButton extends StatelessWidget {
         return DropdownMenuItem<String>(
           alignment: Alignment.center,
           value: dropDownValues,
-          child: Text(dropDownValues,overflow: TextOverflow.ellipsis),
+          child: Text(dropDownValues, overflow: TextOverflow.ellipsis),
         );
       }).toList(),
       onChanged: onChangedAction,
@@ -444,61 +598,147 @@ class CustomDropdownButton extends StatelessWidget {
 }
 
 class BloodDonorInformationTab extends StatelessWidget {
-  BloodDonorInformationTab({super.key,required this.donorName,required this.bloodGroupWithRh, required this.isEligible});
-  String donorName,bloodGroupWithRh;
+  BloodDonorInformationTab(
+      {super.key,
+      required this.donorName,
+      required this.bloodGroupWithRh,
+      required this.isEligible,
+      required this.photo,
+      required this.deleteFunction,
+      required this.editFunction,
+      });
+  String donorName, bloodGroupWithRh, photo;
   bool isEligible;
+  VoidCallback deleteFunction, editFunction;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        // boxShadow: [BoxShadow(color: AppColor.grey,spreadRadius: 5,blurRadius: BorderSide.strokeAlignOutside,offset: Offset.fromDirection(5))],
-        color: AppColor.white,
-        border: Border.all(color: AppColor.grey,width: 0.5),
-        borderRadius: BorderRadius.all(Radius.circular(5))
-      ),
-      margin: const EdgeInsets.symmetric(vertical: 8.0,horizontal: 5),
+          // boxShadow: [BoxShadow(color: AppColor.grey,spreadRadius: 5,blurRadius: BorderSide.strokeAlignOutside,offset: Offset.fromDirection(5))],
+          color: AppColor.white,
+          border: Border.all(color: AppColor.grey, width: 0.5),
+          borderRadius: BorderRadius.all(Radius.circular(5))),
+      margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 5),
       child: Row(
         children: [
           Container(
-            margin: EdgeInsets.only(left: 10,top: 10,bottom: 10,),
+            margin: EdgeInsets.only(
+              left: 10,
+              top: 10,
+              bottom: 10,
+            ),
             width: 50,
             height: 50,
-            decoration: BoxDecoration(shape: BoxShape.circle,color: AppColor.sepiaBlack),
+            decoration: photo.isNotEmpty
+                ? BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                        image: NetworkImage(
+                          photo,
+                        ),
+                        fit: BoxFit.fill))
+                : BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: AppColor.sepiaBlack,
+                  ),
           ),
-          SizedBox(width: 10,),
-          Text('Shraban Ahmed',style: TextStyle(fontWeight: FontWeight.bold),),
-          SizedBox(width: 10,),
-          Container(color: AppColor.grey,width: 0.5,height: 70,),
-          SizedBox(width: 10,),
-          Text('A+',style: TextStyle(fontWeight: FontWeight.bold),),
-          SizedBox(width: 10,),
-          Container(color: AppColor.grey,width: 0.5,height: 70,),
-          SizedBox(width: 10,),
-          Text(AppConstant.eligiblePlainText,style: TextStyle(fontWeight: FontWeight.bold,color: AppColor.fruitSalad),),
-          SizedBox(width: 10,),
-          Container(color: AppColor.grey,width: 0.5,height: 70,),
-          SizedBox(width: 10,),
+          SizedBox(
+            width: 10,
+          ),
+          Text(
+            donorName,
+            style: TextStyle(fontWeight: FontWeight.bold),
+            overflow: TextOverflow.fade,
+          ),
+          SizedBox(
+            width: 10,
+          ),
+          Container(
+            color: AppColor.grey,
+            width: 0.5,
+            height: 70,
+          ),
+          SizedBox(
+            width: 10,
+          ),
+          Text(
+            bloodGroupWithRh,
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          SizedBox(
+            width: 10,
+          ),
+          Container(
+            color: AppColor.grey,
+            width: 0.5,
+            height: 70,
+          ),
+          SizedBox(
+            width: 10,
+          ),
+          isEligible
+              ? Text(
+                  AppConstant.eligiblePlainText,
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, color: AppColor.fruitSalad),
+                )
+              : Text(
+                  AppConstant.notEligiblePlainText,
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, color: AppColor.carnation),
+                ),
+          SizedBox(
+            width: 10,
+          ),
+          Container(
+            color: AppColor.grey,
+            width: 0.5,
+            height: 70,
+          ),
+          SizedBox(
+            width: 10,
+          ),
           PopupMenuButton(
             padding: EdgeInsets.zero,
             itemBuilder: (context) {
               return [
                 PopupMenuItem(
+                  onTap: editFunction,
                     padding: EdgeInsets.zero,
-                    child: Row(mainAxisSize: MainAxisSize.min,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(Icons.edit_note,color: AppColor.killarney,),
-                        const SizedBox(width: 10,),
-                        Text(AppConstant.editPlainText,style: TextStyle(color: AppColor.killarney),)
+                        Icon(
+                          Icons.edit_note,
+                          color: AppColor.killarney,
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          AppConstant.editPlainText,
+                          style: TextStyle(color: AppColor.killarney),
+                        )
                       ],
                     )),
                 PopupMenuItem(
+                    onTap: deleteFunction,
                     padding: EdgeInsets.zero,
-                    child: Row(mainAxisSize: MainAxisSize.min,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(Icons.delete,color: AppColor.butterCup,),
-                        const SizedBox(width: 10,),
-                        Text(AppConstant.removePlainText,style: TextStyle(color: AppColor.butterCup),)
+                        Icon(
+                          Icons.delete,
+                          color: AppColor.butterCup,
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          AppConstant.removePlainText,
+                          style: TextStyle(color: AppColor.butterCup),
+                        )
                       ],
                     )),
               ];
@@ -511,7 +751,11 @@ class BloodDonorInformationTab extends StatelessWidget {
 }
 
 class CustomCalendar extends StatelessWidget {
-  CustomCalendar({super.key,required this.today,required this.dateChangeFunction,required this.saveFunction});
+  CustomCalendar(
+      {super.key,
+      required this.today,
+      required this.dateChangeFunction,
+      required this.saveFunction});
   String today;
   void Function(DateTime? selectedDate) dateChangeFunction;
   VoidCallback saveFunction;
@@ -527,10 +771,15 @@ class CustomCalendar extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           mainAxisSize: MainAxisSize.max,
           children: [
-            IconButton(onPressed: (){
-              Navigator.of(context,rootNavigator: true).pop();
-            }, icon: Icon(Icons.arrow_back)),
-            Text(AppConstant.selectDatePlainText,style: TextStyle(fontSize: 20),)
+            IconButton(
+                onPressed: () {
+                  Navigator.of(context, rootNavigator: true).pop();
+                },
+                icon: Icon(Icons.arrow_back)),
+            Text(
+              AppConstant.selectDatePlainText,
+              style: TextStyle(fontSize: 20),
+            )
           ],
         ),
         Align(
@@ -542,24 +791,31 @@ class CustomCalendar extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(AppConstant.dateTodayPlainText,style: TextStyle(color: AppColor.grey,fontSize: 15),),
-                Text(today,style: TextStyle(color: AppColor.grey,fontSize: 15),),
+                Text(
+                  AppConstant.dateTodayPlainText,
+                  style: TextStyle(color: AppColor.grey, fontSize: 15),
+                ),
+                Text(
+                  today,
+                  style: TextStyle(color: AppColor.grey, fontSize: 15),
+                ),
               ],
             ),
           ),
         ),
-
         Expanded(
-          child: CalendarDatePicker(initialDate: DateTime.now(), firstDate: DateTime(1950), lastDate: DateTime.now(),
-        onDateChanged: dateChangeFunction,
-        //     onDateChanged: (value) {
-        //       setState(() {
-        //         today = '${value.day}/${value.month}/${value.year}';
-        //       });
-        //       print('Onchanged value is :$value');
-        //     },
-             ),
-         ),
+          child: CalendarDatePicker(
+            initialDate: DateTime.now(), firstDate: DateTime(1950),
+            lastDate: DateTime.now(),
+            onDateChanged: dateChangeFunction,
+            //     onDateChanged: (value) {
+            //       setState(() {
+            //         today = '${value.day}/${value.month}/${value.year}';
+            //       });
+            //       print('Onchanged value is :$value');
+            //     },
+          ),
+        ),
         CustomButton(
             content: AppConstant.saveEntryPlainText,
             contentColor: AppColor.white,

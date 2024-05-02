@@ -6,14 +6,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:smf/models/blood_donor_model.dart';
 import 'package:smf/utils/extension/theme.dart';
 import 'package:smf/utils/values/app_constant.dart';
-
+import './blood_donor_directory_screen.dart';
 import '../../../../utils/color/app_color.dart';
 import '../../../../utils/functionalities/functions.dart';
 
 class AddBloodDonorScreen extends StatefulWidget {
-  const AddBloodDonorScreen({super.key});
+  AddBloodDonorScreen({super.key});
+  BloodDonorModel editDonorInfo
+
 
   @override
   State<AddBloodDonorScreen> createState() => _AddBloodDonorScreenState();
@@ -125,7 +128,7 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
                     return CustomCalendar(today: today,
                     dateChangeFunction: (selectedDate) {
                       setState(() {
-                        today = selectedDate==null?'':'${selectedDate.day}/${selectedDate.month}/${selectedDate.year}';
+                        today = selectedDate==null?'':selectedDate.toString().split(' ').first;
                       });
                     },
                       saveFunction: (){
@@ -175,8 +178,8 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
                         print('Selected date:$lastDateOfBloodDonated');
                         Navigator.of(context,rootNavigator: true).pop();
                         setState(() {
-                          lastDateOfBloodDonationController.text = '${lastDateOfBloodDonated.day}/${lastDateOfBloodDonated.month}/${lastDateOfBloodDonated.year}';
-                          nextDateToAbleToDonateBloodController.text = '${lastDateOfBloodDonated.add(Duration(days: 90)).day}/${lastDateOfBloodDonated.add(Duration(days: 90)).month}/${lastDateOfBloodDonated.add(Duration(days: 90)).year}';
+                          lastDateOfBloodDonationController.text = lastDateOfBloodDonated.toString().split(' ').first;
+                          nextDateToAbleToDonateBloodController.text = lastDateOfBloodDonated.add(Duration(days: 90)).toString().split(' ').first;
                           print('Total Dys:${DateTime.now().difference(lastDateOfBloodDonated)}');
                           if (DateTime.now().difference(lastDateOfBloodDonated).inDays>=90){
                             abilityToDonateBloodController.text = AppConstant.ableToDonateBloodPlainText;
@@ -200,7 +203,6 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
                 contentColor: AppColor.white,
                 backgroundColor: AppColor.killarney,
                 onPressed: ()async{
-                  print('Started Current time:${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}');
                   if(formKey.currentState!.validate()){
                     String downloadUrl = '';
                     showDialog(context: context, builder: (context){
@@ -214,6 +216,7 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
                       print('Image Path: $_imagePath');
                       print('File Path: ${file.path}');
                       final uploadTask = storageRef.child("${AppConstant.bloodDonorGroupPath}/$uniqueName/").putFile(file,metadata);
+                      print('Image Upload Time:${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}');
                       uploadTask.snapshotEvents.listen((TaskSnapshot taskSnapshot) async {
                         switch (taskSnapshot.state) {
                           case TaskState.running:
@@ -234,6 +237,7 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
                           case TaskState.success:
                           // Handle successful uploads on complete
                           // ...
+                            print('Time to get url:${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}');
                             downloadUrl = await taskSnapshot.ref.getDownloadURL();
                             print('Successfull');
                             print('download url:$downloadUrl');
@@ -242,7 +246,7 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
                         }
                       });
                     }
-                    await Future.delayed(const Duration(seconds: 5)).whenComplete(() async{
+                    await Future.delayed(const Duration(seconds: 7)).whenComplete(() async{
                       print('Upload Current time:${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}');
                       FirebaseDatabase database = FirebaseDatabase.instance;
                       final firebaseApp = Firebase.app();
@@ -266,13 +270,12 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
                         AppConstant.postCodeColumnText: postCodeController.text,
                         AppConstant.divisionColumnText: divisionController.text,
                         AppConstant.lastDateOfBloodDonationColumnText: lastDateOfBloodDonationController.text,
-                        AppConstant.ableToDonateBloodColumnText: abilityToDonateBloodController.text,
-                        AppConstant.nextDateOfBloodDonationColumnText: nextDateToAbleToDonateBloodController.text,
                         AppConstant.profileImageColumnText: downloadUrl,
                       });
                     });
 
                     Navigator.of(context,rootNavigator: true).pop();
+                    Navigator.of(context,rootNavigator: true).pushReplacement(MaterialPageRoute(builder: (context)=>BloodDonorDirectoryScreen()));
 
                     print('');
                   }

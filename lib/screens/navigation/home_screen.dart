@@ -5,7 +5,7 @@ import '../../utils/color/app_color.dart';
 import '../../utils/extension/theme.dart';
 import '../../utils/values/app_constant.dart';
 import 'home/business/account_screen.dart';
-import 'home/blood_donation/blood_donar_directory_screen.dart';
+import 'home/blood_donation/blood_donor_directory_screen.dart';
 import 'home/man_power/man_power_group.dart';
 
 class HomeScreen extends StatelessWidget {

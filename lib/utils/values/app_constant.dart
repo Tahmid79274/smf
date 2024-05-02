@@ -109,7 +109,5 @@ abstract class AppConstant{
   static String postCodeColumnText = 'post_code';
   static String divisionColumnText = 'division_name';
   static String lastDateOfBloodDonationColumnText = 'last_date_of_blood_donation';
-  static String ableToDonateBloodColumnText = 'able_to_donate_blood';
-  static String nextDateOfBloodDonationColumnText = 'next_date_of_blood_donation';
   static String profileImageColumnText = 'profile_image';
 }
