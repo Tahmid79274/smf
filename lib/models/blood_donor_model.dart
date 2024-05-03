@@ -1,17 +1,17 @@
-import '../utils/functionalities/functions.dart';
-
 class BloodDonorModel {
   String key,
       name,
-      rhFactor,
-      bloodGroup,
       dateOfBirth,
-      lastDateOfBloodDonated,
-      nextDateOfBloodDonated,
+      bloodGroup,
+      rhFactor,
+      phoneNumber,
+  email,
       cityName,
       districtName,
       divisionName,
       postCode,
+      lastDateOfBloodDonated,
+      nextDateOfBloodDonated,
       photoUrl;
   bool isAbleToDonateBlood;
 
@@ -28,6 +28,8 @@ class BloodDonorModel {
       required this.postCode,
       required this.photoUrl,
       required this.lastDateOfBloodDonated,
-      required this.isAbleToDonateBlood
+      required this.isAbleToDonateBlood,
+      required this.phoneNumber,
+      required this.email,
       });
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import '../color/app_color.dart';
 import '../values/app_constant.dart';
 
@@ -623,81 +624,88 @@ class BloodDonorInformationTab extends StatelessWidget {
       child: Row(
         children: [
           Container(
-            margin: EdgeInsets.only(
-              left: 10,
-              top: 10,
-              bottom: 10,
-            ),
-            width: 50,
-            height: 50,
-            decoration: photo.isNotEmpty
-                ? BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                        image: NetworkImage(
-                          photo,
-                        ),
-                        fit: BoxFit.fill))
-                : BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: AppColor.sepiaBlack,
+                      margin: EdgeInsets.only(
+          left: 10,
+          top: 10,
+          bottom: 10,
+                      ),
+                      width: 50,
+                      height: 50,
+                      decoration: photo.isNotEmpty
+            ? BoxDecoration(
+                shape: BoxShape.circle,
+                image: DecorationImage(
+                    image: NetworkImage(
+                      photo,
+                    ),
+                    fit: BoxFit.fill))
+            : BoxDecoration(
+                shape: BoxShape.circle,
+                color: AppColor.sepiaBlack,
+              ),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Expanded(
+                      flex: 2,
+                      child: Text(
+                        donorName,textAlign: TextAlign.start,
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                      ),
+                    ),
+          // SizedBox(
+          //   width: 10,
+          // ),
+          Container(
+            color: AppColor.grey,
+            width: 0.5,
+            height: 70,
+          ),
+          // SizedBox(
+          //   width: 10,
+          // ),
+          Expanded(
+              flex:1,child:Text(
+            bloodGroupWithRh,textAlign: TextAlign.center,
+            style: TextStyle(fontWeight: FontWeight.bold),
+          )),
+          // SizedBox(
+          //   width: 10,
+          // ),
+          Container(
+            color: AppColor.grey,
+            width: 0.5,
+            height: 70,
+          ),
+          // SizedBox(
+          //   width: 10,
+          // ),
+          Expanded(
+            flex: 1,
+            child: isEligible
+                ? Text(
+                    AppConstant.eligiblePlainText,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, color: AppColor.fruitSalad),
+                  )
+                : Text(
+                    AppConstant.notEligiblePlainText,
+              textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, color: AppColor.carnation),
                   ),
           ),
-          SizedBox(
-            width: 10,
-          ),
-          Text(
-            donorName,
-            style: TextStyle(fontWeight: FontWeight.bold),
-            overflow: TextOverflow.fade,
-          ),
-          SizedBox(
-            width: 10,
-          ),
+          // SizedBox(
+          //   width: 10,
+          // ),
           Container(
             color: AppColor.grey,
             width: 0.5,
             height: 70,
-          ),
-          SizedBox(
-            width: 10,
-          ),
-          Text(
-            bloodGroupWithRh,
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          SizedBox(
-            width: 10,
-          ),
-          Container(
-            color: AppColor.grey,
-            width: 0.5,
-            height: 70,
-          ),
-          SizedBox(
-            width: 10,
-          ),
-          isEligible
-              ? Text(
-                  AppConstant.eligiblePlainText,
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold, color: AppColor.fruitSalad),
-                )
-              : Text(
-                  AppConstant.notEligiblePlainText,
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold, color: AppColor.carnation),
-                ),
-          SizedBox(
-            width: 10,
-          ),
-          Container(
-            color: AppColor.grey,
-            width: 0.5,
-            height: 70,
-          ),
-          SizedBox(
-            width: 10,
           ),
           PopupMenuButton(
             padding: EdgeInsets.zero,

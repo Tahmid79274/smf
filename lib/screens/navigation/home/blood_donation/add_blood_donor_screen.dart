@@ -14,8 +14,8 @@ import '../../../../utils/color/app_color.dart';
 import '../../../../utils/functionalities/functions.dart';
 
 class AddBloodDonorScreen extends StatefulWidget {
-  AddBloodDonorScreen({super.key});
-  BloodDonorModel editDonorInfo
+  AddBloodDonorScreen({super.key,this.editDonorInfo});
+  BloodDonorModel? editDonorInfo;
 
 
   @override
@@ -42,6 +42,7 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
   TextEditingController nextDateToAbleToDonateBloodController = TextEditingController();
 
   String _imagePath = '';
+  String imageUrl = '';
 
   Future<void> _pickImage() async {
     final picker = ImagePicker();
@@ -50,11 +51,31 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
     if (pickedImage != null) {
       setState(() {
         _imagePath = pickedImage.path;
-        // _imageFile = File(_imagePath!);
       });
     }
   }
 
+  @override
+  void initState(){
+    if(widget.editDonorInfo!=null){
+       nameController.text = widget.editDonorInfo!.name;
+       dateOfBirthController.text = widget.editDonorInfo!.dateOfBirth;
+       bloodGroupController.text = widget.editDonorInfo!.bloodGroup;
+       rhFactorController.text = widget.editDonorInfo!.rhFactor;
+       phoneNumberController.text =widget.editDonorInfo!.phoneNumber;
+       emailController.text = widget.editDonorInfo!.email;
+       cityNameController.text = widget.editDonorInfo!.cityName;
+       districtNameController.text = widget.editDonorInfo!.districtName;
+       postCodeController.text = widget.editDonorInfo!.postCode;
+       divisionController.text = widget.editDonorInfo!.divisionName;
+       lastDateOfBloodDonationController.text = widget.editDonorInfo!.lastDateOfBloodDonated;
+       abilityToDonateBloodController.text = GlobalVar.bloodDonorStatus(widget.editDonorInfo!.lastDateOfBloodDonated)?AppConstant.ableToDonateBloodPlainText:AppConstant.notAbleToDonateBloodPlainText;
+       nextDateToAbleToDonateBloodController.text = widget.editDonorInfo!.nextDateOfBloodDonated ;
+       imageUrl = widget.editDonorInfo!.photoUrl;
+    }
+    print('Image url in initstate:$imageUrl');
+    super.initState();
+  }
   @override
   void dispose(){
     nameController.dispose();
@@ -90,7 +111,18 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 SizedBox(height: 10,),
-                _imagePath.isEmpty ? InkWell(
+                imageUrl.isNotEmpty?Container(
+                    width: 100,
+                    height: 100,
+                    alignment: Alignment.center,
+                  margin: EdgeInsets.only(bottom: 10),
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                            image: NetworkImage(
+                              imageUrl,
+                            ),
+                            fit: BoxFit.fill))):_imagePath.isEmpty ? InkWell(
                   onTap: _pickImage,
                   child: Container(
                     alignment: Alignment.center,
@@ -203,62 +235,88 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
                 contentColor: AppColor.white,
                 backgroundColor: AppColor.killarney,
                 onPressed: ()async{
-                  if(formKey.currentState!.validate()){
-                    String downloadUrl = '';
-                    showDialog(context: context, builder: (context){
-                      return Center(child: CircularProgressIndicator(),);
-                    });
-                    String uniqueName = GlobalVar.customNameEncoder(nameController.text);
-                    final storageRef = FirebaseStorage.instance.ref();
-                    if(_imagePath.isNotEmpty){
-                      File file = File(_imagePath);
-                      final metadata = SettableMetadata(contentType: "image/jpeg");
-                      print('Image Path: $_imagePath');
-                      print('File Path: ${file.path}');
-                      final uploadTask = storageRef.child("${AppConstant.bloodDonorGroupPath}/$uniqueName/").putFile(file,metadata);
-                      print('Image Upload Time:${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}');
-                      uploadTask.snapshotEvents.listen((TaskSnapshot taskSnapshot) async {
-                        switch (taskSnapshot.state) {
-                          case TaskState.running:
-                            final progress =
-                                100.0 * (taskSnapshot.bytesTransferred / taskSnapshot.totalBytes);
-                            print("Upload is $progress% complete.");
-                            break;
-                          case TaskState.paused:
-                            print("Upload is paused.");
-                            break;
-                          case TaskState.canceled:
-                            print("Upload was canceled");
-                            break;
-                          case TaskState.error:
-                          // Handle unsuccessful uploads
-                            print('Error occured');
-                            break;
-                          case TaskState.success:
-                          // Handle successful uploads on complete
-                          // ...
-                            print('Time to get url:${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}');
-                            downloadUrl = await taskSnapshot.ref.getDownloadURL();
-                            print('Successfull');
-                            print('download url:$downloadUrl');
-                            print('Download url Current time:${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}');
-                            break;
-                        }
+                  if(widget.editDonorInfo==null){
+                    if(formKey.currentState!.validate()){
+                      String downloadUrl = '';
+                      showDialog(context: context, builder: (context){
+                        return Center(child: CircularProgressIndicator(),);
                       });
+                      String uniqueName = GlobalVar.customNameEncoder(nameController.text);
+                      final storageRef = FirebaseStorage.instance.ref();
+                      if(_imagePath.isNotEmpty){
+                        File file = File(_imagePath);
+                        final metadata = SettableMetadata(contentType: "image/jpeg");
+                        print('Image Path: $_imagePath');
+                        print('File Path: ${file.path}');
+                        final uploadTask = storageRef.child("${AppConstant.bloodDonorGroupPath}/$uniqueName/").putFile(file,metadata);
+                        print('Image Upload Time:${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}');
+                        uploadTask.snapshotEvents.listen((TaskSnapshot taskSnapshot) async {
+                          switch (taskSnapshot.state) {
+                            case TaskState.running:
+                              final progress =
+                                  100.0 * (taskSnapshot.bytesTransferred / taskSnapshot.totalBytes);
+                              print("Upload is $progress% complete.");
+                              break;
+                            case TaskState.paused:
+                              print("Upload is paused.");
+                              break;
+                            case TaskState.canceled:
+                              print("Upload was canceled");
+                              break;
+                            case TaskState.error:
+                            // Handle unsuccessful uploads
+                              print('Error occured');
+                              break;
+                            case TaskState.success:
+                            // Handle successful uploads on complete
+                            // ...
+                              print('Time to get url:${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}');
+                              downloadUrl = await taskSnapshot.ref.getDownloadURL();
+                              print('Successfull');
+                              print('download url:$downloadUrl');
+                              print('Download url Current time:${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}');
+                              break;
+                          }
+                        });
+                      }
+                      await Future.delayed(const Duration(seconds: 7)).whenComplete(() async{
+                        print('Upload Current time:${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}');
+                        FirebaseDatabase database = FirebaseDatabase.instance;
+                        final firebaseApp = Firebase.app();
+                        // final rtdb = FirebaseDatabase.instanceFor(
+                        //     app: firebaseApp,
+                        //     databaseURL:
+                        //     'https://smfmobileapp-5b74e-default-rtdb.firebaseio.com/');
+
+                        DatabaseReference ref = database.ref(
+                            "${AppConstant.bloodDonorGroupPath}/${uniqueName}");
+
+                        await ref.set({
+                          AppConstant.nameColumnText: nameController.text,
+                          AppConstant.dateOfBirthColumnText: dateOfBirthController.text,
+                          AppConstant.bloodGroupColumnText: bloodGroupController.text.toUpperCase(),
+                          AppConstant.rhFactorColumnText: rhFactorController.text,
+                          AppConstant.mobileColumnText: phoneNumberController.text,
+                          AppConstant.emailColumnText: emailController.text,
+                          AppConstant.cityNameColumnText: cityNameController.text,
+                          AppConstant.districtNameColumnText: districtNameController.text,
+                          AppConstant.postCodeColumnText: postCodeController.text,
+                          AppConstant.divisionColumnText: divisionController.text,
+                          AppConstant.lastDateOfBloodDonationColumnText: lastDateOfBloodDonationController.text,
+                          AppConstant.profileImageColumnText: downloadUrl,
+                        });
+                      });
+
+                      Navigator.of(context,rootNavigator: true).pop();
+                      Navigator.of(context,rootNavigator: true).pushReplacement(MaterialPageRoute(builder: (context)=>BloodDonorDirectoryScreen()));
+
+                      print('');
                     }
-                    await Future.delayed(const Duration(seconds: 7)).whenComplete(() async{
-                      print('Upload Current time:${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}');
-                      FirebaseDatabase database = FirebaseDatabase.instance;
-                      final firebaseApp = Firebase.app();
-                      // final rtdb = FirebaseDatabase.instanceFor(
-                      //     app: firebaseApp,
-                      //     databaseURL:
-                      //     'https://smfmobileapp-5b74e-default-rtdb.firebaseio.com/');
-
-                      DatabaseReference ref = database.ref(
-                          "${AppConstant.bloodDonorGroupPath}/${uniqueName}");
-
-                      await ref.set({
+                  }
+                  else{
+                    if(formKey.currentState!.validate()){
+                      DatabaseReference ref = FirebaseDatabase.instance.ref("${AppConstant.bloodDonorGroupPath}/${widget.editDonorInfo!.key}");
+                      ref.update({
                         AppConstant.nameColumnText: nameController.text,
                         AppConstant.dateOfBirthColumnText: dateOfBirthController.text,
                         AppConstant.bloodGroupColumnText: bloodGroupController.text.toUpperCase(),
@@ -270,14 +328,8 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
                         AppConstant.postCodeColumnText: postCodeController.text,
                         AppConstant.divisionColumnText: divisionController.text,
                         AppConstant.lastDateOfBloodDonationColumnText: lastDateOfBloodDonationController.text,
-                        AppConstant.profileImageColumnText: downloadUrl,
                       });
-                    });
-
-                    Navigator.of(context,rootNavigator: true).pop();
-                    Navigator.of(context,rootNavigator: true).pushReplacement(MaterialPageRoute(builder: (context)=>BloodDonorDirectoryScreen()));
-
-                    print('');
+                    }
                   }
                 })
           ],

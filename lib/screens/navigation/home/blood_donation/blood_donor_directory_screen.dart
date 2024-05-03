@@ -75,6 +75,8 @@ class _BloodDonorDirectoryScreenState extends State<BloodDonorDirectoryScreen> {
                 bloodGroup: groupData[key][AppConstant.bloodGroupColumnText].toString(),
                 dateOfBirth: groupData[key][AppConstant.dateOfBirthColumnText].toString(),
                 nextDateOfBloodDonated: nextTime,
+                email: groupData[key][AppConstant.emailColumnText].toString(),
+                phoneNumber: groupData[key][AppConstant.mobileColumnText].toString(),
                 cityName: groupData[key][AppConstant.cityNameColumnText].toString(),
                 divisionName: groupData[key][AppConstant.divisionColumnText].toString(),
                 districtName: groupData[key][AppConstant.districtNameColumnText].toString(),
@@ -255,7 +257,7 @@ class _BloodDonorDirectoryScreenState extends State<BloodDonorDirectoryScreen> {
                       isEligible: snapshot.data![index].isAbleToDonateBlood,
                       editFunction : (){
                         print('Edit Pressed');
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>AddBloodDonorScreen()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>AddBloodDonorScreen(editDonorInfo: snapshot.data![index],)));
                       },
                     deleteFunction: ()async{
                       DatabaseReference ref = FirebaseDatabase.instance.ref("${AppConstant.bloodDonorGroupPath}/${snapshot.data![index].key}");
