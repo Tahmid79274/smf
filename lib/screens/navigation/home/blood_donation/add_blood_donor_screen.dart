@@ -247,7 +247,7 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
                         final metadata = SettableMetadata(contentType: "image/jpeg");
                         print('Image Path: $_imagePath');
                         print('File Path: ${file.path}');
-                        final uploadTask = storageRef.child("${AppConstant.bloodDonorGroupPath}/$uniqueName/").putFile(file,metadata);
+                        final uploadTask = storageRef.child("${AppConstant.bloodDonorGroupPath}/$uniqueName/${AppConstant.userImageName}").putFile(file,metadata);
                         print('Image Upload Time:${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}');
                         uploadTask.snapshotEvents.listen((TaskSnapshot taskSnapshot) async {
                           switch (taskSnapshot.state) {

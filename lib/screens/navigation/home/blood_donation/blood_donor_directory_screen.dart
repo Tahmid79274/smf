@@ -1,15 +1,12 @@
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_database/firebase_database.dart';
+
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:smf/models/blood_donor_model.dart';
-import 'package:smf/utils/extension/theme.dart';
-import 'package:smf/utils/functionalities/functions.dart';
+import '../../../../models/blood_donor_model.dart';
+import '../../../../utils/extension/theme.dart';
 import '../../../../utils/color/app_color.dart';
 import '../../../../utils/values/app_constant.dart';
-import 'add_blood_donor_screen.dart';
+import './add_blood_donor_screen.dart';
 import '../../../../utils/functionalities/functions.dart';
 
 class BloodDonorDirectoryScreen extends StatefulWidget {
@@ -47,10 +44,6 @@ class _BloodDonorDirectoryScreenState extends State<BloodDonorDirectoryScreen> {
   Future<List<BloodDonorModel>> getBloodDonorList() async {
     print('Initiated');
     FirebaseDatabase database = FirebaseDatabase.instance;
-    final firebaseApp = Firebase.app();
-    final rtdb = FirebaseDatabase.instanceFor(
-        app: firebaseApp,
-        databaseURL: 'https://smfmobileapp-5b74e-default-rtdb.firebaseio.com/');
 
     //database.ref("${AppConstant.manPowerGroupPath}/${groupNameController.text}/people0");
     DatabaseReference ref = database.ref("${AppConstant.bloodDonorGroupPath}/");
@@ -101,8 +94,8 @@ class _BloodDonorDirectoryScreenState extends State<BloodDonorDirectoryScreen> {
 
   @override
   void initState(){
-    super.initState();
     donorList = getBloodDonorList();
+    super.initState();
   }
   @override
   void dispose() {
@@ -231,7 +224,7 @@ class _BloodDonorDirectoryScreenState extends State<BloodDonorDirectoryScreen> {
 
   Widget initBloodDonorList() {
     return TitleIconButtonWithWhiteBackground(
-      headline: 'মোট রক্তদাতা ${GlobalVar.englishNumberToBengali(filteredBloodDonorList.length.toString())} জন',
+      headline: 'মোট রক্তদাতা ${GlobalVar.englishNumberToBengali(bloodDonorList.length.toString())} জন',
       actionIcon: Icons.add,
       action: () {
         Navigator.push(context,
@@ -244,11 +237,13 @@ class _BloodDonorDirectoryScreenState extends State<BloodDonorDirectoryScreen> {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
+          } else if(snapshot.data!.isEmpty){
+            return Center(child: Text('Please add Blood donor.'),);
           }
           else{
-            setState(() {
+            //setState(() {
               filteredBloodDonorList = snapshot.data!;
-            });
+            //});
             return ListView.builder(
                 shrinkWrap: true,
                 physics: AlwaysScrollableScrollPhysics(),
@@ -264,6 +259,10 @@ class _BloodDonorDirectoryScreenState extends State<BloodDonorDirectoryScreen> {
                         Navigator.push(context, MaterialPageRoute(builder: (context)=>AddBloodDonorScreen(editDonorInfo: filteredBloodDonorList[index],)));
                       },
                     deleteFunction: ()async{
+                      showDialog(context: context, builder: (context)=>Center(child: CircularProgressIndicator(),));
+                      final desertRef = FirebaseStorage.instance.ref().child("${AppConstant.bloodDonorGroupPath}/${filteredBloodDonorList[index].key}/${AppConstant.userImageName}");
+
+                      await desertRef.delete();
                       DatabaseReference ref = FirebaseDatabase.instance.ref("${AppConstant.bloodDonorGroupPath}/${filteredBloodDonorList[index].key}");
 
                       await ref.remove();
