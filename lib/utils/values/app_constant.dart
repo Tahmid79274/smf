@@ -74,6 +74,7 @@ abstract class AppConstant{
   static String ableToDonateBloodPlainText = 'রক্তদানে যোগ্য';
   static String abilityToDonateBloodPlainText = 'রক্তদানের ক্ষমতা';
   static String lastDateOfBloodDonationPlainText = 'শেষ রক্তদানের তারিখ';
+  static String changePlainText = 'পরিবর্তন করুন';
 
   //image_path
 

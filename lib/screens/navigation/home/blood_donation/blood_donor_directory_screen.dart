@@ -39,6 +39,7 @@ class _BloodDonorDirectoryScreenState extends State<BloodDonorDirectoryScreen> {
   double width = 0;
 
   List<BloodDonorModel> bloodDonorList = [];
+  List<BloodDonorModel> filteredBloodDonorList = [];
   Map<String,String> groupMap = {};
 
   Future<List<BloodDonorModel>>? donorList;
@@ -230,7 +231,7 @@ class _BloodDonorDirectoryScreenState extends State<BloodDonorDirectoryScreen> {
 
   Widget initBloodDonorList() {
     return TitleIconButtonWithWhiteBackground(
-      headline: 'মোট রক্তদাতা ${GlobalVar.englishNumberToBengali(bloodDonorList.length.toString())} জন',
+      headline: 'মোট রক্তদাতা ${GlobalVar.englishNumberToBengali(filteredBloodDonorList.length.toString())} জন',
       actionIcon: Icons.add,
       action: () {
         Navigator.push(context,
@@ -245,34 +246,29 @@ class _BloodDonorDirectoryScreenState extends State<BloodDonorDirectoryScreen> {
             return Text('Error: ${snapshot.error}');
           }
           else{
+            setState(() {
+              filteredBloodDonorList = snapshot.data!;
+            });
             return ListView.builder(
                 shrinkWrap: true,
                 physics: AlwaysScrollableScrollPhysics(),
-                itemCount: snapshot.data!.length,
+                itemCount: filteredBloodDonorList.length,
                 itemBuilder: (context, index) {
                   return BloodDonorInformationTab(
-                    photo: snapshot.data![index].photoUrl,
-                      donorName: snapshot.data![index].name,
-                      bloodGroupWithRh: '${snapshot.data![index].bloodGroup}${snapshot.data![index].rhFactor}',
-                      isEligible: snapshot.data![index].isAbleToDonateBlood,
+                    photo: filteredBloodDonorList[index].photoUrl,
+                      donorName: filteredBloodDonorList[index].name,
+                      bloodGroupWithRh: '${filteredBloodDonorList[index].bloodGroup}${filteredBloodDonorList[index].rhFactor}',
+                      isEligible: filteredBloodDonorList[index].isAbleToDonateBlood,
                       editFunction : (){
                         print('Edit Pressed');
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>AddBloodDonorScreen(editDonorInfo: snapshot.data![index],)));
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>AddBloodDonorScreen(editDonorInfo: filteredBloodDonorList[index],)));
                       },
                     deleteFunction: ()async{
-                      DatabaseReference ref = FirebaseDatabase.instance.ref("${AppConstant.bloodDonorGroupPath}/${snapshot.data![index].key}");
+                      DatabaseReference ref = FirebaseDatabase.instance.ref("${AppConstant.bloodDonorGroupPath}/${filteredBloodDonorList[index].key}");
 
                       await ref.remove();
                       Navigator.popUntil(context, (route) => false);
 
-                      // print('Photo URL:${snapshot.data![index].photoUrl}');
-                      // final storageRef = FirebaseStorage.instance.refFromURL(snapshot.data![index].photoUrl);
-                      // print('Reference fullPath:${storageRef.fullPath}');
-                      // print('Reference name:${storageRef.name}');
-                      // print('Reference delete:${storageRef.delete()}');
-                        // final desertRef = storageRef.child("${AppConstant.bloodGroupColumnText}/${snapshot.data![index].photoUrl}");
-                        //
-                        // await desertRef.delete();
                     },
                   );
                 },
@@ -280,58 +276,6 @@ class _BloodDonorDirectoryScreenState extends State<BloodDonorDirectoryScreen> {
           }
         },
       )
-
-      /*ListView(
-        shrinkWrap: true,
-        physics: AlwaysScrollableScrollPhysics(),
-        children: [
-          BloodDonorInformationTab(
-            bloodGroupWithRh: 'A+',
-            donorName: 'Shraban Ahmed',
-            isEligible: true,
-          ),
-          BloodDonorInformationTab(
-            bloodGroupWithRh: 'A+',
-            donorName: 'Shraban Ahmed',
-            isEligible: true,
-          ),
-          BloodDonorInformationTab(
-            bloodGroupWithRh: 'A+',
-            donorName: 'Shraban Ahmed',
-            isEligible: true,
-          ),
-          BloodDonorInformationTab(
-            bloodGroupWithRh: 'A+',
-            donorName: 'Shraban Ahmed',
-            isEligible: true,
-          ),
-          BloodDonorInformationTab(
-            bloodGroupWithRh: 'A+',
-            donorName: 'Shraban Ahmed',
-            isEligible: true,
-          ),
-          BloodDonorInformationTab(
-            bloodGroupWithRh: 'A+',
-            donorName: 'Shraban Ahmed',
-            isEligible: true,
-          ),
-          BloodDonorInformationTab(
-            bloodGroupWithRh: 'A+',
-            donorName: 'Shraban Ahmed',
-            isEligible: true,
-          ),
-          BloodDonorInformationTab(
-            bloodGroupWithRh: 'A+',
-            donorName: 'Shraban Ahmed',
-            isEligible: true,
-          ),
-          BloodDonorInformationTab(
-            bloodGroupWithRh: 'A+',
-            donorName: 'Shraban Ahmed',
-            isEligible: true,
-          ),
-        ],
-      ),*/
     );
   }
 }

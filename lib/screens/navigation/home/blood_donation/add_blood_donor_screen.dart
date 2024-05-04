@@ -73,7 +73,6 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
        nextDateToAbleToDonateBloodController.text = widget.editDonorInfo!.nextDateOfBloodDonated ;
        imageUrl = widget.editDonorInfo!.photoUrl;
     }
-    print('Image url in initstate:$imageUrl');
     super.initState();
   }
   @override
@@ -231,7 +230,7 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
             CustomTextFormField(hint: AppConstant.nextDateToAbleToDonateBloodPlainText,controller: nextDateToAbleToDonateBloodController,keyboardInputType: TextInputType.datetime),
             SizedBox(height: 10,),
             CustomButton(
-                content: AppConstant.addPlainText,
+                content: widget.editDonorInfo==null?AppConstant.addPlainText:AppConstant.changePlainText,
                 contentColor: AppColor.white,
                 backgroundColor: AppColor.killarney,
                 onPressed: ()async{
@@ -307,13 +306,12 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
                         });
                       });
 
-                      Navigator.of(context,rootNavigator: true).pop();
-                      Navigator.of(context,rootNavigator: true).pushReplacement(MaterialPageRoute(builder: (context)=>BloodDonorDirectoryScreen()));
-
-                      print('');
                     }
                   }
                   else{
+                    showDialog(context: context, builder: (context){
+                      return Center(child: CircularProgressIndicator(),);
+                    });
                     if(formKey.currentState!.validate()){
                       DatabaseReference ref = FirebaseDatabase.instance.ref("${AppConstant.bloodDonorGroupPath}/${widget.editDonorInfo!.key}");
                       ref.update({
@@ -331,6 +329,10 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
                       });
                     }
                   }
+                  Navigator.of(context,rootNavigator: true).pop();
+                  Navigator.of(context,rootNavigator: true).pushReplacement(MaterialPageRoute(builder: (context)=>BloodDonorDirectoryScreen()));
+
+                  print('');
                 })
           ],
         ));
