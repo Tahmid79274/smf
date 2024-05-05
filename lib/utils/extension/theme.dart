@@ -117,10 +117,12 @@ class MyBusinessTileUi extends StatelessWidget {
       required this.title,
       required this.imagePath,
       required this.context,
+      required this.editAction,
+      required this.deleteAction,
       required this.onTapAction});
   BuildContext context;
   String title, imagePath;
-  VoidCallback onTapAction;
+  VoidCallback onTapAction,editAction,deleteAction;
 
   @override
   Widget build(BuildContext context) {
@@ -144,6 +146,7 @@ class MyBusinessTileUi extends StatelessWidget {
               itemBuilder: (context) {
                 return [
                   PopupMenuItem(
+                    onTap: editAction,
                       child: Row(
                     children: [
                       Icon(
@@ -158,6 +161,7 @@ class MyBusinessTileUi extends StatelessWidget {
                     ],
                   )),
                   PopupMenuItem(
+                      onTap: deleteAction,
                       child: Row(
                     children: [
                       Icon(
@@ -182,21 +186,32 @@ class MyBusinessTileUi extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
-                    width: 50,
-                    height: 50,
-                    decoration: BoxDecoration(
-                        color: AppColor.fruitSalad,
-                        borderRadius: BorderRadius.circular(50)),
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.all(10),
-                    // child: Image.asset(AppConstant.basePath+AppConstant.fbLogoPath,alignment: Alignment.center,fit: BoxFit.fill,),
+                    margin: EdgeInsets.only(
+                      left: 10,
+                      top: 10,
+                      bottom: 10,
+                    ),
+                    width: 40,
+                    height: 40,
+                    decoration: imagePath.isNotEmpty
+                        ? BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                            image: NetworkImage(
+                              imagePath,
+                            ),
+                            fit: BoxFit.fill))
+                        : BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: AppColor.sepiaBlack,
+                    ),
                   ),
                   SizedBox(
                     width: 10,
                   ),
                   Expanded(
                       child: Text(
-                    AppConstant.manPowerListPlainText,
+                        title,overflow: TextOverflow.fade,maxLines: 2,
                     style: TextStyle(fontSize: 20),
                   ))
                 ])

@@ -2,17 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:smf/utils/color/app_color.dart';
 import 'package:smf/utils/values/app_constant.dart';
 
+import '../../../../../models/transaction_model.dart';
 import '../../../../../utils/extension/theme.dart';
 import 'add_new_transaction_entry_screen.dart';
 
 class BusinessTransactionDetailsScreen extends StatefulWidget {
-  const BusinessTransactionDetailsScreen({super.key});
+  BusinessTransactionDetailsScreen({super.key,required this.selectedTransactionKey,required this.path,required this.imageUrl});
+  String selectedTransactionKey;
+  String path,imageUrl;
 
   @override
   State<BusinessTransactionDetailsScreen> createState() => _BusinessTransactionDetailsScreenState();
 }
 
 class _BusinessTransactionDetailsScreenState extends State<BusinessTransactionDetailsScreen> {
+  @override
+  void initState(){
+    print('Selected path:${widget.path}');
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return BasicAquaHazeBGUi(
@@ -41,18 +49,21 @@ class _BusinessTransactionDetailsScreenState extends State<BusinessTransactionDe
       children: [
         Container(
           padding: EdgeInsets.all(10),
-          height: 70,
-          width: 70,
-          decoration: BoxDecoration(
+          height: 50,
+          width: 50,
+          decoration: widget.imageUrl.isEmpty?BoxDecoration(
+            shape: BoxShape.circle,
               color: AppColor.white,
             borderRadius: BorderRadius.circular(5)
+          ):
+          BoxDecoration(
+              shape: BoxShape.circle,
+            image: DecorationImage(image: NetworkImage(widget.imageUrl),fit: BoxFit.fill)
           ),
-          child: CircleAvatar(
-            backgroundColor: Colors.red,
-          ),
+          child: Text(widget.selectedTransactionKey.transactionName),
         ),
-        const SizedBox(width: 20,),
-        Flexible(child: BusinessTitleWithIcon(title: '',))
+        const SizedBox(width: 10,),
+        Flexible(child: BusinessTitleWithIcon(title: widget.selectedTransactionKey.transactionName,))
       ],
     );
   }

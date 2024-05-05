@@ -114,4 +114,12 @@ abstract class AppConstant{
   static String divisionColumnText = 'division_name';
   static String lastDateOfBloodDonationColumnText = 'last_date_of_blood_donation';
   static String profileImageColumnText = 'profile_image';
+  static String companyNameColumnText = 'company_name';
+  static String addressColumnText = 'address';
+  static String ownershipColumnText = 'ownership';
+  static String businessLogoColumnText = 'logo';
+  static String transactionsColumnText = 'transactions';
+  static String incomeColumnText = 'income';
+  static String expenseColumnText = 'expense';
+  static String remainingBalanceColumnText = 'remaining_balance';
 }

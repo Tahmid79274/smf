@@ -313,20 +313,20 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
                       return Center(child: CircularProgressIndicator(),);
                     });
                     if(formKey.currentState!.validate()){
-                      DatabaseReference ref = FirebaseDatabase.instance.ref("${AppConstant.bloodDonorGroupPath}/${widget.editDonorInfo!.key}");
-                      ref.update({
-                        AppConstant.nameColumnText: nameController.text,
-                        AppConstant.dateOfBirthColumnText: dateOfBirthController.text,
-                        AppConstant.bloodGroupColumnText: bloodGroupController.text.toUpperCase(),
-                        AppConstant.rhFactorColumnText: rhFactorController.text,
-                        AppConstant.mobileColumnText: phoneNumberController.text,
-                        AppConstant.emailColumnText: emailController.text,
-                        AppConstant.cityNameColumnText: cityNameController.text,
-                        AppConstant.districtNameColumnText: districtNameController.text,
-                        AppConstant.postCodeColumnText: postCodeController.text,
-                        AppConstant.divisionColumnText: divisionController.text,
-                        AppConstant.lastDateOfBloodDonationColumnText: lastDateOfBloodDonationController.text,
-                      });
+                        DatabaseReference ref = FirebaseDatabase.instance.ref("${AppConstant.bloodDonorGroupPath}/${widget.editDonorInfo!.key}");
+                        ref.update({
+                          AppConstant.nameColumnText: nameController.text,
+                          AppConstant.dateOfBirthColumnText: dateOfBirthController.text,
+                          AppConstant.bloodGroupColumnText: bloodGroupController.text.toUpperCase(),
+                          AppConstant.rhFactorColumnText: rhFactorController.text,
+                          AppConstant.mobileColumnText: phoneNumberController.text,
+                          AppConstant.emailColumnText: emailController.text,
+                          AppConstant.cityNameColumnText: cityNameController.text,
+                          AppConstant.districtNameColumnText: districtNameController.text,
+                          AppConstant.postCodeColumnText: postCodeController.text,
+                          AppConstant.divisionColumnText: divisionController.text,
+                          AppConstant.lastDateOfBloodDonationColumnText: lastDateOfBloodDonationController.text,
+                        });
                     }
                   }
                   Navigator.of(context,rootNavigator: true).pop();
