@@ -77,7 +77,7 @@ class _ManPowerGroupScreenState extends State<ManPowerGroupScreen> {
   }
 
   Widget initBuildUi() {
-    return Column(
+    return SingleChildScrollView(child: Column(
       children: [
         initSearchAndAddAccountUi(),
         const SizedBox(
@@ -85,7 +85,7 @@ class _ManPowerGroupScreenState extends State<ManPowerGroupScreen> {
         ),
         initManPowerGroupUi()
       ],
-    );
+    ));
   }
 
   Widget initSearchAndAddAccountUi() {
@@ -128,18 +128,12 @@ class _ManPowerGroupScreenState extends State<ManPowerGroupScreen> {
                         String groupName = "${groupNameController.text.replaceAll(' ', '_')}?${DateTime.now().toString().replaceAll(' ', '@').replaceAll('.', ':')}";
                         print('Group Name is: $groupName');
                         FirebaseDatabase database = FirebaseDatabase.instance;
-                        final firebaseApp = Firebase.app();
-                        final rtdb = FirebaseDatabase.instanceFor(
-                            app: firebaseApp,
-                            databaseURL:
-                                'https://smfmobileapp-5b74e-default-rtdb.firebaseio.com/');
 
                         DatabaseReference ref = database.ref(
                             "${AppConstant.manPowerGroupPath}/$groupName/people0");
 
                         await ref.set({
                           "name": "",
-                          "age": 0,
                         });
                         _groupsFuture = getGroupList();
                         Navigator.of(context,rootNavigator: true).pop();
@@ -163,8 +157,8 @@ class _ManPowerGroupScreenState extends State<ManPowerGroupScreen> {
             }
             else {
               //groups = snapshot.data!;
-              print('Snapshot values:${snapshot.data!}');
-              return GridView.builder(
+              //print('Snapshot values:${snapshot.data!}');
+              return GridView.builder(padding: EdgeInsets.all(10),
                 itemCount: groups.length,
                 physics: AlwaysScrollableScrollPhysics(),
                 shrinkWrap: true,
@@ -177,7 +171,7 @@ class _ManPowerGroupScreenState extends State<ManPowerGroupScreen> {
                   return CardAquaHazeWithColumnIconAndTitle(
                     title: groups[index],
                     action: () {
-                      print('You pressed ${groups[index]} which means ${groupMap[groups[index]]}');
+                      //print('You pressed ${groups[index]} which means ${groupMap[groups[index]]}');
                       Navigator.push(
                           context,
                           MaterialPageRoute(

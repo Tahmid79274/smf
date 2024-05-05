@@ -599,15 +599,15 @@ class CustomDropdownButton extends StatelessWidget {
 }
 
 class BloodDonorInformationTab extends StatelessWidget {
-  BloodDonorInformationTab(
-      {super.key,
-      required this.donorName,
-      required this.bloodGroupWithRh,
-      required this.isEligible,
-      required this.photo,
-      required this.deleteFunction,
-      required this.editFunction,
-      });
+  BloodDonorInformationTab({
+    super.key,
+    required this.donorName,
+    required this.bloodGroupWithRh,
+    required this.isEligible,
+    required this.photo,
+    required this.deleteFunction,
+    required this.editFunction,
+  });
   String donorName, bloodGroupWithRh, photo;
   bool isEligible;
   VoidCallback deleteFunction, editFunction;
@@ -624,38 +624,39 @@ class BloodDonorInformationTab extends StatelessWidget {
       child: Row(
         children: [
           Container(
-                      margin: EdgeInsets.only(
-          left: 10,
-          top: 10,
-          bottom: 10,
-                      ),
-                      width: 50,
-                      height: 50,
-                      decoration: photo.isNotEmpty
-            ? BoxDecoration(
-                shape: BoxShape.circle,
-                image: DecorationImage(
-                    image: NetworkImage(
-                      photo,
-                    ),
-                    fit: BoxFit.fill))
-            : BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppColor.sepiaBlack,
-              ),
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: Text(
-                        donorName,textAlign: TextAlign.start,
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 2,
-                      ),
-                    ),
+            margin: EdgeInsets.only(
+              left: 10,
+              top: 10,
+              bottom: 10,
+            ),
+            width: 50,
+            height: 50,
+            decoration: photo.isNotEmpty
+                ? BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                        image: NetworkImage(
+                          photo,
+                        ),
+                        fit: BoxFit.fill))
+                : BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: AppColor.sepiaBlack,
+                  ),
+          ),
+          SizedBox(
+            width: 10,
+          ),
+          Expanded(
+            flex: 2,
+            child: Text(
+              donorName,
+              textAlign: TextAlign.start,
+              style: TextStyle(fontWeight: FontWeight.bold),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 2,
+            ),
+          ),
           // SizedBox(
           //   width: 10,
           // ),
@@ -668,10 +669,12 @@ class BloodDonorInformationTab extends StatelessWidget {
           //   width: 10,
           // ),
           Expanded(
-              flex:1,child:Text(
-            bloodGroupWithRh,textAlign: TextAlign.center,
-            style: TextStyle(fontWeight: FontWeight.bold),
-          )),
+              flex: 1,
+              child: Text(
+                bloodGroupWithRh,
+                textAlign: TextAlign.center,
+                style: TextStyle(fontWeight: FontWeight.bold),
+              )),
           // SizedBox(
           //   width: 10,
           // ),
@@ -690,11 +693,12 @@ class BloodDonorInformationTab extends StatelessWidget {
                     AppConstant.eligiblePlainText,
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                        fontWeight: FontWeight.bold, color: AppColor.fruitSalad),
+                        fontWeight: FontWeight.bold,
+                        color: AppColor.fruitSalad),
                   )
                 : Text(
                     AppConstant.notEligiblePlainText,
-              textAlign: TextAlign.center,
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                         fontWeight: FontWeight.bold, color: AppColor.carnation),
                   ),
@@ -712,7 +716,7 @@ class BloodDonorInformationTab extends StatelessWidget {
             itemBuilder: (context) {
               return [
                 PopupMenuItem(
-                  onTap: editFunction,
+                    onTap: editFunction,
                     padding: EdgeInsets.zero,
                     child: Row(
                       mainAxisSize: MainAxisSize.min,

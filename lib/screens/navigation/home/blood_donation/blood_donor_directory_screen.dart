@@ -266,8 +266,10 @@ class _BloodDonorDirectoryScreenState extends State<BloodDonorDirectoryScreen> {
                       DatabaseReference ref = FirebaseDatabase.instance.ref("${AppConstant.bloodDonorGroupPath}/${filteredBloodDonorList[index].key}");
 
                       await ref.remove();
-                      Navigator.popUntil(context, (route) => false);
-
+                      setState(() {
+                        snapshot.data!.removeAt(index);
+                      });
+                      Navigator.of(context,rootNavigator: true).pop();
                     },
                   );
                 },

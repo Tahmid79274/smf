@@ -98,7 +98,9 @@ abstract class AppConstant{
   //table_path
   static String manPowerGroupPath = 'man_power_groups';
   static String bloodDonorGroupPath = 'blood_donor_list';
+  static String accountPath = 'account_list';
   static String userImageName = 'img_001.jpg';
+  static String ignoredKey = 'people0';
 
   static String nameColumnText = 'name';
   static String dateOfBirthColumnText = 'date_of_birth';
