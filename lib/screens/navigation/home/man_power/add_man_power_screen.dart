@@ -71,7 +71,7 @@ class _AddManpowerScreenState extends State<AddManpowerScreen> {
   @override
   Widget build(BuildContext context) {
     return BasicAquaHazeBGUi(
-        appBarTitle: AppConstant.addManpowerPlainText, child: initBuildUi());
+        appBarTitle: AppConstant.addManpowerPlainText, child: SingleChildScrollView(child: initBuildUi()));
   }
 
   Widget initBuildUi() {
@@ -181,6 +181,7 @@ class _AddManpowerScreenState extends State<AddManpowerScreen> {
                     keyboardInputType: TextInputType.text),
               ],
             ),
+            SizedBox(height: 120,),
             CustomButton(
                 content: widget.editGroupMember == null
                     ? AppConstant.addPlainText

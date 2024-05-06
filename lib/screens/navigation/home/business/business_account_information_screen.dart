@@ -25,10 +25,11 @@ class _BusinessAccountInformationScreenState
   TextEditingController transactionDetailsTabController =
       TextEditingController();
 
+  double totalIncome=0,totalExpense = 0,remainingBalance =0;
   List<TransactionModel> transactionList = [];
   Future<List<TransactionModel>>? _transactionTabsFuture;
   Future<List<TransactionModel>> getTransactionTabsList() async {
-    print('Initiated');
+    //print('Initiated');
     FirebaseDatabase database = FirebaseDatabase.instance;
 
     //database.ref("${AppConstant.manPowerGroupPath}/${groupNameController.text}/people0");
@@ -41,26 +42,32 @@ class _BusinessAccountInformationScreenState
         // Extract the data as a Map
         Map<dynamic, dynamic> groupData =
             event.snapshot.value as Map<dynamic, dynamic>;
-        print('Business Account map:$groupData');
+        //print('Business Account map:$groupData');
         for (var key in groupData.keys) {
           if (key == AppConstant.transactionsColumnText) {
-            setState(() {
-              transactionList.add(TransactionModel(
-                  key: key,
-                  transactionName:
-                      GlobalVar.customNameDecoder(groupData[key].toString()),
-                  income:
-                      groupData[key][AppConstant.incomeColumnText].toString(),
-                  expense: groupData[key][AppConstant.incomeColumnText].toString(),
-                  remainingBalance: groupData[key][AppConstant.incomeColumnText].toString(),
-                  entries: []));
-            });
+            // print('Business Account Key:${groupData[key]}');
+            for(var transactionKey in groupData[key].keys){
+              print('Transaction Keys are:$transactionKey');
+              setState(() {
+                totalIncome += double.parse(groupData[key][transactionKey][AppConstant.incomeColumnText].toString());
+                totalExpense += double.parse(groupData[key][transactionKey][AppConstant.expenseColumnText].toString());
+                remainingBalance = totalIncome - totalExpense;
+                transactionList.add(TransactionModel(
+                    key: transactionKey,
+                    transactionName: groupData[key][transactionKey][AppConstant.nameColumnText].toString(),
+                    income:
+                    groupData[key][transactionKey][AppConstant.incomeColumnText].toString(),
+                    expense: groupData[key][transactionKey][AppConstant.incomeColumnText].toString(),
+                    remainingBalance: groupData[key][transactionKey][AppConstant.incomeColumnText].toString(),
+                    entries: []));
+              });
+            }
           }
         }
 
-        print('Transactions:$transactionList');
+        //print('Transactions:$transactionList');
       } else {
-        print("Group with ID '123' does not exist.");
+        //print("Group with ID '123' does not exist.");
       }
     });
     return transactionList;
@@ -159,7 +166,7 @@ class _BusinessAccountInformationScreenState
       whatToShow: Column(children: [
         ReportStatusDetailsUi(
           title: AppConstant.incomePlainText,
-          amount: '20000',
+          amount: totalIncome.toString(),
           imagePath: AppConstant.incomeLogoPath,
         ),
         const SizedBox(
@@ -167,7 +174,7 @@ class _BusinessAccountInformationScreenState
         ),
         ReportStatusDetailsUi(
           title: AppConstant.expensePlainText,
-          amount: '20000',
+          amount: totalExpense.toString(),
           imagePath: AppConstant.expenseLogoPath,
         ),
         const SizedBox(
@@ -175,7 +182,7 @@ class _BusinessAccountInformationScreenState
         ),
         ReportStatusDetailsUi(
           title: AppConstant.remainingBalancePlainText,
-          amount: '20000',
+          amount: remainingBalance.toString(),
           imagePath: AppConstant.remainingBalanceLogoPath,
         ),
       ]),
@@ -216,10 +223,10 @@ class _BusinessAccountInformationScreenState
 
                       await ref.set({
                         AppConstant.nameColumnText: transactionDetailsTabController.text,
-                        AppConstant.incomeColumnText: '',
-                        AppConstant.expenseColumnText: '',
-                        AppConstant.remainingBalanceColumnText: '',
-                        AppConstant.transactionsColumnText: '',
+                        AppConstant.incomeColumnText: '0',
+                        AppConstant.expenseColumnText: '0',
+                        AppConstant.remainingBalanceColumnText: '0',
+                        AppConstant.entryColumnText: '',
 
                       });
                       _transactionTabsFuture = getTransactionTabsList();
@@ -240,8 +247,10 @@ class _BusinessAccountInformationScreenState
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
-          } else {
+            return Text('Please add transaction..');
+          } else if (snapshot.data!.isEmpty) {
+            return Text('Please add transaction');
+          }else {
             return GridView.builder(
               itemCount: snapshot.data!.length,
               shrinkWrap: true,
@@ -258,8 +267,8 @@ class _BusinessAccountInformationScreenState
                           MaterialPageRoute(
                               builder: (context) =>
                                   BusinessTransactionDetailsScreen(
-                                    path: widget.selectedBusinessAccount.key,
-                                    selectedTransactionKey: snapshot.data![index].key,
+                                    path: '${widget.path}/${AppConstant.transactionsColumnText}/${snapshot.data![index].key}',
+                                    selectedTransaction: snapshot.data![index],
                                     imageUrl: widget.selectedBusinessAccount.imageUrl,
                                   )));
                     });

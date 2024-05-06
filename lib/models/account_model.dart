@@ -1,3 +1,5 @@
+import 'package:firebase_database/firebase_database.dart';
+
 class AccountModel{
   String key,companyName,address,ownershipName,imageUrl;
   AccountModel({

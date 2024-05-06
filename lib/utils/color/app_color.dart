@@ -4,6 +4,7 @@ abstract class AppColor{
   static Color white = Colors.white;
   static Color grey = Colors.blueGrey;
   static Color red = Colors.red;
+  static Color green = Colors.green;
   static Color timberGreen = Color(0xFF182C25);
   static Color grannySmith = Color(0xFF859D95);
   static Color downy = Color(0xFF69CE9F);

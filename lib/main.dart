@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'screens/auth/welcome_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'screens/navigation/navigation_screen.dart';
 
 
 const firebaseConfig = {
@@ -31,7 +32,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: const WelcomeScreen(),
+        home: const NavigationScreen(),
       );
   }
 }

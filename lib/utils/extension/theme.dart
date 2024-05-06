@@ -389,12 +389,14 @@ class CardAquaHazeWithColumnIconAndTitle extends StatelessWidget {
               SizedBox(
                 height: 10,
               ),
-              Text(
-                title,
-                textAlign: TextAlign.center,
-                maxLines: 2,
-                style: TextStyle(fontSize: 17),
-                overflow: TextOverflow.visible,
+              Expanded(
+                child: Text(
+                  title,
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  style: TextStyle(fontSize: 17),
+                  overflow: TextOverflow.visible,
+                ),
               )
             ],
           ),
@@ -461,7 +463,10 @@ class TitleIconButtonWithWhiteBackground extends StatelessWidget {
           SizedBox(
             height: 10,
           ),
-          whatToShow
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: whatToShow,
+          )
         ],
       ),
     );

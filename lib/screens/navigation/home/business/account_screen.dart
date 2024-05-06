@@ -46,7 +46,8 @@ class _AccountScreenState extends State<AccountScreen> {
                 ownershipName:
                     groupData[key][AppConstant.ownershipColumnText].toString(),
                 imageUrl: groupData[key][AppConstant.businessLogoColumnText]
-                    .toString()));
+                    .toString(),
+                ));
             //groups.add(key);
           });
         }
@@ -147,7 +148,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   imagePath: snapshot.data![index].imageUrl,
                   context: context,
                   onTapAction: () {
-                    Navigator.push(
+                    Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
                             builder: (context) =>

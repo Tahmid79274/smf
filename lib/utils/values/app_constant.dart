@@ -122,4 +122,10 @@ abstract class AppConstant{
   static String incomeColumnText = 'income';
   static String expenseColumnText = 'expense';
   static String remainingBalanceColumnText = 'remaining_balance';
+  static String entryDateColumnText = 'entry_date';
+  static String entryTitleColumnText = 'entry_title';
+  static String entryDetailsColumnText = 'entry_details';
+  static String entryAmountColumnText = 'entry_amount';
+  static String entryColumnText = 'entries';
+  static String debitOrCreditColumnText = 'debit_or_credit';
 }

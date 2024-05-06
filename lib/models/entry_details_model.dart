@@ -1,8 +1,9 @@
 class EntryDetailsModel{
-  String productName,transactionDate,amount;
+  String entryTitle,entryDetails,transactionDate,amount;
   bool isDebit;
   EntryDetailsModel({
-    required this.productName,
+    required this.entryTitle,
+    required this.entryDetails,
     required this.transactionDate,
     required this.amount,
     required this.isDebit,

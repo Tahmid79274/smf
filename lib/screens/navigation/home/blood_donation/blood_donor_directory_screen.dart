@@ -20,6 +20,7 @@ class BloodDonorDirectoryScreen extends StatefulWidget {
 class _BloodDonorDirectoryScreenState extends State<BloodDonorDirectoryScreen> {
   TextEditingController searchController = TextEditingController();
 
+  int totalDonor = 0;
   List<String> bloodGroupList = [
     'A',
     'AB',
@@ -79,6 +80,7 @@ class _BloodDonorDirectoryScreenState extends State<BloodDonorDirectoryScreen> {
                 lastDateOfBloodDonated: groupData[key][AppConstant.lastDateOfBloodDonationColumnText].toString(),
                 isAbleToDonateBlood: GlobalVar.bloodDonorStatus(groupData[key][AppConstant.lastDateOfBloodDonationColumnText].toString())
             ));
+            totalDonor = bloodDonorList.length;
           });
         }
       } else {
@@ -224,10 +226,10 @@ class _BloodDonorDirectoryScreenState extends State<BloodDonorDirectoryScreen> {
 
   Widget initBloodDonorList() {
     return TitleIconButtonWithWhiteBackground(
-      headline: 'মোট রক্তদাতা ${GlobalVar.englishNumberToBengali(bloodDonorList.length.toString())} জন',
+      headline: 'মোট রক্তদাতা ${GlobalVar.englishNumberToBengali(totalDonor.toString())} জন',
       actionIcon: Icons.add,
       action: () {
-        Navigator.push(context,
+        Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (context) => AddBloodDonorScreen()));
       },
       whatToShow: FutureBuilder<List<BloodDonorModel>>(
@@ -256,7 +258,7 @@ class _BloodDonorDirectoryScreenState extends State<BloodDonorDirectoryScreen> {
                       isEligible: filteredBloodDonorList[index].isAbleToDonateBlood,
                       editFunction : (){
                         print('Edit Pressed');
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>AddBloodDonorScreen(editDonorInfo: filteredBloodDonorList[index],)));
+                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>AddBloodDonorScreen(editDonorInfo: filteredBloodDonorList[index],)));
                       },
                     deleteFunction: ()async{
                       showDialog(context: context, builder: (context)=>Center(child: CircularProgressIndicator(),));
