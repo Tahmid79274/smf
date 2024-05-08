@@ -128,4 +128,10 @@ abstract class AppConstant{
   static String entryAmountColumnText = 'entry_amount';
   static String entryColumnText = 'entries';
   static String debitOrCreditColumnText = 'debit_or_credit';
+
+
+  //shared_pref
+  static String loggedIn = 'logged_in';
+  static String emails = 'emails';
+  static String passwords = 'passwords';
 }

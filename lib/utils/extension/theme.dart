@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import '../color/app_color.dart';
+import '../functionalities/functions.dart';
 import '../values/app_constant.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -514,28 +515,37 @@ Text orTextUI() {
         fontWeight: FontWeight.bold, color: AppColor.sepiaBlack, fontSize: 20),
   );
 }
+class SocialLoginUi extends StatelessWidget {
+  SocialLoginUi({super.key,required this.onTapAction});
+  VoidCallback onTapAction;
 
-Widget socialLoginUi() {
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.start,
-    crossAxisAlignment: CrossAxisAlignment.start,
-    mainAxisSize: MainAxisSize.min,
-    children: [
-      InkWell(
-        child: Image.asset(
-            AppConstant.imageBasePath + AppConstant.googleLogoPath,
-            width: 50),
-      ),
-      SizedBox(
-        width: 20,
-      ),
-      InkWell(
-        child: Image.asset(AppConstant.imageBasePath + AppConstant.fbLogoPath,
-            width: 50),
-      ),
-    ],
-  );
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        InkWell(
+          child: Image.asset(
+              AppConstant.imageBasePath + AppConstant.googleLogoPath,
+              width: 50),
+          onTap: onTapAction,
+        ),
+        SizedBox(
+          width: 20,
+        ),
+        InkWell(
+          onTap: onTapAction,
+          child: Image.asset(AppConstant.imageBasePath + AppConstant.fbLogoPath,
+              width: 50),
+        ),
+      ],
+    );
+  }
 }
+
+
 
 Widget forgotPasswordUi(VoidCallback onPressed) {
   return Align(

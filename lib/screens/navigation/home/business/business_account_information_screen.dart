@@ -262,7 +262,7 @@ class _BusinessAccountInformationScreenState
                 return CardAquaHazeWithColumnIconAndTitle(
                     title: snapshot.data![index].transactionName,
                     action: () {
-                      Navigator.push(
+                      Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
