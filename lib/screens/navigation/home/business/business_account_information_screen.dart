@@ -37,6 +37,7 @@ class _BusinessAccountInformationScreenState
         "${AppConstant.accountPath}/${widget.selectedBusinessAccount.key}");
     //print(ref.);
     transactionList.clear();
+    totalIncome = 0; totalExpense = 0; remainingBalance =0;
     await ref.once().then((event) {
       if (event.snapshot.exists) {
         // Extract the data as a Map
@@ -262,7 +263,7 @@ class _BusinessAccountInformationScreenState
                 return CardAquaHazeWithColumnIconAndTitle(
                     title: snapshot.data![index].transactionName,
                     action: () {
-                      Navigator.pushReplacement(
+                      Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) =>

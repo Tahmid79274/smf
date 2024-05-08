@@ -330,8 +330,7 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
                     }
                   }
                   Navigator.of(context,rootNavigator: true).pop();
-                  Navigator.of(context,rootNavigator: true).pushReplacement(MaterialPageRoute(builder: (context)=>BloodDonorDirectoryScreen()));
-
+                  Navigator.pop(context,true);
                   print('');
                 })
           ],

@@ -26,6 +26,8 @@ class _BusinessTransactionDetailsScreenState
     extends State<BusinessTransactionDetailsScreen> {
   Map<String,String> groupMap = {};
 
+  bool loadData = true;
+
   Future<List<EntryDetailsModel>>? _getEntriesFuture;
   List<EntryDetailsModel> entries = [];
   double totalExpense = 0, totalIncome = 0, remainingBalance = 0;
@@ -38,6 +40,7 @@ class _BusinessTransactionDetailsScreenState
     DatabaseReference ref = database.ref("${widget.path}/${AppConstant.entryColumnText}");
     //print(ref.);
     entries.clear();
+    totalExpense = 0; totalIncome = 0; remainingBalance = 0;
     await ref.once().then((event) {
       if (event.snapshot.exists) {
         // Extract the data as a Map
@@ -73,7 +76,9 @@ class _BusinessTransactionDetailsScreenState
 
   @override
   void initState() {
-    _getEntriesFuture = getEntryDetails();
+    if(loadData){
+      _getEntriesFuture = getEntryDetails();
+    }
     print('Selected path:${widget.path}');
     super.initState();
   }
@@ -123,7 +128,6 @@ class _BusinessTransactionDetailsScreenState
                   shape: BoxShape.circle,
                   image: DecorationImage(
                       image: NetworkImage(widget.imageUrl), fit: BoxFit.fill)),
-          child: Text('widget.selectedTransactionKey.transactionName'),
         ),
         const SizedBox(
           width: 10,
@@ -170,15 +174,20 @@ class _BusinessTransactionDetailsScreenState
     return TitleIconButtonWithWhiteBackground(
       headline: AppConstant.entryTitlePlainText,
       actionIcon: Icons.add,
-      action: () {
-        Navigator.pushReplacement(
+      action: () async {
+        loadData = await Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => AddNewBusinessTransactionEntryScreen(
-                      path: widget.path,
-                      selectedTransaction: widget.selectedTransaction,
-                      imageUrl: widget.imageUrl,
-                    )));
+                  path: widget.path,
+                  selectedTransaction: widget.selectedTransaction,
+                  imageUrl: widget.imageUrl,
+                )));
+        if(loadData){
+          setState(() {
+            _getEntriesFuture = getEntryDetails();
+          });
+        }
       },
       whatToShow: FutureBuilder<List<EntryDetailsModel>>
         (future: _getEntriesFuture,

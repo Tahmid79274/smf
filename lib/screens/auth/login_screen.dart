@@ -98,7 +98,7 @@ class _LoginScreenState extends State<LoginScreen> {
         SizedBox(height: 10,),
         orTextUI(),
         SizedBox(height: 10,),
-        socialLoginUi()
+        SocialLoginUi(onTapAction: (){},)
       ],
     );
   }

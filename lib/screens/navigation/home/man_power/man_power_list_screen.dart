@@ -43,16 +43,18 @@ class _ManPowerGroupListScreenState extends State<ManPowerGroupListScreen> {
         print('Memeber List:$groupData}');
         for (var key in groupData.keys) {
           if (key != AppConstant.ignoredKey) {
-            groupMembers.add(GroupMemberModel(
-                key: key,
-                name: groupData[key][AppConstant.nameColumnText],
-                mobileNumber: groupData[key][AppConstant.mobileColumnText],
-                cityName: groupData[key][AppConstant.cityNameColumnText],
-                districtName: groupData[key]
-                    [AppConstant.districtNameColumnText],
-                division: groupData[key][AppConstant.divisionColumnText],
-                postCode: groupData[key][AppConstant.postCodeColumnText],
-                photoUrl: groupData[key][AppConstant.profileImageColumnText]));
+            setState(() {
+              groupMembers.add(GroupMemberModel(
+                  key: key,
+                  name: groupData[key][AppConstant.nameColumnText],
+                  mobileNumber: groupData[key][AppConstant.mobileColumnText],
+                  cityName: groupData[key][AppConstant.cityNameColumnText],
+                  districtName: groupData[key]
+                  [AppConstant.districtNameColumnText],
+                  division: groupData[key][AppConstant.divisionColumnText],
+                  postCode: groupData[key][AppConstant.postCodeColumnText],
+                  photoUrl: groupData[key][AppConstant.profileImageColumnText]));
+            });
           }
         }
         print('Group Map:$groupMap');
@@ -65,8 +67,8 @@ class _ManPowerGroupListScreenState extends State<ManPowerGroupListScreen> {
 
   @override
   void initState() {
-    super.initState();
     _groupMemberFuture = getGroupMemberList();
+    super.initState();
   }
 
   @override
@@ -157,7 +159,8 @@ class _ManPowerGroupListScreenState extends State<ManPowerGroupListScreen> {
 
   Widget initManpowerListUi() {
     return TitleIconButtonWithWhiteBackground(
-        headline: 'মোট জনশক্তি ${GlobalVar.englishNumberToBengali(groupMembers.length.toString())} জন',
+        headline:
+            'মোট জনশক্তি ${GlobalVar.englishNumberToBengali(groupMembers.length.toString())} জন',
         actionIcon: Icons.add,
         action: () {
           Navigator.push(
@@ -188,26 +191,40 @@ class _ManPowerGroupListScreenState extends State<ManPowerGroupListScreen> {
                 itemCount: snapshot.data!.length,
                 itemBuilder: (context, index) {
                   return ManPowerTile(
-                      imagePath: snapshot.data![index].photoUrl,
-                      name: snapshot.data![index].name,
-                      address:
-                          '${snapshot.data![index].cityName},${snapshot.data![index].districtName},${snapshot.data![index].division}-${snapshot.data![index].postCode}',
-                      phone: snapshot.data![index].mobileNumber,
-                  editFunction: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>AddManpowerScreen(groupName: widget.selectedGroup,editGroupMember: snapshot.data![index],)));
-                  },
-                    deleteFunction: ()async{
-                      showDialog(context: context, builder: (context)=>Center(child: CircularProgressIndicator(),));
-                      final desertRef = FirebaseStorage.instance.ref().child("${AppConstant.manPowerGroupPath}/${widget.selectedGroup}/${snapshot.data![index].key}/${AppConstant.userImageName}");
+                    imagePath: snapshot.data![index].photoUrl,
+                    name: snapshot.data![index].name,
+                    address:
+                        '${snapshot.data![index].cityName},${snapshot.data![index].districtName},${snapshot.data![index].division}-${snapshot.data![index].postCode}',
+                    phone: snapshot.data![index].mobileNumber,
+                    editFunction: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AddManpowerScreen(
+                                    groupName: widget.selectedGroup,
+                                    editGroupMember: snapshot.data![index],
+                                  )));
+                    },
+                    deleteFunction: () async {
+                      showDialog(
+                          context: context,
+                          builder: (context) => Center(
+                                child: CircularProgressIndicator(),
+                              ));
+                      if(snapshot.data![index].photoUrl.isNotEmpty){
+                        final desertRef = FirebaseStorage.instance.ref().child(
+                            "${AppConstant.manPowerGroupPath}/${widget.selectedGroup}/${snapshot.data![index].key}/${AppConstant.userImageName}");
 
-                      await desertRef.delete();
-                      DatabaseReference ref = FirebaseDatabase.instance.ref("${AppConstant.manPowerGroupPath}/${widget.selectedGroup}/${snapshot.data![index].key}");
+                        await desertRef.delete();
+                      }
+                      DatabaseReference ref = FirebaseDatabase.instance.ref(
+                          "${AppConstant.manPowerGroupPath}/${widget.selectedGroup}/${snapshot.data![index].key}");
 
                       await ref.remove();
                       setState(() {
                         snapshot.data!.removeAt(index);
                       });
-                      Navigator.of(context,rootNavigator: true).pop();
+                      Navigator.of(context, rootNavigator: true).pop();
                     },
                   );
                 },
@@ -219,17 +236,17 @@ class _ManPowerGroupListScreenState extends State<ManPowerGroupListScreen> {
 }
 
 class ManPowerTile extends StatelessWidget {
-  ManPowerTile(
-      {super.key,
-      required this.imagePath,
-      required this.name,
-      required this.address,
-      required this.phone,
-      required this.editFunction,
-      required this.deleteFunction,
-      });
+  ManPowerTile({
+    super.key,
+    required this.imagePath,
+    required this.name,
+    required this.address,
+    required this.phone,
+    required this.editFunction,
+    required this.deleteFunction,
+  });
   String imagePath, name, address, phone;
-  VoidCallback deleteFunction,editFunction;
+  VoidCallback deleteFunction, editFunction;
 
   @override
   Widget build(BuildContext context) {
@@ -244,16 +261,16 @@ class ManPowerTile extends StatelessWidget {
         height: 50,
         decoration: imagePath.isNotEmpty
             ? BoxDecoration(
-            shape: BoxShape.circle,
-            image: DecorationImage(
-                image: NetworkImage(
-                  imagePath,
-                ),
-                fit: BoxFit.fill))
+                shape: BoxShape.circle,
+                image: DecorationImage(
+                    image: NetworkImage(
+                      imagePath,
+                    ),
+                    fit: BoxFit.fill))
             : BoxDecoration(
-          shape: BoxShape.circle,
-          color: AppColor.sepiaBlack,
-        ),
+                shape: BoxShape.circle,
+                color: AppColor.sepiaBlack,
+              ),
       ),
       title: Text(
         name,
@@ -278,7 +295,7 @@ class ManPowerTile extends StatelessWidget {
         itemBuilder: (context) {
           return [
             PopupMenuItem(
-              onTap: editFunction,
+                onTap: editFunction,
                 padding: EdgeInsets.zero,
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -297,7 +314,7 @@ class ManPowerTile extends StatelessWidget {
                   ],
                 )),
             PopupMenuItem(
-              onTap: deleteFunction,
+                onTap: deleteFunction,
                 padding: EdgeInsets.zero,
                 child: Row(
                   mainAxisSize: MainAxisSize.min,

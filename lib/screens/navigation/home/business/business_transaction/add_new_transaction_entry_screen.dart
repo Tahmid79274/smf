@@ -258,28 +258,38 @@ class _AddNewBusinessTransactionEntryScreenState
                         AppConstant.debitOrCreditColumnText: isDebit,
                       });
 
-                      double updateTotalIncome = double.parse(widget.selectedTransaction.income);
-                      double updateTotalExpense = double.parse(widget.selectedTransaction.expense);
+                      double updateTotalIncome =
+                          double.parse(widget.selectedTransaction.income);
+                      double updateTotalExpense =
+                          double.parse(widget.selectedTransaction.expense);
                       double updateRemainingBalance = 0;
 
-                      if(isDebit){
-                        updateTotalIncome += double.parse(entryAmountController.text);
-                        updateRemainingBalance = updateTotalIncome - updateTotalExpense;
-                      }
-                      else{
-                        updateTotalExpense += double.parse(entryAmountController.text);
-                        updateRemainingBalance = updateTotalIncome - updateTotalExpense;
+                      if (isDebit) {
+                        updateTotalIncome +=
+                            double.parse(entryAmountController.text);
+                        updateRemainingBalance =
+                            updateTotalIncome - updateTotalExpense;
+                      } else {
+                        updateTotalExpense +=
+                            double.parse(entryAmountController.text);
+                        updateRemainingBalance =
+                            updateTotalIncome - updateTotalExpense;
                       }
                       ref = database.ref(widget.path);
                       await ref.update({
-                        AppConstant.expenseColumnText: updateTotalExpense.toString(),
-                        AppConstant.incomeColumnText: updateTotalIncome.toString(),
-                        AppConstant.remainingBalanceColumnText: updateRemainingBalance.toString(),
+                        AppConstant.expenseColumnText:
+                            updateTotalExpense.toString(),
+                        AppConstant.incomeColumnText:
+                            updateTotalIncome.toString(),
+                        AppConstant.remainingBalanceColumnText:
+                            updateRemainingBalance.toString(),
                       });
                       Navigator.of(context, rootNavigator: true).pop();
-                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>BusinessTransactionDetailsScreen(
-                        path: widget.path,imageUrl: widget.imageUrl,selectedTransaction: widget.selectedTransaction,
-                      )));
+                      Navigator.pop(context,true);
+                      // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>BusinessTransactionDetailsScreen(
+                      //   path: widget.path,imageUrl: widget.imageUrl,selectedTransaction: widget.selectedTransaction,
+                      // )));
+
                     }
                   })
             ],

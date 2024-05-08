@@ -148,7 +148,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   imagePath: snapshot.data![index].imageUrl,
                   context: context,
                   onTapAction: () {
-                    Navigator.pushReplacement(
+                    Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) =>

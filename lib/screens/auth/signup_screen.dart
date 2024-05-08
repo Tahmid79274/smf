@@ -100,7 +100,7 @@ class _SignupScreenState extends State<SignupScreen> {
         ),
         orTextUI(),
         SizedBox(height: 10,),
-        socialLoginUi()
+        SocialLoginUi(onTapAction: (){},)
       ],
     );
   }
