@@ -291,8 +291,8 @@ class _BloodDonorDirectoryScreenState extends State<BloodDonorDirectoryScreen> {
                     isEligible:
                         filteredBloodDonorList[index].isAbleToDonateBlood,
                     editFunction: () {
-                      print('Edit Pressed');
-                      Navigator.pushReplacement(
+                      // print('Edit Pressed');
+                      Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => AddBloodDonorScreen(

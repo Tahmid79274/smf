@@ -262,7 +262,7 @@ class _AddManpowerScreenState extends State<AddManpowerScreen> {
                           }
                         });
                       }
-                      await Future.delayed(const Duration(seconds: 7))
+                      await Future.delayed(Duration(seconds: _imagePath.isNotEmpty ? 7 : 0))
                           .whenComplete(() async {
                         FirebaseDatabase database = FirebaseDatabase.instance;
 

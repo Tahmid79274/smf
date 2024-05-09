@@ -607,6 +607,13 @@ class CustomDropdownButton extends StatelessWidget {
         overflow: TextOverflow.ellipsis,
       ),
       isDense: true,
+      validator: (value) {
+        if(value!.isEmpty){
+          return hintText;
+        }
+        print('Value is $value');
+        return null;
+      },
       decoration: InputDecoration(
         isDense: true,
         contentPadding: EdgeInsets.only(left: 5, top: 10, bottom: 7),

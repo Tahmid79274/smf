@@ -237,7 +237,7 @@ class _AddNewBusinessTransactionEntryScreenState
                             }
                           });
                         }*/
-                      // await Future.delayed(const Duration(seconds: 7)).whenComplete(() async{
+                      // await Future.delayed(const Duration(seconds: _imagePath.isNotEmpty ? 7 : 0)).whenComplete(() async{
                       print(
                           'Upload Current time:${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}');
                       FirebaseDatabase database = FirebaseDatabase.instance;
