@@ -24,6 +24,7 @@ class _AddManpowerScreenState extends State<AddManpowerScreen> {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   TextEditingController nameController = TextEditingController();
   TextEditingController mobileNumberController = TextEditingController();
+  TextEditingController positionController = TextEditingController();
   TextEditingController cityNameController = TextEditingController();
   TextEditingController districtNameController = TextEditingController();
   TextEditingController postCodeController = TextEditingController();
@@ -48,6 +49,7 @@ class _AddManpowerScreenState extends State<AddManpowerScreen> {
     if (widget.editGroupMember != null) {
       nameController.text = widget.editGroupMember!.name;
       mobileNumberController.text = widget.editGroupMember!.mobileNumber;
+      positionController.text = widget.editGroupMember!.position;
       cityNameController.text = widget.editGroupMember!.cityName;
       districtNameController.text = widget.editGroupMember!.districtName;
       postCodeController.text = widget.editGroupMember!.postCode;
@@ -61,6 +63,7 @@ class _AddManpowerScreenState extends State<AddManpowerScreen> {
   void dispose() {
     nameController.dispose();
     mobileNumberController.dispose();
+    positionController.dispose();
     cityNameController.dispose();
     districtNameController.dispose();
     postCodeController.dispose();
@@ -71,7 +74,8 @@ class _AddManpowerScreenState extends State<AddManpowerScreen> {
   @override
   Widget build(BuildContext context) {
     return BasicAquaHazeBGUi(
-        appBarTitle: AppConstant.addManpowerPlainText, child: SingleChildScrollView(child: initBuildUi()));
+        appBarTitle: AppConstant.addManpowerPlainText,
+        child: SingleChildScrollView(child: initBuildUi()));
   }
 
   Widget initBuildUi() {
@@ -155,6 +159,14 @@ class _AddManpowerScreenState extends State<AddManpowerScreen> {
                   height: 10,
                 ),
                 CustomTextFormField(
+                  hint: AppConstant.positionPlainText,
+                  controller: positionController,
+                  keyboardInputType: TextInputType.text,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                CustomTextFormField(
                     hint: AppConstant.cityNamePlainText,
                     controller: cityNameController,
                     keyboardInputType: TextInputType.text),
@@ -181,7 +193,9 @@ class _AddManpowerScreenState extends State<AddManpowerScreen> {
                     keyboardInputType: TextInputType.text),
               ],
             ),
-            SizedBox(height: 120,),
+            SizedBox(
+              height: 120,
+            ),
             CustomButton(
                 content: widget.editGroupMember == null
                     ? AppConstant.addPlainText
@@ -259,6 +273,10 @@ class _AddManpowerScreenState extends State<AddManpowerScreen> {
                           AppConstant.nameColumnText: nameController.text,
                           AppConstant.mobileColumnText:
                               mobileNumberController.text,
+                          AppConstant.positionColumnText:
+                          positionController.text,
+                          AppConstant.postCodeColumnText:
+                              positionController.text,
                           AppConstant.cityNameColumnText:
                               cityNameController.text,
                           AppConstant.districtNameColumnText:
@@ -273,12 +291,18 @@ class _AddManpowerScreenState extends State<AddManpowerScreen> {
                       //_groupsFuture = getGroupList();
                       print('');
                     } else {
-                      DatabaseReference ref = FirebaseDatabase.instance.ref("${AppConstant.manPowerGroupPath}/${widget.groupName}/${widget.editGroupMember!.key}");
+                      DatabaseReference ref = FirebaseDatabase.instance.ref(
+                          "${AppConstant.manPowerGroupPath}/${widget.groupName}/${widget.editGroupMember!.key}");
                       ref.update({
                         AppConstant.nameColumnText: nameController.text,
-                        AppConstant.mobileColumnText: mobileNumberController.text,
+                        AppConstant.mobileColumnText:
+                            mobileNumberController.text,
+                        AppConstant.positionColumnText:
+                        positionController.text,
+                        AppConstant.postCodeColumnText: positionController.text,
                         AppConstant.cityNameColumnText: cityNameController.text,
-                        AppConstant.districtNameColumnText: districtNameController.text,
+                        AppConstant.districtNameColumnText:
+                            districtNameController.text,
                         AppConstant.postCodeColumnText: postCodeController.text,
                         AppConstant.divisionColumnText: divisionController.text,
                       });
@@ -286,8 +310,9 @@ class _AddManpowerScreenState extends State<AddManpowerScreen> {
                     Navigator.of(context, rootNavigator: true).pop();
                     Navigator.of(context, rootNavigator: true)
                         .pushReplacement(MaterialPageRoute(
-                        builder: (context) =>
-                            ManPowerGroupListScreen(selectedGroup: widget.groupName,)));
+                            builder: (context) => ManPowerGroupListScreen(
+                                  selectedGroup: widget.groupName,
+                                )));
                   }
                 })
           ],

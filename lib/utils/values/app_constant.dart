@@ -61,6 +61,7 @@ abstract class AppConstant{
   static String districtNamePlainText = 'জেলার নাম';
   static String cityNamePlainText = 'শহরের নাম';
   static String mobileNumberPlainText = 'মোবাইল নাম্বার';
+  static String positionPlainText = 'পদবি';
   static String addBloodDonorPlainText = 'একজন রক্তদাতা যুক্ত করুন';
   static String dateOfBirthPlainText = 'জন্ম তারিখ';
   static String rhFactorPlainText = 'আরএইচ';
@@ -108,6 +109,7 @@ abstract class AppConstant{
   static String rhFactorColumnText = 'rh_factor';
   static String emailColumnText = 'email';
   static String mobileColumnText = 'mobile';
+  static String positionColumnText = 'position';
   static String cityNameColumnText = 'city_name';
   static String districtNameColumnText = 'district_name';
   static String postCodeColumnText = 'post_code';

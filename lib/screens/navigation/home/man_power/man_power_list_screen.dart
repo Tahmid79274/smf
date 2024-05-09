@@ -46,14 +46,15 @@ class _ManPowerGroupListScreenState extends State<ManPowerGroupListScreen> {
             setState(() {
               groupMembers.add(GroupMemberModel(
                   key: key,
-                  name: groupData[key][AppConstant.nameColumnText],
-                  mobileNumber: groupData[key][AppConstant.mobileColumnText],
-                  cityName: groupData[key][AppConstant.cityNameColumnText],
+                  name: groupData[key][AppConstant.nameColumnText].toString(),
+                  mobileNumber: groupData[key][AppConstant.mobileColumnText].toString(),
+                  position: groupData[key][AppConstant.positionColumnText].toString(),
+                  cityName: groupData[key][AppConstant.cityNameColumnText].toString(),
                   districtName: groupData[key]
-                  [AppConstant.districtNameColumnText],
-                  division: groupData[key][AppConstant.divisionColumnText],
-                  postCode: groupData[key][AppConstant.postCodeColumnText],
-                  photoUrl: groupData[key][AppConstant.profileImageColumnText]));
+                  [AppConstant.districtNameColumnText].toString(),
+                  division: groupData[key][AppConstant.divisionColumnText].toString(),
+                  postCode: groupData[key][AppConstant.postCodeColumnText].toString(),
+                  photoUrl: groupData[key][AppConstant.profileImageColumnText].toString()));
             });
           }
         }
