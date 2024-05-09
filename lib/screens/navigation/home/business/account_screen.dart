@@ -18,6 +18,7 @@ class AccountScreen extends StatefulWidget {
 class _AccountScreenState extends State<AccountScreen> {
   List<AccountModel> accountList = [];
   Map<String, String> groupMap = {};
+  bool loadData = true;
 
   Future<List<AccountModel>>? getAccountList;
 
@@ -60,7 +61,9 @@ class _AccountScreenState extends State<AccountScreen> {
 
   @override
   void initState() {
-    getAccountList = getAccounts();
+    if(loadData){
+      getAccountList = getAccounts();
+    }
     super.initState();
   }
 
@@ -113,9 +116,12 @@ class _AccountScreenState extends State<AccountScreen> {
           width: 10,
         ),
         AddEntryButtonUi(
-          whatToDo: () {
-            Navigator.push(context,
+          whatToDo: () async {
+            loadData = await Navigator.push(context,
                 MaterialPageRoute(builder: (context) => AddBusinessScreen()));
+            if(loadData){
+              getAccountList = getAccounts();
+            }
           },
         )
       ],
@@ -166,9 +172,12 @@ class _AccountScreenState extends State<AccountScreen> {
                   },
                   deleteAction: () async {
                     showDialog(context: context, builder: (context)=>Center(child: CircularProgressIndicator(),));
-                    final desertRef = FirebaseStorage.instance.ref().child("${AppConstant.accountPath}/${snapshot.data![index].key}/${AppConstant.userImageName}");
+                    if(snapshot.data![index].imageUrl.isNotEmpty){
+                      final desertRef = FirebaseStorage.instance.ref().child(
+                          "${AppConstant.accountPath}/${snapshot.data![index].key}/${AppConstant.userImageName}");
 
-                    await desertRef.delete();
+                      await desertRef.delete();
+                    }
                     DatabaseReference ref = FirebaseDatabase.instance.ref("${AppConstant.accountPath}/${snapshot.data![index].key}");
 
                     await ref.remove();

@@ -270,8 +270,10 @@ class _BusinessAccountInformationScreenState
                                   BusinessTransactionDetailsScreen(
                                     path: '${widget.path}/${AppConstant.transactionsColumnText}/${snapshot.data![index].key}',
                                     selectedTransaction: snapshot.data![index],
-                                    imageUrl: widget.selectedBusinessAccount.imageUrl,
-                                  )));
+                                    imageUrl: widget.selectedBusinessAccount.imageUrl??'',
+                                  ))).whenComplete(() {
+                        _transactionTabsFuture = getTransactionTabsList();
+                      });
                     });
               },
             );

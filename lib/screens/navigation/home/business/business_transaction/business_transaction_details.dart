@@ -13,9 +13,10 @@ class BusinessTransactionDetailsScreen extends StatefulWidget {
       {super.key,
       required this.selectedTransaction,
       required this.path,
-      required this.imageUrl});
+      this.imageUrl});
   TransactionModel selectedTransaction;
-  String path, imageUrl;
+  String path;
+  String? imageUrl;
 
   @override
   State<BusinessTransactionDetailsScreen> createState() =>
@@ -119,7 +120,7 @@ class _BusinessTransactionDetailsScreenState
           padding: EdgeInsets.all(10),
           height: 50,
           width: 50,
-          decoration: widget.imageUrl.isEmpty
+          decoration: widget.imageUrl!.isEmpty
               ? BoxDecoration(
                   shape: BoxShape.circle,
                   color: AppColor.white,
@@ -127,7 +128,7 @@ class _BusinessTransactionDetailsScreenState
               : BoxDecoration(
                   shape: BoxShape.circle,
                   image: DecorationImage(
-                      image: NetworkImage(widget.imageUrl), fit: BoxFit.fill)),
+                      image: NetworkImage(widget.imageUrl!), fit: BoxFit.fill)),
         ),
         const SizedBox(
           width: 10,
@@ -181,7 +182,7 @@ class _BusinessTransactionDetailsScreenState
                 builder: (context) => AddNewBusinessTransactionEntryScreen(
                   path: widget.path,
                   selectedTransaction: widget.selectedTransaction,
-                  imageUrl: widget.imageUrl,
+                  imageUrl: widget.imageUrl!.isNotEmpty?widget.imageUrl!:'',
                 )));
         if(loadData){
           setState(() {
@@ -244,9 +245,9 @@ class _BusinessTransactionDetailsScreenState
                     Row(mainAxisAlignment:MainAxisAlignment.center,
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text(e.isDebit?'+':'-',
+                        Text(e.isDebit?'-':'+',
                             textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: 15,color: e.isDebit?AppColor.green:AppColor.red)),
+                            style: TextStyle(fontSize: 15,color: e.isDebit?AppColor.red:AppColor.green)),
                         Text(e.amount,
                             textAlign: TextAlign.center,
                             style: TextStyle(fontSize: 15))

@@ -184,6 +184,11 @@ class _AddBusinessScreenState extends State<AddBusinessScreen> {
                             }
                           });
                         }
+                        else{
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              backgroundColor: AppColor.red,
+                              content: Text('Please add image')));
+                        }
                         await Future.delayed(Duration(seconds: _imagePath.isNotEmpty ? 7 : 0)).whenComplete(() async{
                           print('Upload Current time:${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}');
                           FirebaseDatabase database = FirebaseDatabase.instance;
@@ -209,7 +214,7 @@ class _AddBusinessScreenState extends State<AddBusinessScreen> {
                         });
                       }
                       Navigator.of(context,rootNavigator: true).pop();
-                      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>AccountScreen()), (route) => false);
+                      Navigator.pop(context, true);
                     }
                   })
             ],

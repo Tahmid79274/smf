@@ -269,17 +269,18 @@ class _AddNewBusinessTransactionEntryScreenState
                       double updateRemainingBalance = 0;
 
                       if (isDebit) {
-                        updateTotalIncome +=
+                        updateTotalExpense +=
                             double.parse(entryAmountController.text);
                         updateRemainingBalance =
                             updateTotalIncome - updateTotalExpense;
                       } else {
-                        updateTotalExpense +=
+                        updateTotalIncome +=
                             double.parse(entryAmountController.text);
                         updateRemainingBalance =
                             updateTotalIncome - updateTotalExpense;
                       }
                       ref = database.ref(widget.path);
+                      print('Updated income:$updateTotalIncome, expense: $updateTotalExpense, balance: $updateRemainingBalance');
                       await ref.update({
                         AppConstant.expenseColumnText:
                             updateTotalExpense.toString(),
@@ -319,7 +320,7 @@ class _AddNewBusinessTransactionEntryScreenState
                     isDebit = true;
                   },
                   child: Text(
-                    '+ ${AppConstant.debitPlainText}',
+                    '- ${AppConstant.debitPlainText}',
                     style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -336,7 +337,7 @@ class _AddNewBusinessTransactionEntryScreenState
                     isDebit = false;
                   },
                   child: Text(
-                    '- ${AppConstant.creditPlainText}',
+                    '+ ${AppConstant.creditPlainText}',
                     style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
