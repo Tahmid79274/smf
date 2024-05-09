@@ -80,11 +80,11 @@ class _AddBusinessScreenState extends State<AddBusinessScreen> {
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  CustomTextFormField(hint: AppConstant.companyNamePlainText,controller: companyNameController,keyboardInputType: TextInputType.text),
+                  CustomTextFormField(isMandatory: true,hint: AppConstant.companyNamePlainText,controller: companyNameController,keyboardInputType: TextInputType.text),
                   SizedBox(height: 10,),
-                  CustomTextFormField(hint: AppConstant.addressPlainText,controller: addressController,keyboardInputType: TextInputType.text),
+                  CustomTextFormField(isMandatory: false,hint: AppConstant.addressPlainText,controller: addressController,keyboardInputType: TextInputType.text),
                   SizedBox(height: 10,),
-                  CustomTextFormField(hint: AppConstant.ownershipPlainText,controller: ownershipController,keyboardInputType: TextInputType.text),
+                  CustomTextFormField(isMandatory: true,hint: AppConstant.ownershipPlainText,controller: ownershipController,keyboardInputType: TextInputType.text),
                   SizedBox(height: 10,),
                   imageUrl.isNotEmpty
                       ? Container(

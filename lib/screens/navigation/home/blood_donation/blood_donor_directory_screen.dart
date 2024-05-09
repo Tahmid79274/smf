@@ -229,6 +229,7 @@ class _BloodDonorDirectoryScreenState extends State<BloodDonorDirectoryScreen> {
       children: [
         Expanded(
           child: CustomTextFormField(
+            isMandatory: false,
             hint: AppConstant.searchPlainText,
             keyboardInputType: TextInputType.text,
             controller: searchController,

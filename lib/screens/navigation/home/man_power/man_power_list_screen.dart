@@ -19,6 +19,9 @@ class ManPowerGroupListScreen extends StatefulWidget {
 }
 
 class _ManPowerGroupListScreenState extends State<ManPowerGroupListScreen> {
+
+  bool loadData = true;
+
   List<String> locations = [];
 
   List<GroupMemberModel> groupMembers = [];
@@ -68,7 +71,9 @@ class _ManPowerGroupListScreenState extends State<ManPowerGroupListScreen> {
 
   @override
   void initState() {
-    _groupMemberFuture = getGroupMemberList();
+    if(loadData){
+      _groupMemberFuture = getGroupMemberList();
+    }
     super.initState();
   }
 
@@ -163,13 +168,16 @@ class _ManPowerGroupListScreenState extends State<ManPowerGroupListScreen> {
         headline:
             'মোট জনশক্তি ${GlobalVar.englishNumberToBengali(groupMembers.length.toString())} জন',
         actionIcon: Icons.add,
-        action: () {
-          Navigator.push(
+        action: () async {
+          loadData = await Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) => AddManpowerScreen(
                         groupName: widget.selectedGroup,
                       )));
+          if(loadData){
+            _groupMemberFuture = getGroupMemberList();
+          }
         },
         whatToShow: FutureBuilder<List<GroupMemberModel>>(
           future: _groupMemberFuture,

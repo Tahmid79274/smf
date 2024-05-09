@@ -175,6 +175,7 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
                   height: 10,
                 ),
                 CustomTextFormField(
+                  isMandatory: true,
                     hint: AppConstant.namePlainText,
                     controller: nameController,
                     keyboardInputType: TextInputType.text),
@@ -182,9 +183,10 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
                   height: 10,
                 ),
                 CustomTextFormField(
+                  isMandatory: true,
                   hint: AppConstant.dateOfBirthPlainText,
                   controller: dateOfBirthController,
-                  keyboardInputType: TextInputType.datetime,
+                  keyboardInputType: TextInputType.none,
                   onTap: () {
                     showModalBottomSheet(
                       context: context,
@@ -247,6 +249,7 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
                   height: 10,
                 ),
                 CustomTextFormField(
+                  isMandatory: true,
                     hint: AppConstant.phoneNumberPlainText,
                     controller: phoneNumberController,
                     keyboardInputType: TextInputType.phone),
@@ -254,6 +257,7 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
                   height: 10,
                 ),
                 CustomTextFormField(
+                  isMandatory: false,
                     hint: AppConstant.emailPlainText,
                     controller: emailController,
                     keyboardInputType: TextInputType.emailAddress),
@@ -270,18 +274,22 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
                       mainAxisSpacing: 10),
                   children: [
                     CustomTextFormField(
+                        isMandatory: false,
                         hint: AppConstant.cityNamePlainText,
                         controller: cityNameController,
                         keyboardInputType: TextInputType.text),
                     CustomTextFormField(
+                        isMandatory: false,
                         hint: AppConstant.districtNamePlainText,
                         controller: districtNameController,
                         keyboardInputType: TextInputType.text),
                     CustomTextFormField(
+                        isMandatory: false,
                         hint: AppConstant.postCodePlainText,
                         controller: postCodeController,
                         keyboardInputType: TextInputType.number),
                     CustomTextFormField(
+                        isMandatory: false,
                         hint: AppConstant.divisionPlainText,
                         controller: divisionController,
                         keyboardInputType: TextInputType.text),
@@ -293,6 +301,7 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
               height: 10,
             ),
             CustomTextFormField(
+                isMandatory: true,
                 hint: AppConstant.lastDateOfBloodDonationPlainText,
                 controller: lastDateOfBloodDonationController,
                 keyboardInputType: TextInputType.datetime,
@@ -344,6 +353,7 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
               height: 10,
             ),
             CustomTextFormField(
+                isMandatory: true,
                 hint: AppConstant.abilityToDonateBloodPlainText,
                 controller: abilityToDonateBloodController,
                 keyboardInputType: TextInputType.datetime),
@@ -351,6 +361,7 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
               height: 10,
             ),
             CustomTextFormField(
+                isMandatory: true,
                 hint: AppConstant.nextDateToAbleToDonateBloodPlainText,
                 controller: nextDateToAbleToDonateBloodController,
                 keyboardInputType: TextInputType.datetime),

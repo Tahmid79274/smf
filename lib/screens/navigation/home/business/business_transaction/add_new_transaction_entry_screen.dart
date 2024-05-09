@@ -88,9 +88,10 @@ class _AddNewBusinessTransactionEntryScreenState
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   CustomTextFormField(
+                      isMandatory: true,
                       hint: AppConstant.datePlainText,
                       controller: dateController,
-                      keyboardInputType: TextInputType.datetime,
+                      keyboardInputType: TextInputType.none,
                       onTap: () {
                         showModalBottomSheet(
                           context: context,
@@ -122,6 +123,7 @@ class _AddNewBusinessTransactionEntryScreenState
                     height: 10,
                   ),
                   CustomTextFormField(
+                      isMandatory: true,
                       hint: AppConstant.entryTitlePlainText,
                       controller: entryTitleController,
                       keyboardInputType: TextInputType.text),
@@ -129,6 +131,7 @@ class _AddNewBusinessTransactionEntryScreenState
                     height: 10,
                   ),
                   CustomTextFormField(
+                      isMandatory: true,
                       hint: AppConstant.entryDetailsPlainText,
                       controller: entryDetailsController,
                       keyboardInputType: TextInputType.text),
@@ -136,6 +139,7 @@ class _AddNewBusinessTransactionEntryScreenState
                     height: 10,
                   ),
                   CustomTextFormField(
+                      isMandatory: true,
                       hint: AppConstant.moneyAmountPlainText,
                       controller: entryAmountController,
                       keyboardInputType: TextInputType.numberWithOptions()),

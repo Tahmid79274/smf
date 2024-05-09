@@ -1,8 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import '../color/app_color.dart';
-import '../functionalities/functions.dart';
 import '../values/app_constant.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -250,6 +247,7 @@ class CustomTextFormField extends StatelessWidget {
   CustomTextFormField(
       {super.key,
       required this.hint,
+      required this.isMandatory,
       required this.controller,
       this.onTap,
       required this.keyboardInputType,
@@ -259,12 +257,13 @@ class CustomTextFormField extends StatelessWidget {
   VoidCallback? onTap;
   TextInputType keyboardInputType;
   IconData? suffixIcon;
+  bool isMandatory;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       validator: (value) {
-        if (value == null || value.isEmpty) {
+        if (value == null || value.isEmpty && isMandatory) {
           return "Please don't leave this field.";
         }
         return null;

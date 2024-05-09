@@ -33,6 +33,7 @@ class _AddManpowerScreenState extends State<AddManpowerScreen> {
   String _imagePath = '';
   String imageUrl = '';
 
+
   Future<void> _pickImage() async {
     final picker = ImagePicker();
     final pickedImage = await picker.pickImage(source: ImageSource.gallery);
@@ -143,6 +144,7 @@ class _AddManpowerScreenState extends State<AddManpowerScreen> {
                   height: 10,
                 ),
                 CustomTextFormField(
+                  isMandatory: true,
                   hint: AppConstant.namePlainText,
                   controller: nameController,
                   keyboardInputType: TextInputType.text,
@@ -151,6 +153,7 @@ class _AddManpowerScreenState extends State<AddManpowerScreen> {
                   height: 10,
                 ),
                 CustomTextFormField(
+                  isMandatory: true,
                   hint: AppConstant.mobileNumberPlainText,
                   controller: mobileNumberController,
                   keyboardInputType: TextInputType.phone,
@@ -159,6 +162,7 @@ class _AddManpowerScreenState extends State<AddManpowerScreen> {
                   height: 10,
                 ),
                 CustomTextFormField(
+                  isMandatory: true,
                   hint: AppConstant.positionPlainText,
                   controller: positionController,
                   keyboardInputType: TextInputType.text,
@@ -167,6 +171,7 @@ class _AddManpowerScreenState extends State<AddManpowerScreen> {
                   height: 10,
                 ),
                 CustomTextFormField(
+                    isMandatory: false,
                     hint: AppConstant.cityNamePlainText,
                     controller: cityNameController,
                     keyboardInputType: TextInputType.text),
@@ -174,6 +179,7 @@ class _AddManpowerScreenState extends State<AddManpowerScreen> {
                   height: 10,
                 ),
                 CustomTextFormField(
+                    isMandatory: false,
                     hint: AppConstant.districtNamePlainText,
                     controller: districtNameController,
                     keyboardInputType: TextInputType.text),
@@ -181,6 +187,7 @@ class _AddManpowerScreenState extends State<AddManpowerScreen> {
                   height: 10,
                 ),
                 CustomTextFormField(
+                    isMandatory: false,
                     hint: AppConstant.postCodePlainText,
                     controller: postCodeController,
                     keyboardInputType: TextInputType.number),
@@ -188,6 +195,7 @@ class _AddManpowerScreenState extends State<AddManpowerScreen> {
                   height: 10,
                 ),
                 CustomTextFormField(
+                    isMandatory: false,
                     hint: AppConstant.divisionPlainText,
                     controller: divisionController,
                     keyboardInputType: TextInputType.text),
@@ -308,11 +316,7 @@ class _AddManpowerScreenState extends State<AddManpowerScreen> {
                       });
                     }
                     Navigator.of(context, rootNavigator: true).pop();
-                    Navigator.of(context, rootNavigator: true)
-                        .pushReplacement(MaterialPageRoute(
-                            builder: (context) => ManPowerGroupListScreen(
-                                  selectedGroup: widget.groupName,
-                                )));
+                    Navigator.pop(context,true);
                   }
                 })
           ],
