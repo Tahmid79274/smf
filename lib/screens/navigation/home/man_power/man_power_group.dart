@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import '../../../../utils/color/app_color.dart';
 import '../../../../utils/extension/theme.dart';
+import '../../../../utils/functionalities/functions.dart';
 import '../../../../utils/values/app_constant.dart';
 import 'man_power_list_screen.dart';
 
@@ -30,7 +31,7 @@ class _ManPowerGroupScreenState extends State<ManPowerGroupScreen> {
         databaseURL: 'https://smfmobileapp-5b74e-default-rtdb.firebaseio.com/');
 
     //database.ref("${AppConstant.manPowerGroupPath}/${groupNameController.text}/people0");
-    DatabaseReference ref = database.ref("${AppConstant.manPowerGroupPath}/");
+    DatabaseReference ref = database.ref("${GlobalVar.basePath}/${AppConstant.manPowerGroupPath}/");
     //print(ref.);
     groups.clear();
     await ref.once().then((event) {
@@ -130,7 +131,7 @@ class _ManPowerGroupScreenState extends State<ManPowerGroupScreen> {
                         FirebaseDatabase database = FirebaseDatabase.instance;
 
                         DatabaseReference ref = database.ref(
-                            "${AppConstant.manPowerGroupPath}/$groupName/people0");
+                            "${GlobalVar.basePath}/${AppConstant.manPowerGroupPath}/$groupName/people0");
 
                         await ref.set({
                           "name": "",

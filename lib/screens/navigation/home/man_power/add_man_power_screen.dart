@@ -144,7 +144,7 @@ class _AddManpowerScreenState extends State<AddManpowerScreen> {
                   height: 10,
                 ),
                 CustomTextFormField(
-                  isMandatory: true,
+                  // isMandatory: true,
                   hint: AppConstant.namePlainText,
                   controller: nameController,
                   keyboardInputType: TextInputType.text,
@@ -153,7 +153,7 @@ class _AddManpowerScreenState extends State<AddManpowerScreen> {
                   height: 10,
                 ),
                 CustomTextFormField(
-                  isMandatory: true,
+                  // isMandatory: true,
                   hint: AppConstant.mobileNumberPlainText,
                   controller: mobileNumberController,
                   keyboardInputType: TextInputType.phone,
@@ -162,7 +162,7 @@ class _AddManpowerScreenState extends State<AddManpowerScreen> {
                   height: 10,
                 ),
                 CustomTextFormField(
-                  isMandatory: true,
+                  // isMandatory: true,
                   hint: AppConstant.positionPlainText,
                   controller: positionController,
                   keyboardInputType: TextInputType.text,
@@ -171,7 +171,7 @@ class _AddManpowerScreenState extends State<AddManpowerScreen> {
                   height: 10,
                 ),
                 CustomTextFormField(
-                    isMandatory: false,
+                    // isMandatory: false,
                     hint: AppConstant.cityNamePlainText,
                     controller: cityNameController,
                     keyboardInputType: TextInputType.text),
@@ -179,7 +179,7 @@ class _AddManpowerScreenState extends State<AddManpowerScreen> {
                   height: 10,
                 ),
                 CustomTextFormField(
-                    isMandatory: false,
+                    // isMandatory: false,
                     hint: AppConstant.districtNamePlainText,
                     controller: districtNameController,
                     keyboardInputType: TextInputType.text),
@@ -187,7 +187,7 @@ class _AddManpowerScreenState extends State<AddManpowerScreen> {
                   height: 10,
                 ),
                 CustomTextFormField(
-                    isMandatory: false,
+                    // isMandatory: false,
                     hint: AppConstant.postCodePlainText,
                     controller: postCodeController,
                     keyboardInputType: TextInputType.number),
@@ -195,7 +195,7 @@ class _AddManpowerScreenState extends State<AddManpowerScreen> {
                   height: 10,
                 ),
                 CustomTextFormField(
-                    isMandatory: false,
+                    // isMandatory: false,
                     hint: AppConstant.divisionPlainText,
                     controller: divisionController,
                     keyboardInputType: TextInputType.text),
@@ -232,7 +232,7 @@ class _AddManpowerScreenState extends State<AddManpowerScreen> {
                         print('File Path: ${file.path}');
                         final uploadTask = storageRef
                             .child(
-                                "${AppConstant.manPowerGroupPath}/${widget.groupName}/$uniqueName/${AppConstant.userImageName}")
+                                "${GlobalVar.basePath}/${AppConstant.manPowerGroupPath}/${widget.groupName}/$uniqueName/${AppConstant.userImageName}")
                             .putFile(file, metadata);
                         print(
                             'Image Upload Time:${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}');
@@ -275,7 +275,7 @@ class _AddManpowerScreenState extends State<AddManpowerScreen> {
                         FirebaseDatabase database = FirebaseDatabase.instance;
 
                         DatabaseReference ref = database.ref(
-                            "${AppConstant.manPowerGroupPath}/${widget.groupName}/$uniqueName");
+                            "${GlobalVar.basePath}/${AppConstant.manPowerGroupPath}/${widget.groupName}/$uniqueName");
 
                         await ref.set({
                           AppConstant.nameColumnText: nameController.text,
@@ -300,7 +300,7 @@ class _AddManpowerScreenState extends State<AddManpowerScreen> {
                       print('');
                     } else {
                       DatabaseReference ref = FirebaseDatabase.instance.ref(
-                          "${AppConstant.manPowerGroupPath}/${widget.groupName}/${widget.editGroupMember!.key}");
+                          "${GlobalVar.basePath}/${AppConstant.manPowerGroupPath}/${widget.groupName}/${widget.editGroupMember!.key}");
                       ref.update({
                         AppConstant.nameColumnText: nameController.text,
                         AppConstant.mobileColumnText:

@@ -47,7 +47,7 @@ class _BloodDonorDirectoryScreenState extends State<BloodDonorDirectoryScreen> {
     FirebaseDatabase database = FirebaseDatabase.instance;
 
     //database.ref("${AppConstant.manPowerGroupPath}/${groupNameController.text}/people0");
-    DatabaseReference ref = database.ref("${AppConstant.bloodDonorGroupPath}/");
+    DatabaseReference ref = database.ref("${GlobalVar.basePath}/${AppConstant.bloodDonorGroupPath}/");
     //print(ref.);
     bloodDonorList.clear();
     await ref.once().then((event) {
@@ -229,7 +229,7 @@ class _BloodDonorDirectoryScreenState extends State<BloodDonorDirectoryScreen> {
       children: [
         Expanded(
           child: CustomTextFormField(
-            isMandatory: false,
+            // isMandatory: false,
             hint: AppConstant.searchPlainText,
             keyboardInputType: TextInputType.text,
             controller: searchController,

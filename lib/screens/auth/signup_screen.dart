@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import '../../utils/color/app_color.dart';
 import '../../utils/extension/theme.dart';
 import '../../utils/values/app_constant.dart';
@@ -82,7 +82,34 @@ class _SignupScreenState extends State<SignupScreen> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        CustomButton(content: AppConstant.signUpPlainText, contentColor: AppColor.white, backgroundColor: AppColor.killarney, onPressed: (){}),
+        CustomButton(content: AppConstant.signUpPlainText, contentColor: AppColor.white, backgroundColor: AppColor.killarney, onPressed: ()async{
+          try {
+            final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+              email: emailController.text,
+              password: passwordController.text,
+            );
+            print(credential.additionalUserInfo!.authorizationCode);
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LoginScreen()));
+            // FirebaseAuth.instance
+            //     .authStateChanges()
+            //     .listen((User? user) {
+            //   if (user != null) {
+            //     print(user.uid);
+            //   }
+            // });
+          } on FirebaseAuthException catch (e) {
+            if (e.code == 'weak-password') {
+              print('The password provided is too weak.');
+              showErrorSnackBar('The password provided is too weak.',context);
+            } else if (e.code == 'email-already-in-use') {
+              print('The account already exists for that email.');
+              showErrorSnackBar('The account already exists for that email.',context);
+            }
+          } catch (e) {
+            print(e);
+            showErrorSnackBar(e.toString(),context);
+          }
+        }),
         SizedBox(height: 10,),
         Row(
           mainAxisSize: MainAxisSize.min,

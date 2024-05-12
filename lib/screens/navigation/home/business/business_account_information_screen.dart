@@ -34,7 +34,7 @@ class _BusinessAccountInformationScreenState
 
     //database.ref("${AppConstant.manPowerGroupPath}/${groupNameController.text}/people0");
     DatabaseReference ref = database.ref(
-        "${AppConstant.accountPath}/${widget.selectedBusinessAccount.key}");
+        "${GlobalVar.basePath}/${AppConstant.accountPath}/${widget.selectedBusinessAccount.key}");
     //print(ref.);
     transactionList.clear();
     totalIncome = 0; totalExpense = 0; remainingBalance =0;
@@ -71,6 +71,7 @@ class _BusinessAccountInformationScreenState
         //print("Group with ID '123' does not exist.");
       }
     });
+    transactionList.sort((a, b) => a.transactionName.compareTo(b.transactionName),);
     return transactionList;
   }
 

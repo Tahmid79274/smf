@@ -13,10 +13,11 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: AppColor.aquaHaze,
-        body: ListView(
-          padding: EdgeInsets.all(10),
+    return BasicAquaHazeBGUi(
+      appBarTitle: '',
+        //backgroundColor: AppColor.aquaHaze,
+        child: ListView(
+          //padding: EdgeInsets.all(10),
           children: [
             CustomTile(title: AppConstant.accountPlainText,imagePath: AppConstant.imageBasePath+AppConstant.accountLogoPath,onTapAction: (){
               Navigator.push(context, MaterialPageRoute(builder: (context)=>AccountScreen()));

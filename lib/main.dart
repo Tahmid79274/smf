@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:smf/screens/navigation/home_screen.dart';
+import 'package:smf/utils/functionalities/shared_prefs_manager.dart';
 import 'screens/auth/welcome_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import 'screens/navigation/home/blood_donation/add_blood_donor_screen.dart';
-import 'screens/navigation/home/blood_donation/blood_donor_directory_screen.dart';
-import 'screens/navigation/home/business/account_screen.dart';
-import 'screens/navigation/navigation_screen.dart';
+import 'utils/functionalities/functions.dart';
 
 
 const firebaseConfig = {
@@ -14,11 +13,14 @@ const firebaseConfig = {
   // ... other Firebase services configuration options (optional)
 };
 
+bool isLoggedIn = false;
+
 Future<void> main() async{
   WidgetsFlutterBinding.ensureInitialized(); // For Flutter versions below 2.8
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  isLoggedIn = await SharedPrefsManager.getSplashStatus();
   runApp(const MyApp());
 }
 
@@ -35,7 +37,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: const AccountScreen(),
+        home: isLoggedIn?HomeScreen():WelcomeScreen(),
       );
   }
 }

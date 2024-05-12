@@ -5,6 +5,7 @@ import 'package:smf/models/account_model.dart';
 import 'package:smf/utils/extension/theme.dart';
 import '../../../../../../utils/color/app_color.dart';
 import '../../../../../../utils/values/app_constant.dart';
+import '../../../../utils/functionalities/functions.dart';
 import 'add_business_screen.dart';
 import 'business_account_information_screen.dart';
 
@@ -26,7 +27,7 @@ class _AccountScreenState extends State<AccountScreen> {
     print('Initiated');
     FirebaseDatabase database = FirebaseDatabase.instance;
 
-    DatabaseReference ref = database.ref("${AppConstant.accountPath}/");
+    DatabaseReference ref = database.ref("${GlobalVar.basePath}/${AppConstant.accountPath}/");
     //print(ref.);
     accountList.clear();
     await ref.once().then((event) {
@@ -56,6 +57,7 @@ class _AccountScreenState extends State<AccountScreen> {
         print("Group with ID '123' does not exist.");
       }
     });
+    accountList.sort((a, b) => a.companyName.compareTo(b.companyName),);
     return accountList;
   }
 
@@ -159,7 +161,7 @@ class _AccountScreenState extends State<AccountScreen> {
                         MaterialPageRoute(
                             builder: (context) =>
                                 BusinessAccountInformationScreen(selectedBusinessAccount: snapshot.data![index],
-                                path: '${AppConstant.accountPath}/${snapshot.data![index].key}',
+                                path: '${GlobalVar.basePath}/${AppConstant.accountPath}/${snapshot.data![index].key}',
                                 )));
                   },
                   editAction: () {
@@ -168,17 +170,19 @@ class _AccountScreenState extends State<AccountScreen> {
                         MaterialPageRoute(
                             builder: (context) => AddBusinessScreen(
                                   editCompanyInfo: snapshot.data![index],
-                                )));
+                                ))).whenComplete(() {
+                      getAccountList = getAccounts();
+                    });
                   },
                   deleteAction: () async {
                     showDialog(context: context, builder: (context)=>Center(child: CircularProgressIndicator(),));
                     if(snapshot.data![index].imageUrl.isNotEmpty){
                       final desertRef = FirebaseStorage.instance.ref().child(
-                          "${AppConstant.accountPath}/${snapshot.data![index].key}/${AppConstant.userImageName}");
+                          "${GlobalVar.basePath}/${AppConstant.accountPath}/${snapshot.data![index].key}/${AppConstant.userImageName}");
 
                       await desertRef.delete();
                     }
-                    DatabaseReference ref = FirebaseDatabase.instance.ref("${AppConstant.accountPath}/${snapshot.data![index].key}");
+                    DatabaseReference ref = FirebaseDatabase.instance.ref("${GlobalVar.basePath}/${AppConstant.accountPath}/${snapshot.data![index].key}");
 
                     await ref.remove();
                     setState(() {

@@ -35,7 +35,7 @@ class _ManPowerGroupListScreenState extends State<ManPowerGroupListScreen> {
 
     //database.ref("${AppConstant.manPowerGroupPath}/${groupNameController.text}/people0");
     DatabaseReference ref = database
-        .ref("${AppConstant.manPowerGroupPath}/${widget.selectedGroup}/");
+        .ref("${GlobalVar.basePath}/${AppConstant.manPowerGroupPath}/${widget.selectedGroup}/");
     //print(ref.);
     groupMembers.clear();
     await ref.once().then((event) {
@@ -205,14 +205,17 @@ class _ManPowerGroupListScreenState extends State<ManPowerGroupListScreen> {
                     address:
                         '${snapshot.data![index].cityName},${snapshot.data![index].districtName},${snapshot.data![index].division}-${snapshot.data![index].postCode}',
                     phone: snapshot.data![index].mobileNumber,
-                    editFunction: () {
-                      Navigator.push(
+                    editFunction: () async {
+                      loadData = await Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => AddManpowerScreen(
                                     groupName: widget.selectedGroup,
                                     editGroupMember: snapshot.data![index],
                                   )));
+                      if(loadData){
+                        _groupMemberFuture = getGroupMemberList();
+                      }
                     },
                     deleteFunction: () async {
                       showDialog(
@@ -222,12 +225,12 @@ class _ManPowerGroupListScreenState extends State<ManPowerGroupListScreen> {
                               ));
                       if(snapshot.data![index].photoUrl.isNotEmpty){
                         final desertRef = FirebaseStorage.instance.ref().child(
-                            "${AppConstant.manPowerGroupPath}/${widget.selectedGroup}/${snapshot.data![index].key}/${AppConstant.userImageName}");
+                            "${GlobalVar.basePath}/${AppConstant.manPowerGroupPath}/${widget.selectedGroup}/${snapshot.data![index].key}/${AppConstant.userImageName}");
 
                         await desertRef.delete();
                       }
                       DatabaseReference ref = FirebaseDatabase.instance.ref(
-                          "${AppConstant.manPowerGroupPath}/${widget.selectedGroup}/${snapshot.data![index].key}");
+                          "${GlobalVar.basePath}/${AppConstant.manPowerGroupPath}/${widget.selectedGroup}/${snapshot.data![index].key}");
 
                       await ref.remove();
                       setState(() {

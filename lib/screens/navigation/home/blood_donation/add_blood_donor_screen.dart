@@ -175,7 +175,7 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
                   height: 10,
                 ),
                 CustomTextFormField(
-                  isMandatory: true,
+                  // isMandatory: true,
                     hint: AppConstant.namePlainText,
                     controller: nameController,
                     keyboardInputType: TextInputType.text),
@@ -183,7 +183,7 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
                   height: 10,
                 ),
                 CustomTextFormField(
-                  isMandatory: true,
+                  // isMandatory: true,
                   hint: AppConstant.dateOfBirthPlainText,
                   controller: dateOfBirthController,
                   keyboardInputType: TextInputType.none,
@@ -249,7 +249,7 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
                   height: 10,
                 ),
                 CustomTextFormField(
-                  isMandatory: true,
+                  // isMandatory: true,
                     hint: AppConstant.phoneNumberPlainText,
                     controller: phoneNumberController,
                     keyboardInputType: TextInputType.phone),
@@ -257,7 +257,7 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
                   height: 10,
                 ),
                 CustomTextFormField(
-                  isMandatory: false,
+                  // isMandatory: false,
                     hint: AppConstant.emailPlainText,
                     controller: emailController,
                     keyboardInputType: TextInputType.emailAddress),
@@ -274,22 +274,22 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
                       mainAxisSpacing: 10),
                   children: [
                     CustomTextFormField(
-                        isMandatory: false,
+                        // isMandatory: false,
                         hint: AppConstant.cityNamePlainText,
                         controller: cityNameController,
                         keyboardInputType: TextInputType.text),
                     CustomTextFormField(
-                        isMandatory: false,
+                        // isMandatory: false,
                         hint: AppConstant.districtNamePlainText,
                         controller: districtNameController,
                         keyboardInputType: TextInputType.text),
                     CustomTextFormField(
-                        isMandatory: false,
+                        // isMandatory: false,
                         hint: AppConstant.postCodePlainText,
                         controller: postCodeController,
                         keyboardInputType: TextInputType.number),
                     CustomTextFormField(
-                        isMandatory: false,
+                        // isMandatory: false,
                         hint: AppConstant.divisionPlainText,
                         controller: divisionController,
                         keyboardInputType: TextInputType.text),
@@ -301,7 +301,7 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
               height: 10,
             ),
             CustomTextFormField(
-                isMandatory: true,
+                // isMandatory: true,
                 hint: AppConstant.lastDateOfBloodDonationPlainText,
                 controller: lastDateOfBloodDonationController,
                 keyboardInputType: TextInputType.datetime,
@@ -353,7 +353,7 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
               height: 10,
             ),
             CustomTextFormField(
-                isMandatory: true,
+                // isMandatory: true,
                 hint: AppConstant.abilityToDonateBloodPlainText,
                 controller: abilityToDonateBloodController,
                 keyboardInputType: TextInputType.datetime),
@@ -361,7 +361,7 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
               height: 10,
             ),
             CustomTextFormField(
-                isMandatory: true,
+                // isMandatory: true,
                 hint: AppConstant.nextDateToAbleToDonateBloodPlainText,
                 controller: nextDateToAbleToDonateBloodController,
                 keyboardInputType: TextInputType.datetime),
@@ -383,16 +383,16 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
                           style: TextStyle(color: AppColor.white),
                         )));
                   }
-                  if (formKey.currentState!.validate()) {
+                  // if (formKey.currentState!.validate()) {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        });
                     if (widget.editDonorInfo == null) {
                       String downloadUrl = '';
-                      showDialog(
-                          context: context,
-                          builder: (context) {
-                            return Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          });
                       String uniqueName =
                           GlobalVar.customNameEncoder(nameController.text);
                       final storageRef = FirebaseStorage.instance.ref();
@@ -404,7 +404,7 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
                         print('File Path: ${file.path}');
                         final uploadTask = storageRef
                             .child(
-                                "${AppConstant.bloodDonorGroupPath}/$uniqueName/${AppConstant.userImageName}")
+                                "${GlobalVar.basePath}/${AppConstant.bloodDonorGroupPath}/$uniqueName/${AppConstant.userImageName}")
                             .putFile(file, metadata);
                         print(
                             'Image Upload Time:${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}');
@@ -455,7 +455,7 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
                         //     'https://smfmobileapp-5b74e-default-rtdb.firebaseio.com/');
 
                         DatabaseReference ref = database.ref(
-                            "${AppConstant.bloodDonorGroupPath}/${uniqueName}");
+                            "${GlobalVar.basePath}/${AppConstant.bloodDonorGroupPath}/${uniqueName}");
 
                         await ref.set({
                           AppConstant.nameColumnText: nameController.text,
@@ -479,16 +479,10 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
                           AppConstant.profileImageColumnText: downloadUrl,
                         });
                       });
-                    } else {
-                      showDialog(
-                          context: context,
-                          builder: (context) {
-                            return Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          });
+                    }
+                    else {
                       DatabaseReference ref = FirebaseDatabase.instance.ref(
-                          "${AppConstant.bloodDonorGroupPath}/${widget.editDonorInfo!.key}");
+                          "${GlobalVar.basePath}/${AppConstant.bloodDonorGroupPath}/${widget.editDonorInfo!.key}");
                       ref.update({
                         AppConstant.nameColumnText: nameController.text,
                         AppConstant.dateOfBirthColumnText:
@@ -510,7 +504,7 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
                     Navigator.of(context, rootNavigator: true).pop();
                     Navigator.pop(context, true);
                     print('');
-                  }
+                  // }
                 })
           ],
         ));

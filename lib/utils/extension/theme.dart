@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:smf/screens/navigation/profile/profile_manage_screen.dart';
+import 'package:smf/utils/functionalities/shared_prefs_manager.dart';
 import '../color/app_color.dart';
 import '../values/app_constant.dart';
 
@@ -16,6 +18,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         title,
         style: TextStyle(color: AppColor.white),
       ),
+      actions: [
+        IconButton(onPressed: (){
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>ProfileManageScreen()));
+          // SharedPrefsManager.setSplash(false);
+        }, icon: Icon(Icons.person))
+      ],
     );
   }
 
@@ -120,7 +128,7 @@ class MyBusinessTileUi extends StatelessWidget {
       required this.onTapAction});
   BuildContext context;
   String title, imagePath;
-  VoidCallback onTapAction,editAction,deleteAction;
+  VoidCallback onTapAction, editAction, deleteAction;
 
   @override
   Widget build(BuildContext context) {
@@ -144,37 +152,37 @@ class MyBusinessTileUi extends StatelessWidget {
               itemBuilder: (context) {
                 return [
                   PopupMenuItem(
-                    onTap: editAction,
+                      onTap: editAction,
                       child: Row(
-                    children: [
-                      Icon(
-                        Icons.edit_note,
-                        color: AppColor.killarney,
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Text(AppConstant.editPlainText,
-                          style: TextStyle(color: AppColor.killarney)),
-                    ],
-                  )),
+                        children: [
+                          Icon(
+                            Icons.edit_note,
+                            color: AppColor.killarney,
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(AppConstant.editPlainText,
+                              style: TextStyle(color: AppColor.killarney)),
+                        ],
+                      )),
                   PopupMenuItem(
                       onTap: deleteAction,
                       child: Row(
-                    children: [
-                      Icon(
-                        Icons.delete,
-                        color: AppColor.butterCup,
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        AppConstant.removePlainText,
-                        style: TextStyle(color: AppColor.butterCup),
-                      ),
-                    ],
-                  )),
+                        children: [
+                          Icon(
+                            Icons.delete,
+                            color: AppColor.butterCup,
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            AppConstant.removePlainText,
+                            style: TextStyle(color: AppColor.butterCup),
+                          ),
+                        ],
+                      )),
                 ];
               },
             ),
@@ -193,23 +201,25 @@ class MyBusinessTileUi extends StatelessWidget {
                     height: 40,
                     decoration: imagePath.isNotEmpty
                         ? BoxDecoration(
-                        shape: BoxShape.circle,
-                        image: DecorationImage(
-                            image: NetworkImage(
-                              imagePath,
-                            ),
-                            fit: BoxFit.fill))
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                                image: NetworkImage(
+                                  imagePath,
+                                ),
+                                fit: BoxFit.fill))
                         : BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: AppColor.sepiaBlack,
-                    ),
+                            shape: BoxShape.circle,
+                            color: AppColor.sepiaBlack,
+                          ),
                   ),
                   SizedBox(
                     width: 10,
                   ),
                   Expanded(
                       child: Text(
-                        title,overflow: TextOverflow.fade,maxLines: 2,
+                    title,
+                    overflow: TextOverflow.fade,
+                    maxLines: 2,
                     style: TextStyle(fontSize: 20),
                   ))
                 ])
@@ -247,7 +257,7 @@ class CustomTextFormField extends StatelessWidget {
   CustomTextFormField(
       {super.key,
       required this.hint,
-      required this.isMandatory,
+      // required this.isMandatory,
       required this.controller,
       this.onTap,
       required this.keyboardInputType,
@@ -257,13 +267,13 @@ class CustomTextFormField extends StatelessWidget {
   VoidCallback? onTap;
   TextInputType keyboardInputType;
   IconData? suffixIcon;
-  bool isMandatory;
+  // bool isMandatory;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       validator: (value) {
-        if (value == null || value.isEmpty && isMandatory) {
+        if (value == null || value.isEmpty /*&& isMandatory*/) {
           return "Please don't leave this field.";
         }
         return null;
@@ -514,8 +524,9 @@ Text orTextUI() {
         fontWeight: FontWeight.bold, color: AppColor.sepiaBlack, fontSize: 20),
   );
 }
+
 class SocialLoginUi extends StatelessWidget {
-  SocialLoginUi({super.key,required this.onTapAction});
+  SocialLoginUi({super.key, required this.onTapAction});
   VoidCallback onTapAction;
 
   @override
@@ -543,8 +554,6 @@ class SocialLoginUi extends StatelessWidget {
     );
   }
 }
-
-
 
 Widget forgotPasswordUi(VoidCallback onPressed) {
   return Align(
@@ -607,7 +616,7 @@ class CustomDropdownButton extends StatelessWidget {
       ),
       isDense: true,
       validator: (value) {
-        if(value!.isEmpty){
+        if (value!.isEmpty) {
           return hintText;
         }
         print('Value is $value');
@@ -872,4 +881,15 @@ class CustomCalendar extends StatelessWidget {
       ],
     );
   }
+}
+
+void showErrorSnackBar(
+    String msg, BuildContext context) {
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    content: Text(
+      msg,
+      style: TextStyle(color: AppColor.white),
+    ),
+    backgroundColor: AppColor.red,
+  ));
 }

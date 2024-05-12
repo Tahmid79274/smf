@@ -1,4 +1,9 @@
 class GlobalVar {
+
+  static String basePath ='';
+  static String userName ='';
+  static String userProfileLink ='';
+
   static String customNameEncoder(String name) {
     String encodedName =
         "${name.replaceAll(' ', '_')}?${DateTime.now().toString().replaceAll(' ', '@').replaceAll('.', ':')}";

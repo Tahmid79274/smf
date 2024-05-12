@@ -88,7 +88,7 @@ class _AddNewBusinessTransactionEntryScreenState
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   CustomTextFormField(
-                      isMandatory: true,
+                      // isMandatory: true,
                       hint: AppConstant.datePlainText,
                       controller: dateController,
                       keyboardInputType: TextInputType.none,
@@ -123,7 +123,7 @@ class _AddNewBusinessTransactionEntryScreenState
                     height: 10,
                   ),
                   CustomTextFormField(
-                      isMandatory: true,
+                      // isMandatory: true,
                       hint: AppConstant.entryTitlePlainText,
                       controller: entryTitleController,
                       keyboardInputType: TextInputType.text),
@@ -131,7 +131,7 @@ class _AddNewBusinessTransactionEntryScreenState
                     height: 10,
                   ),
                   CustomTextFormField(
-                      isMandatory: true,
+                      // isMandatory: true,
                       hint: AppConstant.entryDetailsPlainText,
                       controller: entryDetailsController,
                       keyboardInputType: TextInputType.text),
@@ -139,7 +139,7 @@ class _AddNewBusinessTransactionEntryScreenState
                     height: 10,
                   ),
                   CustomTextFormField(
-                      isMandatory: true,
+                      // isMandatory: true,
                       hint: AppConstant.moneyAmountPlainText,
                       controller: entryAmountController,
                       keyboardInputType: TextInputType.numberWithOptions()),
@@ -322,13 +322,13 @@ class _AddNewBusinessTransactionEntryScreenState
                   child: Text(
                     '- ${AppConstant.debitPlainText}',
                     style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 15,
                         fontWeight: FontWeight.bold,
-                        color: AppColor.white),
+                        color: AppColor.red),
                   ),
                   style: ButtonStyle(
                       backgroundColor:
-                          MaterialStateProperty.all<Color>(AppColor.killarney),
+                          MaterialStateProperty.all<Color>(AppColor.nebula),
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(5))))),
@@ -339,13 +339,13 @@ class _AddNewBusinessTransactionEntryScreenState
                   child: Text(
                     '+ ${AppConstant.creditPlainText}',
                     style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 15,
                         fontWeight: FontWeight.bold,
-                        color: AppColor.red),
+                        color: AppColor.white),
                   ),
                   style: ButtonStyle(
                       backgroundColor:
-                          MaterialStateProperty.all<Color>(AppColor.nebula),
+                          MaterialStateProperty.all<Color>(AppColor.killarney),
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(5))))),
