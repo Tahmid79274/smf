@@ -151,13 +151,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 print(
                     'After check-${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}');
-                await Future.delayed(Duration(seconds: 5)).whenComplete(() {
-                  print('Email:${credential.user!.email}');
-                  print('UserID:${credential.user!.uid}');
-                });
-                GlobalVar.basePath = credential.user!.uid;
-                GlobalVar.userName = credential.user!.displayName!;
-                GlobalVar.userProfileLink = credential.user!.photoURL!;
+                GlobalVar.basePath = emailController.text.replaceAll('.', '_');
+                SharedPrefsManager.setUID(emailController.text.replaceAll('.', '_'));
+                print('Email:${GlobalVar.basePath}');
+                print('UserID:${GlobalVar.basePath}');
               } catch (e) {
                 if (e is FirebaseAuthException) {
                   if (e.code == 'user-not-found') {

@@ -6,6 +6,7 @@ import 'package:smf/models/group_member_model.dart';
 import 'package:smf/utils/extension/theme.dart';
 import '../../../../utils/color/app_color.dart';
 import '../../../../utils/functionalities/functions.dart';
+import '../../../../utils/functionalities/shared_prefs_manager.dart';
 import '../../../../utils/values/app_constant.dart';
 import './add_man_power_screen.dart';
 
@@ -30,6 +31,7 @@ class _ManPowerGroupListScreenState extends State<ManPowerGroupListScreen> {
   Future<List<GroupMemberModel>>? _groupMemberFuture;
 
   Future<List<GroupMemberModel>> getGroupMemberList() async {
+    GlobalVar.basePath = await SharedPrefsManager.getUID();
     print('Initiated Man Power Group List of ${widget.selectedGroup}');
     FirebaseDatabase database = FirebaseDatabase.instance;
 
@@ -66,6 +68,7 @@ class _ManPowerGroupListScreenState extends State<ManPowerGroupListScreen> {
         print("Group with ID '123' does not exist.");
       }
     });
+    groupMembers.sort((a, b) => a.name.compareTo(b.name),);
     return groupMembers;
   }
 

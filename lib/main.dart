@@ -21,6 +21,8 @@ Future<void> main() async{
     options: DefaultFirebaseOptions.currentPlatform,
   );
   isLoggedIn = await SharedPrefsManager.getSplashStatus();
+  GlobalVar.basePath = await SharedPrefsManager.getUID();
+  print('UserID:${GlobalVar.basePath}');
   runApp(const MyApp());
 }
 

@@ -5,6 +5,7 @@ import 'package:firebase_database/firebase_database.dart';
 import '../../../../utils/color/app_color.dart';
 import '../../../../utils/extension/theme.dart';
 import '../../../../utils/functionalities/functions.dart';
+import '../../../../utils/functionalities/shared_prefs_manager.dart';
 import '../../../../utils/values/app_constant.dart';
 import 'man_power_list_screen.dart';
 
@@ -24,6 +25,7 @@ class _ManPowerGroupScreenState extends State<ManPowerGroupScreen> {
 
   Future<List<String>> getGroupList() async {
     print('Initiated');
+    GlobalVar.basePath = await SharedPrefsManager.getUID();
     FirebaseDatabase database = FirebaseDatabase.instance;
     final firebaseApp = Firebase.app();
     final rtdb = FirebaseDatabase.instanceFor(
@@ -54,6 +56,7 @@ class _ManPowerGroupScreenState extends State<ManPowerGroupScreen> {
         print("Group with ID '123' does not exist.");
       }
     });
+    groups.sort((a, b) => a.compareTo(b),);
     return groups;
   }
 

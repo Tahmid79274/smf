@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:smf/models/group_member_model.dart';
 import '../../../../utils/extension/theme.dart';
 import '../../../../utils/functionalities/functions.dart';
+import '../../../../utils/functionalities/shared_prefs_manager.dart';
 import '../../../../utils/values/app_constant.dart';
 import '../../../../utils/color/app_color.dart';
 import 'man_power_list_screen.dart';
@@ -212,6 +213,7 @@ class _AddManpowerScreenState extends State<AddManpowerScreen> {
                 backgroundColor: AppColor.killarney,
                 onPressed: () async {
                   if (formKey.currentState!.validate()) {
+                    GlobalVar.basePath = await SharedPrefsManager.getUID();
                     String downloadUrl = '';
                     showDialog(
                         context: context,

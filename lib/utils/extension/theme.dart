@@ -811,9 +811,10 @@ class CustomCalendar extends StatelessWidget {
   CustomCalendar(
       {super.key,
       required this.today,
+      required this.range,
       required this.dateChangeFunction,
       required this.saveFunction});
-  String today;
+  String today,range;
   void Function(DateTime? selectedDate) dateChangeFunction;
   VoidCallback saveFunction;
 
@@ -849,7 +850,7 @@ class CustomCalendar extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  AppConstant.dateTodayPlainText,
+                  range,
                   style: TextStyle(color: AppColor.grey, fontSize: 15),
                 ),
                 Text(
@@ -892,4 +893,12 @@ void showErrorSnackBar(
     ),
     backgroundColor: AppColor.red,
   ));
+}
+
+void showLoader(BuildContext context){
+  showDialog(context: context, builder: (context)=>Center(child: CircularProgressIndicator(),));
+}
+
+void removeLoader(BuildContext context){
+  Navigator.of(context,rootNavigator: true).pop();
 }

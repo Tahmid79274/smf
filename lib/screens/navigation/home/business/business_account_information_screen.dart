@@ -6,6 +6,7 @@ import 'package:smf/utils/functionalities/functions.dart';
 import '../../../../models/transaction_model.dart';
 import '../../../../utils/color/app_color.dart';
 import '../../../../utils/extension/theme.dart';
+import '../../../../utils/functionalities/shared_prefs_manager.dart';
 import '../../../../utils/values/app_constant.dart';
 import 'business_transaction/business_transaction_details.dart';
 
@@ -30,6 +31,7 @@ class _BusinessAccountInformationScreenState
   Future<List<TransactionModel>>? _transactionTabsFuture;
   Future<List<TransactionModel>> getTransactionTabsList() async {
     //print('Initiated');
+    GlobalVar.basePath = await SharedPrefsManager.getUID();
     FirebaseDatabase database = FirebaseDatabase.instance;
 
     //database.ref("${AppConstant.manPowerGroupPath}/${groupNameController.text}/people0");

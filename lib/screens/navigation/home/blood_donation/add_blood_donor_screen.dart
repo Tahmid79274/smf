@@ -192,6 +192,7 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
                       context: context,
                       builder: (context) {
                         return CustomCalendar(
+                          range: AppConstant.dateTodayPlainText,
                           today: today,
                           dateChangeFunction: (selectedDate) {
                             setState(() {
@@ -310,6 +311,7 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
                     context: context,
                     builder: (context) {
                       return CustomCalendar(
+                        range: AppConstant.dateTodayPlainText,
                         today: today,
                         dateChangeFunction: (selectedDate) {
                           setState(() {

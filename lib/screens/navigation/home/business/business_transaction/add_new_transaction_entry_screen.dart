@@ -97,6 +97,7 @@ class _AddNewBusinessTransactionEntryScreenState
                           context: context,
                           builder: (context) {
                             return CustomCalendar(
+                              range: AppConstant.dateTodayPlainText,
                               today: today,
                               dateChangeFunction: (selectedDate) {
                                 setState(() {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:smf/utils/functionalities/shared_prefs_manager.dart';
 import '../../utils/color/app_color.dart';
 import '../../utils/extension/theme.dart';
 import '../../utils/values/app_constant.dart';
@@ -83,12 +84,15 @@ class _SignupScreenState extends State<SignupScreen> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         CustomButton(content: AppConstant.signUpPlainText, contentColor: AppColor.white, backgroundColor: AppColor.killarney, onPressed: ()async{
+          showLoader(context);
           try {
             final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
               email: emailController.text,
               password: passwordController.text,
             );
             print(credential.additionalUserInfo!.authorizationCode);
+            removeLoader(context);
+            SharedPrefsManager.setProfileName(nameController.text);
             Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LoginScreen()));
             // FirebaseAuth.instance
             //     .authStateChanges()

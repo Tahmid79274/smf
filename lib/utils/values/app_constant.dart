@@ -134,6 +134,9 @@ abstract class AppConstant{
 
   //shared_pref
   static String loggedIn = 'logged_in';
+  static String userId = 'uid';
+  static String userName = 'user_name';
+  static String profilePhotoLink = 'profile_photo_link';
   static String emails = 'emails';
   static String passwords = 'passwords';
 }

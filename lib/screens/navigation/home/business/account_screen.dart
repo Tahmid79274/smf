@@ -3,6 +3,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:smf/models/account_model.dart';
 import 'package:smf/utils/extension/theme.dart';
+import 'package:smf/utils/functionalities/shared_prefs_manager.dart';
 import '../../../../../../utils/color/app_color.dart';
 import '../../../../../../utils/values/app_constant.dart';
 import '../../../../utils/functionalities/functions.dart';
@@ -24,7 +25,8 @@ class _AccountScreenState extends State<AccountScreen> {
   Future<List<AccountModel>>? getAccountList;
 
   Future<List<AccountModel>> getAccounts() async {
-    print('Initiated');
+    GlobalVar.basePath = await SharedPrefsManager.getUID();
+    print('Initiated: ${GlobalVar.basePath}');
     FirebaseDatabase database = FirebaseDatabase.instance;
 
     DatabaseReference ref = database.ref("${GlobalVar.basePath}/${AppConstant.accountPath}/");

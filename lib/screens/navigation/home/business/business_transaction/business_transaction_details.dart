@@ -25,12 +25,15 @@ class BusinessTransactionDetailsScreen extends StatefulWidget {
 
 class _BusinessTransactionDetailsScreenState
     extends State<BusinessTransactionDetailsScreen> {
-  Map<String,String> groupMap = {};
+  Map<String, String> groupMap = {};
 
   bool loadData = true;
+  DateTime startDate = DateTime(1950);
+  DateTime endDate = DateTime.now();
 
   Future<List<EntryDetailsModel>>? _getEntriesFuture;
   List<EntryDetailsModel> entries = [];
+  List<EntryDetailsModel> filteredEntries = [];
   double totalExpense = 0, totalIncome = 0, remainingBalance = 0;
 
   Future<List<EntryDetailsModel>> getEntryDetails() async {
@@ -38,32 +41,40 @@ class _BusinessTransactionDetailsScreenState
     FirebaseDatabase database = FirebaseDatabase.instance;
 
     //database.ref("${AppConstant.manPowerGroupPath}/${groupNameController.text}/people0");
-    DatabaseReference ref = database.ref("${widget.path}/${AppConstant.entryColumnText}");
+    DatabaseReference ref =
+        database.ref("${widget.path}/${AppConstant.entryColumnText}");
     //print(ref.);
     entries.clear();
-    totalExpense = 0; totalIncome = 0; remainingBalance = 0;
+    totalExpense = 0;
+    totalIncome = 0;
+    remainingBalance = 0;
     await ref.once().then((event) {
       if (event.snapshot.exists) {
         // Extract the data as a Map
         Map<dynamic, dynamic> groupData =
-        event.snapshot.value as Map<dynamic, dynamic>;
+            event.snapshot.value as Map<dynamic, dynamic>;
         for (var key in groupData.keys) {
-          print('After getting a key, the value is ${groupData[key]}');
+          // print('After getting a key, the value is ${groupData[key]}');
           setState(() {
-            entries.add(EntryDetailsModel(
-                entryTitle: groupData[key][AppConstant.entryTitleColumnText].toString(),
-                entryDetails: groupData[key][AppConstant.entryDetailsColumnText].toString(),
-                transactionDate: groupData[key][AppConstant.entryDateColumnText].toString(),
-                amount: groupData[key][AppConstant.entryAmountColumnText].toString(),
+            if(startDate.isBefore(DateTime.parse(groupData[key][AppConstant.entryDateColumnText].toString())) && endDate.isAfter(DateTime.parse(groupData[key][AppConstant.entryDateColumnText].toString()))){
+              entries.add(EntryDetailsModel(
+                entryTitle:
+                groupData[key][AppConstant.entryTitleColumnText].toString(),
+                entryDetails:
+                groupData[key][AppConstant.entryDetailsColumnText].toString(),
+                transactionDate:
+                groupData[key][AppConstant.entryDateColumnText].toString(),
+                amount:
+                groupData[key][AppConstant.entryAmountColumnText].toString(),
                 isDebit: groupData[key][AppConstant.debitOrCreditColumnText],
-            ));
-            if(entries.last.isDebit){
-              totalExpense += double.parse(entries.last.amount);
-            }else{
-              totalIncome += double.parse(entries.last.amount);
+              ));
+              if (entries.last.isDebit) {
+                totalExpense += double.parse(entries.last.amount);
+              } else {
+                totalIncome += double.parse(entries.last.amount);
+              }
+              remainingBalance = totalIncome - totalExpense;
             }
-            remainingBalance = totalIncome - totalExpense;
-            //groups.add(key);
           });
         }
         // print('Group Map:$groupMap');
@@ -72,12 +83,16 @@ class _BusinessTransactionDetailsScreenState
       }
     });
 
+    entries.sort(
+      (a, b) => a.transactionDate.compareTo(b.transactionDate),
+    );
+    print('');
     return entries;
   }
 
   @override
   void initState() {
-    if(loadData){
+    if (loadData) {
       _getEntriesFuture = getEntryDetails();
     }
     print('Selected path:${widget.path}');
@@ -91,21 +106,42 @@ class _BusinessTransactionDetailsScreenState
       child: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              initBusinessTransactionDetailsTitleUi(),
-              const SizedBox(
-                height: 10,
-              ),
-              initReportUi(),
-              const SizedBox(
-                height: 10,
-              ),
-              initEntryTitleUi(),
-              const SizedBox(
-                height: 10,
-              ),
-            ],
+          child: FutureBuilder<List<EntryDetailsModel>>(
+            future: _getEntriesFuture,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Center(child: Text('Please add some transactions..'));
+              } else if (snapshot.data!.isEmpty) {
+                return Text('Please add some transactions');
+              } else {
+                // filteredEntries = entries;
+                filteredEntries.clear();
+                for(var entry in entries){
+                  if(startDate.isBefore(DateTime.parse(entry.transactionDate))&& endDate.isAfter(DateTime.parse(entry.transactionDate))){
+                    filteredEntries.add(entry);
+                  }
+                  print('object');
+                }
+                return Column(
+                  children: [
+                    initBusinessTransactionDetailsTitleUi(),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    initReportUi(),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    initEntryTitleUi(),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                  ],
+                );
+              }
+            },
           ),
         ),
       ),
@@ -145,7 +181,77 @@ class _BusinessTransactionDetailsScreenState
     return TitleIconButtonWithWhiteBackground(
       headline: AppConstant.reportPlainText,
       actionIcon: Icons.calendar_today_outlined,
-      action: () {},
+      action: () {
+        showModalBottomSheet(
+          context: context,
+          builder: (context) {
+            return StatefulBuilder(
+              builder: (context, setState) {
+                return CustomCalendar(
+                  range: 'From',
+                  today:
+                      '${startDate.year}-${startDate.month}-${startDate.day}',
+                  dateChangeFunction: (selectedDate) {
+                    setState(() {
+                      startDate = selectedDate!.subtract(Duration(days: 1));
+                    });
+                  },
+                  saveFunction: () {
+                    Navigator.of(context, rootNavigator: true).pop();
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (context) {
+                        return StatefulBuilder(
+                          builder: (context, setState) {
+                            return CustomCalendar(
+                              range: 'Today',
+                              today:
+                                  '${endDate.year}-${endDate.month}-${endDate.day}',
+                              dateChangeFunction: (selectedDate) {
+                                setState(() {
+                                  endDate = selectedDate!.add(Duration(days: 1));
+                                  // filteredEntries.clear();
+                                  // totalIncome = 0;
+                                  // totalExpense = 0;
+                                  // for (var entry in entries) {
+                                  //   print(
+                                  //       'Entry date is : ${DateTime.parse(entry.transactionDate)}');
+                                  //   if (startDate.isBefore(DateTime.parse(
+                                  //           entry.transactionDate)) &&
+                                  //       endDate.isAfter(DateTime.parse(
+                                  //           entry.transactionDate))) {
+                                  //     filteredEntries.add(entry);
+                                  //     if (filteredEntries.last.isDebit) {
+                                  //       totalExpense += double.parse(
+                                  //           filteredEntries.last.amount);
+                                  //     } else {
+                                  //       totalIncome += double.parse(
+                                  //           filteredEntries.last.amount);
+                                  //     }
+                                  //   }
+                                  // }
+                                  // remainingBalance = totalIncome - totalExpense;
+                                  // print(
+                                  //     'Filtered length:${filteredEntries.length}');
+                                });
+                              },
+                              saveFunction: () {
+                                Navigator.of(context, rootNavigator: true)
+                                    .pop();
+                                _getEntriesFuture = getEntryDetails();
+                              },
+                            );
+                          },
+                        );
+                      },
+                    );
+                  },
+                );
+              },
+            );
+          },
+        );
+      },
       whatToShow: Column(children: [
         ReportStatusDetailsUi(
           title: AppConstant.incomePlainText,
@@ -171,93 +277,90 @@ class _BusinessTransactionDetailsScreenState
       ]),
     );
   }
+
   Widget initEntryTitleUi() {
     return TitleIconButtonWithWhiteBackground(
-      headline: AppConstant.entryTitlePlainText,
-      actionIcon: Icons.add,
-      action: () async {
-        loadData = await Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => AddNewBusinessTransactionEntryScreen(
-                  path: widget.path,
-                  selectedTransaction: widget.selectedTransaction,
-                  imageUrl: widget.imageUrl!.isNotEmpty?widget.imageUrl!:'',
-                )));
-        if(loadData){
-          setState(() {
-            _getEntriesFuture = getEntryDetails();
-          });
-        }
-      },
-      whatToShow: FutureBuilder<List<EntryDetailsModel>>
-        (future: _getEntriesFuture,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
-            } else if (snapshot.hasError) {
-              return Text('Please add some transactions..');
-            }else if (snapshot.data!.isEmpty) {
-              return Text('Please add some transactions');
-            }else{
-              return Table(
-                border: TableBorder.all(
-                    color: AppColor.nebula,
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(5), topRight: Radius.circular(5))),
+        headline: AppConstant.entryTitlePlainText,
+        actionIcon: Icons.add,
+        action: () async {
+          loadData = await Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => AddNewBusinessTransactionEntryScreen(
+                        path: widget.path,
+                        selectedTransaction: widget.selectedTransaction,
+                        imageUrl:
+                            widget.imageUrl!.isNotEmpty ? widget.imageUrl! : '',
+                      )));
+          if (loadData) {
+            setState(() {
+              _getEntriesFuture = getEntryDetails();
+            });
+          }
+        },
+        whatToShow: Table(
+          border: TableBorder.all(
+              color: AppColor.nebula,
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(5),
+                  topRight: Radius.circular(5))),
+          children: [
+            TableRow(
+                decoration: BoxDecoration(
+                  color: AppColor.aquaHaze,
+                  // border: Border.all(color: AppColor.grey),
+                  // borderRadius: BorderRadius.only(topLeft: Radius.circular(5),topRight: Radius.circular(5))
+                ),
                 children: [
-                  TableRow(
-                      decoration: BoxDecoration(
-                        color: AppColor.aquaHaze,
-                        // border: Border.all(color: AppColor.grey),
-                        // borderRadius: BorderRadius.only(topLeft: Radius.circular(5),topRight: Radius.circular(5))
-                      ),
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(AppConstant.datePlainText,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 15)),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(AppConstant.productNamePlainText,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 15)),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            AppConstant.moneyAmountPlainText,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: 15),
-                          ),
-                        ),
-                      ]),
-                  ...snapshot.data!
-                      .map((e) => TableRow(children: [
-                    Text(e.transactionDate,
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(AppConstant.datePlainText,
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 15)),
-                    Text(e.entryTitle,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(AppConstant.productNamePlainText,
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 15)),
-                    Row(mainAxisAlignment:MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(e.isDebit?'-':'+',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: 15,color: e.isDebit?AppColor.red:AppColor.green)),
-                        Text(e.amount,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: 15))
-                      ],),
-                  ]))
-                      .toList()
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      AppConstant.moneyAmountPlainText,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 15),
+                    ),
+                  ),
+                ]),
+            ...filteredEntries.where((element) => startDate.isBefore(DateTime.parse(element.transactionDate))&& endDate.isAfter(DateTime.parse(element.transactionDate)))
+                .map((e) => TableRow(children: [
+              Text(e.transactionDate,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 15)),
+              Text(e.entryTitle,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 15)),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(e.isDebit ? '-' : '+',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 15,
+                          color: e.isDebit
+                              ? AppColor.red
+                              : AppColor.green)),
+                  Text(e.amount,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 15))
                 ],
-              );
-            }
-          },)
+              ),
+            ]))
+                .toList()
+          ],
+        )
     );
   }
 }
