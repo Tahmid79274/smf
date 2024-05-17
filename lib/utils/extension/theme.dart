@@ -1,8 +1,14 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:smf/screens/auth/login_screen.dart';
 import 'package:smf/screens/navigation/profile/profile_manage_screen.dart';
 import 'package:smf/utils/functionalities/shared_prefs_manager.dart';
+import '../../screens/auth/welcome_screen.dart';
 import '../color/app_color.dart';
+import '../functionalities/functions.dart';
 import '../values/app_constant.dart';
+
+TextEditingController newPasswordController = TextEditingController();
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   CustomAppBar({super.key, required this.title});
@@ -19,10 +25,66 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         style: TextStyle(color: AppColor.white),
       ),
       actions: [
-        IconButton(onPressed: (){
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>ProfileManageScreen()));
-          // SharedPrefsManager.setSplash(false);
-        }, icon: Icon(Icons.person))
+        GlobalVar.basePath!=''?PopupMenuButton(itemBuilder:(context) {
+          return [PopupMenuItem(
+              onTap: ()async{
+                showDialog(context: context, builder: (context) {
+                  return AlertDialog(title: Text('Enter your New Password'),
+                    content: CustomTextFormField(
+                      controller: newPasswordController,
+                      keyboardInputType: TextInputType.text,
+                      hint: 'Password',
+                    ),
+                    actions: [
+                      TextButton(onPressed: ()async{
+                        showLoader(context);
+                        final user = FirebaseAuth.instance.currentUser;
+                        if (user != null) {
+                          // Get the new password from a text field or other input source
+
+                          try {
+                            await user.updatePassword(newPasswordController.text);
+                            print('Password updated successfully!');
+                            // Optionally, navigate to a success screen or display a confirmation message
+                          } on FirebaseAuthException catch (e) {
+                            // Handle errors related to password update
+                            if (e.code == 'weak-password') {
+                              print('The password is too weak.');
+                              showErrorSnackBar('The password is too weak.',context);
+                            } else if (e.code == 'requires-recent-login') {
+                              print('This operation requires recent login. Please sign in again before changing your password.');
+                              showErrorSnackBar('This operation requires recent login. Please sign in again before changing your password.',context);
+                            } else {
+                              print("Error updating password: ${e.code}");
+                              showErrorSnackBar("Error updating password: ${e.code}",context);
+                            }
+                          } catch (e) {
+                            // Handle other unexpected errors
+                            print("An unexpected error occurred: ${e}");
+                            showErrorSnackBar("An unexpected error occurred: ${e}",context);
+                          }
+                        } else {
+                          print('No user signed in. Please sign in first.');
+                          showErrorSnackBar('No user signed in. Please sign in first.',context);
+                          // Optionally, navigate to a sign-in screen
+                        }
+                        removeLoader(context);
+                        Navigator.of(context,rootNavigator: true).pop();
+                        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>LoginScreen()), (route) => false);
+                      }, child: Text('Update'))
+                    ],
+                  );
+                },);
+              },
+              child: Text('Change Password')),
+            PopupMenuItem(
+                onTap: ()async{
+                  await FirebaseAuth.instance.signOut().whenComplete(() => GlobalVar.basePath='');
+                  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>WelcomeScreen()), (route) => true);
+                },
+                child: Text('Logout')),
+          ];
+        },):Container()
       ],
     );
   }
@@ -373,9 +435,10 @@ class ReportStatusDetailsUi extends StatelessWidget {
 
 class CardAquaHazeWithColumnIconAndTitle extends StatelessWidget {
   CardAquaHazeWithColumnIconAndTitle(
-      {super.key, required this.title, required this.action});
+      {super.key, required this.title, required this.action, required this.longPressAction});
   String title;
   VoidCallback action;
+  VoidCallback longPressAction;
 
   @override
   Widget build(BuildContext context) {
@@ -384,6 +447,7 @@ class CardAquaHazeWithColumnIconAndTitle extends StatelessWidget {
       clipBehavior: Clip.antiAliasWithSaveLayer,
       color: AppColor.aquaHaze,
       child: InkWell(
+        onLongPress: longPressAction,
         onTap: action,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -542,14 +606,14 @@ class SocialLoginUi extends StatelessWidget {
               width: 50),
           onTap: onTapAction,
         ),
-        SizedBox(
-          width: 20,
-        ),
-        InkWell(
-          onTap: onTapAction,
-          child: Image.asset(AppConstant.imageBasePath + AppConstant.fbLogoPath,
-              width: 50),
-        ),
+        // SizedBox(
+        //   width: 20,
+        // ),
+        // InkWell(
+        //   onTap: onTapAction,
+        //   child: Image.asset(AppConstant.imageBasePath + AppConstant.fbLogoPath,
+        //       width: 50),
+        // ),
       ],
     );
   }

@@ -213,7 +213,6 @@ class _AddManpowerScreenState extends State<AddManpowerScreen> {
                 backgroundColor: AppColor.killarney,
                 onPressed: () async {
                   if (formKey.currentState!.validate()) {
-                    GlobalVar.basePath = await SharedPrefsManager.getUID();
                     String downloadUrl = '';
                     showDialog(
                         context: context,

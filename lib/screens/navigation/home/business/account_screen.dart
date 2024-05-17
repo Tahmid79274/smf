@@ -18,14 +18,21 @@ class AccountScreen extends StatefulWidget {
 }
 
 class _AccountScreenState extends State<AccountScreen> {
+
+  TextEditingController searchController = TextEditingController();
+
   List<AccountModel> accountList = [];
   Map<String, String> groupMap = {};
   bool loadData = true;
+  bool showResult = false;
 
   Future<List<AccountModel>>? getAccountList;
 
+  Future<List<AccountModel>> getSearchedAccounts() async {
+    return accountList.where((element) => element.companyName.toLowerCase().startsWith(searchController.text)).toList();
+  }
   Future<List<AccountModel>> getAccounts() async {
-    GlobalVar.basePath = await SharedPrefsManager.getUID();
+    // GlobalVar.basePath = await SharedPrefsManager.getUID();
     print('Initiated: ${GlobalVar.basePath}');
     FirebaseDatabase database = FirebaseDatabase.instance;
 
@@ -72,6 +79,11 @@ class _AccountScreenState extends State<AccountScreen> {
   }
 
   @override
+  void dispose(){
+    searchController.dispose();
+    super.dispose();
+  }
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.aquaHaze,
@@ -103,19 +115,76 @@ class _AccountScreenState extends State<AccountScreen> {
       mainAxisSize: MainAxisSize.max,
       children: [
         Expanded(
-            child: TextFormField(
-          decoration: InputDecoration(
-              isDense: true,
-              contentPadding: EdgeInsets.symmetric(horizontal: 10),
-              suffixIcon: Icon(
-                Icons.search,
-                color: AppColor.alto,
-              ),
-              hintText: AppConstant.searchPlainText,
-              hintStyle: TextStyle(color: AppColor.alto),
-              border: OutlineInputBorder(
-                  borderSide: BorderSide(color: AppColor.alto))),
-        )),
+            child: Column(
+              children: [
+                TextField(
+                  onChanged: (value) {
+                    setState(() {
+                      if(value.length>2){
+                        showResult = true;
+                      }
+                      else{
+                        showResult = false;
+                      }
+                    });
+                  },
+                  controller : searchController,
+                          decoration: InputDecoration(
+                  isDense: true,
+                  contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                  suffixIcon: Icon(
+                    Icons.search,
+                    color: AppColor.alto,
+                  ),
+
+                  hintText: AppConstant.searchPlainText,
+                  hintStyle: TextStyle(color: AppColor.alto),
+                  border: OutlineInputBorder(
+                      borderSide: BorderSide(color: AppColor.alto))),
+                        ),
+                Visibility(
+                        visible: showResult,
+                        child: FutureBuilder<List<AccountModel>>(
+                          future: getSearchedAccounts(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState == ConnectionState.waiting) {
+                              return Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            } else if (snapshot.hasError) {
+                              return Center(
+                                child: Text('No result Found yet'),
+                              );
+                            } else{
+                              return ListView.builder(
+                                shrinkWrap: true,
+                                  itemCount: snapshot.data!.length,
+                                  itemBuilder: (context, index) {
+                                    return InkWell(
+                                      onTap: (){
+                                        searchController.clear();
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    BusinessAccountInformationScreen(selectedBusinessAccount: snapshot.data![index],
+                                                      path: '${GlobalVar.basePath}/${AppConstant.accountPath}/${snapshot.data![index].key}',
+                                                    )));
+                                      },
+                                      child: Container(
+                                        color: AppColor.white,
+                                        padding: EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+                                        margin: EdgeInsets.symmetric(vertical: 5),
+                                        height: 30,
+                                        child: Text(snapshot.data![index].companyName,style: TextStyle(fontSize: 20),),
+                                      ),
+                                    );
+                                  },);
+                            }
+                          },
+                        ))
+              ],
+            )),
         SizedBox(
           width: 10,
         ),
@@ -141,6 +210,8 @@ class _AccountScreenState extends State<AccountScreen> {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
+          } else if (snapshot.data!.isEmpty) {
+            return Center(child: Text('Please add some accounts'));
           } else {
             return GridView.builder(
               itemCount: snapshot.data!.length,
@@ -158,6 +229,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   imagePath: snapshot.data![index].imageUrl,
                   context: context,
                   onTapAction: () {
+                    searchController.clear();
                     Navigator.push(
                         context,
                         MaterialPageRoute(

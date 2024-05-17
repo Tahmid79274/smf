@@ -86,21 +86,35 @@ class _SignupScreenState extends State<SignupScreen> {
         CustomButton(content: AppConstant.signUpPlainText, contentColor: AppColor.white, backgroundColor: AppColor.killarney, onPressed: ()async{
           showLoader(context);
           try {
+            print('Signup started:${DateTime.now().minute}:${DateTime.now().second}');
             final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
               email: emailController.text,
               password: passwordController.text,
-            );
-            print(credential.additionalUserInfo!.authorizationCode);
-            removeLoader(context);
-            SharedPrefsManager.setProfileName(nameController.text);
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LoginScreen()));
+            ).whenComplete(() => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LoginScreen())));
+            // print('Signup ended:${DateTime.now().minute}:${DateTime.now().second}');
+            // print('After signup user is:${credential.user!.email}');
+            // if(credential.user!.email!.isNotEmpty){
+            //   try {
+            //     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LoginScreen()));
+            //   } catch (e) {
+            //     print(e);
+            //   }
+            // }
+
+            //SharedPrefsManager.setProfileName(nameController.text);
             // FirebaseAuth.instance
             //     .authStateChanges()
             //     .listen((User? user) {
-            //   if (user != null) {
-            //     print(user.uid);
+            //   if (user == null) {
+            //     print('User is currently signed out!');
+            //   } else {
+            //     print('Before initialization:${GlobalVar.basePath}');
+            //     GlobalVar.basePath = user.email!.replaceAll('.', '_');
+            //     print('Before initialization:${GlobalVar.basePath}');
+            //     print('User is signed in! and the user is ${user.displayName}');
             //   }
             // });
+
           } on FirebaseAuthException catch (e) {
             if (e.code == 'weak-password') {
               print('The password provided is too weak.');
@@ -108,11 +122,14 @@ class _SignupScreenState extends State<SignupScreen> {
             } else if (e.code == 'email-already-in-use') {
               print('The account already exists for that email.');
               showErrorSnackBar('The account already exists for that email.',context);
+            }else{
+              showErrorSnackBar(e.toString(),context);
             }
           } catch (e) {
             print(e);
             showErrorSnackBar(e.toString(),context);
           }
+
         }),
         SizedBox(height: 10,),
         Row(
@@ -129,9 +146,11 @@ class _SignupScreenState extends State<SignupScreen> {
                 child: Text(AppConstant.loginPlainText,style: TextStyle(color: AppColor.killarney,fontWeight: FontWeight.bold),))
           ],
         ),
-        orTextUI(),
-        SizedBox(height: 10,),
-        SocialLoginUi(onTapAction: (){},)
+        // orTextUI(),
+        // SizedBox(height: 10,),
+        // SocialLoginUi(
+        //   onTapAction: (){},
+        // )
       ],
     );
   }

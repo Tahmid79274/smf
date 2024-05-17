@@ -384,29 +384,22 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
                           'Please add Blood Group and Rh Factor',
                           style: TextStyle(color: AppColor.white),
                         )));
-                  }
-                  // if (formKey.currentState!.validate()) {
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        });
+                  }else{
+                    showLoader(context);
                     if (widget.editDonorInfo == null) {
                       String downloadUrl = '';
                       String uniqueName =
-                          GlobalVar.customNameEncoder(nameController.text);
+                      GlobalVar.customNameEncoder(nameController.text);
                       final storageRef = FirebaseStorage.instance.ref();
                       if (_imagePath.isNotEmpty) {
                         File file = File(_imagePath);
                         final metadata =
-                            SettableMetadata(contentType: "image/jpeg");
+                        SettableMetadata(contentType: "image/jpeg");
                         print('Image Path: $_imagePath');
                         print('File Path: ${file.path}');
                         final uploadTask = storageRef
                             .child(
-                                "${GlobalVar.basePath}/${AppConstant.bloodDonorGroupPath}/$uniqueName/${AppConstant.userImageName}")
+                            "${GlobalVar.basePath}/${AppConstant.bloodDonorGroupPath}/$uniqueName/${AppConstant.userImageName}")
                             .putFile(file, metadata);
                         print(
                             'Image Upload Time:${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}');
@@ -426,16 +419,16 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
                               print("Upload was canceled");
                               break;
                             case TaskState.error:
-                              // Handle unsuccessful uploads
+                            // Handle unsuccessful uploads
                               print('Error occured');
                               break;
                             case TaskState.success:
-                              // Handle successful uploads on complete
-                              // ...
+                            // Handle successful uploads on complete
+                            // ...
                               print(
                                   'Time to get url:${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}');
                               downloadUrl =
-                                  await taskSnapshot.ref.getDownloadURL();
+                              await taskSnapshot.ref.getDownloadURL();
                               print('Successfull');
                               print('download url:$downloadUrl');
                               print(
@@ -445,7 +438,7 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
                         });
                       }
                       await Future.delayed(
-                              Duration(seconds: _imagePath.isNotEmpty ? 7 : 0))
+                          Duration(seconds: _imagePath.isNotEmpty ? 7 : 0))
                           .whenComplete(() async {
                         print(
                             'Upload Current time:${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}');
@@ -462,22 +455,22 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
                         await ref.set({
                           AppConstant.nameColumnText: nameController.text,
                           AppConstant.dateOfBirthColumnText:
-                              dateOfBirthController.text,
+                          dateOfBirthController.text,
                           AppConstant.bloodGroupColumnText: selectedBloodGroup,
                           AppConstant.rhFactorColumnText: selectedRhFactor,
                           AppConstant.mobileColumnText:
-                              phoneNumberController.text,
+                          phoneNumberController.text,
                           AppConstant.emailColumnText: emailController.text,
                           AppConstant.cityNameColumnText:
-                              cityNameController.text,
+                          cityNameController.text,
                           AppConstant.districtNameColumnText:
-                              districtNameController.text,
+                          districtNameController.text,
                           AppConstant.postCodeColumnText:
-                              postCodeController.text,
+                          postCodeController.text,
                           AppConstant.divisionColumnText:
-                              divisionController.text,
+                          divisionController.text,
                           AppConstant.lastDateOfBloodDonationColumnText:
-                              lastDateOfBloodDonationController.text,
+                          lastDateOfBloodDonationController.text,
                           AppConstant.profileImageColumnText: downloadUrl,
                         });
                       });
@@ -488,23 +481,24 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
                       ref.update({
                         AppConstant.nameColumnText: nameController.text,
                         AppConstant.dateOfBirthColumnText:
-                            dateOfBirthController.text,
+                        dateOfBirthController.text,
                         AppConstant.bloodGroupColumnText: selectedBloodGroup,
                         AppConstant.rhFactorColumnText: selectedRhFactor,
                         AppConstant.mobileColumnText:
-                            phoneNumberController.text,
+                        phoneNumberController.text,
                         AppConstant.emailColumnText: emailController.text,
                         AppConstant.cityNameColumnText: cityNameController.text,
                         AppConstant.districtNameColumnText:
-                            districtNameController.text,
+                        districtNameController.text,
                         AppConstant.postCodeColumnText: postCodeController.text,
                         AppConstant.divisionColumnText: divisionController.text,
                         AppConstant.lastDateOfBloodDonationColumnText:
-                            lastDateOfBloodDonationController.text,
+                        lastDateOfBloodDonationController.text,
                       });
                     }
-                    Navigator.of(context, rootNavigator: true).pop();
+                    removeLoader(context);
                     Navigator.pop(context, true);
+                  }
                     print('');
                   // }
                 })

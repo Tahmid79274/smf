@@ -1,6 +1,7 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:smf/models/account_model.dart';
+import 'package:smf/models/entry_details_model.dart';
 import 'package:smf/utils/functionalities/functions.dart';
 
 import '../../../../models/transaction_model.dart';
@@ -26,12 +27,14 @@ class _BusinessAccountInformationScreenState
   TextEditingController transactionDetailsTabController =
       TextEditingController();
 
-  double totalIncome=0,totalExpense = 0,remainingBalance =0;
+  DateTime startDate = DateTime(1950);
+  DateTime endDate = DateTime.now();
+
+  double totalIncome = 0, totalExpense = 0, remainingBalance = 0;
   List<TransactionModel> transactionList = [];
   Future<List<TransactionModel>>? _transactionTabsFuture;
   Future<List<TransactionModel>> getTransactionTabsList() async {
-    //print('Initiated');
-    GlobalVar.basePath = await SharedPrefsManager.getUID();
+    print('Initiated:${GlobalVar.basePath}');
     FirebaseDatabase database = FirebaseDatabase.instance;
 
     //database.ref("${AppConstant.manPowerGroupPath}/${groupNameController.text}/people0");
@@ -39,7 +42,9 @@ class _BusinessAccountInformationScreenState
         "${GlobalVar.basePath}/${AppConstant.accountPath}/${widget.selectedBusinessAccount.key}");
     //print(ref.);
     transactionList.clear();
-    totalIncome = 0; totalExpense = 0; remainingBalance =0;
+    totalIncome = 0;
+    totalExpense = 0;
+    remainingBalance = 0;
     await ref.once().then((event) {
       if (event.snapshot.exists) {
         // Extract the data as a Map
@@ -48,23 +53,74 @@ class _BusinessAccountInformationScreenState
         //print('Business Account map:$groupData');
         for (var key in groupData.keys) {
           if (key == AppConstant.transactionsColumnText) {
-            // print('Business Account Key:${groupData[key]}');
-            for(var transactionKey in groupData[key].keys){
-              print('Transaction Keys are:$transactionKey');
-              setState(() {
-                totalIncome += double.parse(groupData[key][transactionKey][AppConstant.incomeColumnText].toString());
-                totalExpense += double.parse(groupData[key][transactionKey][AppConstant.expenseColumnText].toString());
-                remainingBalance = totalIncome - totalExpense;
-                transactionList.add(TransactionModel(
-                    key: transactionKey,
-                    transactionName: groupData[key][transactionKey][AppConstant.nameColumnText].toString(),
-                    income:
-                    groupData[key][transactionKey][AppConstant.incomeColumnText].toString(),
-                    expense: groupData[key][transactionKey][AppConstant.incomeColumnText].toString(),
-                    remainingBalance: groupData[key][transactionKey][AppConstant.incomeColumnText].toString(),
-                    entries: []));
-              });
-            }
+            setState(() {
+              // print('Business Account Key with elements:${groupData[key]}');
+              List<EntryDetailsModel> entryList = [];
+              for (var transactionKey in groupData[key].keys) {
+                // print('Transaction Keys are:$transactionKey');
+                // print(
+                //     '$transactionKey has:${groupData[key][transactionKey][AppConstant.entryColumnText]}');
+                print('Entry Key:${groupData[key][transactionKey][AppConstant.entryColumnText].length}');
+                if(groupData[key][transactionKey][AppConstant.entryColumnText].isNotEmpty){
+                  for (var entryKey in groupData[key][transactionKey]
+                  [AppConstant.entryColumnText]
+                      .keys) {
+                    // print('${groupData[key][transactionKey][AppConstant.entryColumnText][entryKey][AppConstant.entryTitleColumnText]}');
+                    entryList.add(EntryDetailsModel(
+                        entryTitle: groupData[key][transactionKey]
+                        [AppConstant.entryColumnText][entryKey]
+                        [AppConstant.entryTitleColumnText]
+                            .toString(),
+                        entryDetails: groupData[key][transactionKey]
+                        [AppConstant.entryColumnText][entryKey]
+                        [AppConstant.entryDetailsColumnText]
+                            .toString(),
+                        transactionDate: groupData[key][transactionKey]
+                        [AppConstant.entryColumnText][entryKey]
+                        [AppConstant.entryDateColumnText]
+                            .toString(),
+                        amount: groupData[key][transactionKey]
+                        [AppConstant.entryColumnText][entryKey]
+                        [AppConstant.entryAmountColumnText]
+                            .toString(),
+                        isDebit: groupData[key][transactionKey]
+                        [AppConstant.entryColumnText][entryKey]
+                        [AppConstant.debitOrCreditColumnText]));
+                    // print('${entryList.last.entryTitle} is a ${entryList.last.isDebit}');
+                  }
+                }
+
+                // totalIncome += double.parse(groupData[key][transactionKey]
+                //         [AppConstant.incomeColumnText]
+                //     .toString());
+                // totalExpense += double.parse(groupData[key][transactionKey]
+                //         [AppConstant.expenseColumnText]
+                //     .toString());
+                // remainingBalance = totalIncome - totalExpense;
+                try {
+                  transactionList.add(TransactionModel(
+                                      key: transactionKey,
+                                      transactionName: groupData[key][transactionKey]
+                                              [AppConstant.nameColumnText]
+                                          .toString(),
+                                      income: groupData[key][transactionKey]
+                                              [AppConstant.incomeColumnText]
+                                          .toString(),
+                                      expense: groupData[key][transactionKey]
+                                              [AppConstant.incomeColumnText]
+                                          .toString(),
+                                      remainingBalance: groupData[key][transactionKey]
+                                              [AppConstant.incomeColumnText]
+                                          .toString(),
+                                      entries: entryList));
+                } catch (e) {
+                  print(e);
+                }
+                // print('Before length:${transactionList.last.entries.length}');
+                entryList= [];
+                // print('After length:${transactionList.last.entries.length}');
+              }
+            });
           }
         }
 
@@ -73,7 +129,29 @@ class _BusinessAccountInformationScreenState
         //print("Group with ID '123' does not exist.");
       }
     });
-    transactionList.sort((a, b) => a.transactionName.compareTo(b.transactionName),);
+    transactionList.sort(
+      (a, b) => a.transactionName.compareTo(b.transactionName),
+    );
+    for(TransactionModel transactionModel in transactionList){
+      for(EntryDetailsModel entry in transactionModel.entries){
+        // print('${transactionModel.transactionName} has ${entry.entryTitle} and it is ${entry.isDebit}');
+        DateTime entryDate = DateTime.parse(entry.transactionDate);
+        print('Entry date is $entryDate which occurs after $startDate\'s and before $endDate');
+        if(entryDate.isAfter(startDate) && entryDate.isBefore(endDate)){
+          if (entry.isDebit) {
+            totalExpense +=
+                double.parse(entry.amount);
+          }
+          else {
+            totalIncome +=
+                double.parse(entry.amount);
+          }
+        }
+      }
+    }
+    setState(() {
+      remainingBalance = totalIncome -totalExpense;
+    });
     return transactionList;
   }
 
@@ -166,7 +244,78 @@ class _BusinessAccountInformationScreenState
     return TitleIconButtonWithWhiteBackground(
       headline: AppConstant.reportPlainText,
       actionIcon: Icons.calendar_today_outlined,
-      action: () {},
+      action: () {
+        showModalBottomSheet(
+          context: context,
+          builder: (context) {
+            return StatefulBuilder(
+              builder: (context, setState) {
+                return CustomCalendar(
+                  range: 'From',
+                  today:
+                  '${startDate.year}-${startDate.month}-${startDate.day}',
+                  dateChangeFunction: (selectedDate) {
+                    setState(() {
+                      startDate = selectedDate!.subtract(Duration(days: 1));
+                    });
+                  },
+                  saveFunction: () {
+                    Navigator.of(context, rootNavigator: true).pop();
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (context) {
+                        return StatefulBuilder(
+                          builder: (context, setState) {
+                            return CustomCalendar(
+                              range: 'Today',
+                              today:
+                              '${endDate.year}-${endDate.month}-${endDate.day}',
+                              dateChangeFunction: (selectedDate) {
+                                setState(() {
+                                  endDate = selectedDate!.add(Duration(days: 1));
+                                });
+                              },
+                              saveFunction: () {
+                                setState((){
+                                  totalIncome = 0;
+                                  totalExpense = 0;
+                                  for(TransactionModel transactionModel in transactionList){
+                                    for(EntryDetailsModel entry in transactionModel.entries){
+                                      // print('${transactionModel.transactionName} has ${entry.entryTitle} and it is ${entry.isDebit}');
+                                      DateTime entryDate = DateTime.parse(entry.transactionDate);
+                                      print('Entry date is $entryDate which occurs after $startDate\'s and before $endDate');
+                                      if(entryDate.isAfter(startDate) && entryDate.isBefore(endDate)){
+                                        if (entry.isDebit) {
+                                          totalExpense +=
+                                              double.parse(entry.amount);
+                                        }
+                                        else {
+                                          totalIncome +=
+                                              double.parse(entry.amount);
+                                        }
+                                      }
+                                    }
+                                  }
+
+                                  remainingBalance = totalIncome - totalExpense;
+                                  print('Income:$totalIncome,Expense:$totalExpense,bal:$remainingBalance');
+                                });
+                                Navigator.of(context, rootNavigator: true)
+                                    .pop();
+                                _transactionTabsFuture = getTransactionTabsList();
+                              },
+                            );
+                          },
+                        );
+                      },
+                    );
+                  },
+                );
+              },
+            );
+          },
+        );
+      },
       whatToShow: Column(children: [
         ReportStatusDetailsUi(
           title: AppConstant.incomePlainText,
@@ -226,12 +375,12 @@ class _BusinessAccountInformationScreenState
                           "${widget.path}/${AppConstant.transactionsColumnText}/$transactionTabName");
 
                       await ref.set({
-                        AppConstant.nameColumnText: transactionDetailsTabController.text,
+                        AppConstant.nameColumnText:
+                            transactionDetailsTabController.text,
                         AppConstant.incomeColumnText: '0',
                         AppConstant.expenseColumnText: '0',
                         AppConstant.remainingBalanceColumnText: '0',
                         AppConstant.entryColumnText: '',
-
                       });
                       _transactionTabsFuture = getTransactionTabsList();
                       Navigator.of(context, rootNavigator: true).pop();
@@ -254,7 +403,7 @@ class _BusinessAccountInformationScreenState
             return Text('Please add transaction..');
           } else if (snapshot.data!.isEmpty) {
             return Text('Please add transaction');
-          }else {
+          } else {
             return GridView.builder(
               itemCount: snapshot.data!.length,
               shrinkWrap: true,
@@ -264,6 +413,7 @@ class _BusinessAccountInformationScreenState
               padding: const EdgeInsets.all(10),
               itemBuilder: (context, index) {
                 return CardAquaHazeWithColumnIconAndTitle(
+                  longPressAction: (){},
                     title: snapshot.data![index].transactionName,
                     action: () {
                       Navigator.push(
@@ -271,9 +421,12 @@ class _BusinessAccountInformationScreenState
                           MaterialPageRoute(
                               builder: (context) =>
                                   BusinessTransactionDetailsScreen(
-                                    path: '${widget.path}/${AppConstant.transactionsColumnText}/${snapshot.data![index].key}',
+                                    path:
+                                        '${widget.path}/${AppConstant.transactionsColumnText}/${snapshot.data![index].key}',
                                     selectedTransaction: snapshot.data![index],
-                                    imageUrl: widget.selectedBusinessAccount.imageUrl??'',
+                                    imageUrl: widget
+                                            .selectedBusinessAccount.imageUrl ??
+                                        '',
                                   ))).whenComplete(() {
                         _transactionTabsFuture = getTransactionTabsList();
                       });

@@ -20,7 +20,10 @@ class _BloodDonorDirectoryScreenState extends State<BloodDonorDirectoryScreen> {
   TextEditingController searchController = TextEditingController();
 
   bool loadData = true;
-  int totalDonor = 0;
+  bool showSuggestion = false;
+  bool showLoading = false;
+  //int totalDonor = 0;
+  List<String> filteredBloodGroupWithLocation = [];
   List<String> bloodGroupList = [
     'A',
     'AB',
@@ -37,16 +40,99 @@ class _BloodDonorDirectoryScreenState extends State<BloodDonorDirectoryScreen> {
   double width = 0;
 
   List<BloodDonorModel> bloodDonorList = [];
+  List<BloodDonorModel> filteredBloodDonorList = [];
+  List<BloodDonorModel> searchFilteredBloodDonorList = [];
   Map<String, String> groupMap = {};
 
   Future<List<BloodDonorModel>>? donorList;
 
+  Future<List<BloodDonorModel>> getSearchedBloodDonorList() async {
+    searchFilteredBloodDonorList = bloodDonorList
+        .where((element) => element.name.toLowerCase().contains(searchController.text))
+        .toList();
+    return searchFilteredBloodDonorList;
+  }
+
+  Future<List<BloodDonorModel>> getFilteredBloodDonorList() async {
+    if (selectedBloodGroup.isNotEmpty &&
+        selectedLocationList.isNotEmpty &&
+        selectedRhFactor.isNotEmpty) {
+      filteredBloodDonorList = bloodDonorList
+          .where(
+            (element) =>
+                element.bloodGroup == selectedBloodGroup &&
+                element.rhFactor == selectedRhFactor &&
+                element.cityName == selectedLocationList,
+          )
+          .toList();
+      return filteredBloodDonorList;
+    } else if (selectedBloodGroup.isNotEmpty &&
+        selectedRhFactor.isNotEmpty) {
+      filteredBloodDonorList = bloodDonorList
+          .where(
+            (element) =>
+                element.bloodGroup == selectedBloodGroup &&
+                element.rhFactor == selectedRhFactor
+          )
+          .toList();
+      return filteredBloodDonorList;
+    } else if (selectedBloodGroup.isNotEmpty &&
+        selectedLocationList.isNotEmpty) {
+      filteredBloodDonorList = bloodDonorList
+          .where(
+              (element) =>
+          element.bloodGroup == selectedBloodGroup &&
+              element.cityName == selectedLocationList
+      )
+          .toList();
+      return filteredBloodDonorList;
+    }else if (selectedBloodGroup.isNotEmpty ) {
+      filteredBloodDonorList = bloodDonorList
+          .where(
+              (element) =>
+          element.bloodGroup == selectedBloodGroup
+      )
+          .toList();
+      return filteredBloodDonorList;
+    } else if (selectedRhFactor.isNotEmpty &&
+        selectedLocationList.isNotEmpty) {
+      filteredBloodDonorList = bloodDonorList
+          .where(
+              (element) =>
+          element.rhFactor == selectedRhFactor &&
+              element.cityName == selectedLocationList
+      )
+          .toList();
+      return filteredBloodDonorList;
+    } else if (selectedRhFactor.isNotEmpty) {
+      filteredBloodDonorList = bloodDonorList
+          .where(
+              (element) =>
+          element.rhFactor == selectedRhFactor
+      )
+          .toList();
+      return filteredBloodDonorList;
+    } else if (selectedLocationList.isNotEmpty) {
+      filteredBloodDonorList = bloodDonorList
+          .where(
+              (element) =>
+          element.cityName == selectedLocationList
+      )
+          .toList();
+      return filteredBloodDonorList;
+    }else{
+      filteredBloodDonorList = bloodDonorList;
+      return filteredBloodDonorList;
+    }
+  }
+
   Future<List<BloodDonorModel>> getBloodDonorList() async {
-    print('Initiated');
+    print('Initiated:${GlobalVar.basePath}');
     FirebaseDatabase database = FirebaseDatabase.instance;
 
     //database.ref("${AppConstant.manPowerGroupPath}/${groupNameController.text}/people0");
-    DatabaseReference ref = database.ref("${GlobalVar.basePath}/${AppConstant.bloodDonorGroupPath}/");
+    DatabaseReference ref = database
+        .ref("${GlobalVar.basePath}/${AppConstant.bloodDonorGroupPath}/");
     //print(ref.);
     bloodDonorList.clear();
     await ref.once().then((event) {
@@ -99,22 +185,32 @@ class _BloodDonorDirectoryScreenState extends State<BloodDonorDirectoryScreen> {
                 isAbleToDonateBlood: GlobalVar.bloodDonorStatus(groupData[key]
                         [AppConstant.lastDateOfBloodDonationColumnText]
                     .toString())));
-            locationList.add(bloodDonorList.last.cityName);
-            totalDonor = bloodDonorList.length;
+            if (!locationList
+                .contains(bloodDonorList.last.cityName.replaceAll(' ', ''))) {
+              locationList
+                  .add(bloodDonorList.last.cityName.replaceAll(' ', ''));
+            }
           });
         }
       } else {
         print("No Data exist.");
       }
     });
-    bloodDonorList.sort((a, b) => a.name.compareTo(b.name),);
+    bloodDonorList.sort(
+      (a, b) => a.name.compareTo(b.name),
+    );
+    setState(() {
+      getFilteredBloodDonorList();
+      showLoading = true;
+    });
     return bloodDonorList;
   }
 
   @override
   void initState() {
     if (loadData) {
-      donorList = getBloodDonorList();
+      donorList =
+          getBloodDonorList();
     }
     super.initState();
   }
@@ -136,18 +232,17 @@ class _BloodDonorDirectoryScreenState extends State<BloodDonorDirectoryScreen> {
 
   Widget initBuildUi() {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          initBloodDonorFilter(),
-          SizedBox(
-            height: 10,
-          ),
-          initBloodDonorList(),
-        ],
-      ),
-    );
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            initBloodDonorFilter(),
+            SizedBox(
+              height: 10,
+            ),
+            initBloodDonorList(),
+          ],
+        ));
   }
 
   Widget initBloodDonorFilter() {
@@ -170,7 +265,9 @@ class _BloodDonorDirectoryScreenState extends State<BloodDonorDirectoryScreen> {
                 onChangedAction: (String? newValue) {
                   // Handle dropdown value change
                   setState(() {
+                    // filteredBloodGroupWithLocation.add(newValue!);
                     selectedBloodGroup = newValue!;
+                    donorList = getFilteredBloodDonorList();
                   });
                 },
               ),
@@ -183,7 +280,9 @@ class _BloodDonorDirectoryScreenState extends State<BloodDonorDirectoryScreen> {
                 onChangedAction: (String? newValue) {
                   // Handle dropdown value change
                   setState(() {
+                    // filteredBloodGroupWithLocation.add(newValue!);
                     selectedRhFactor = newValue!;
+                    getFilteredBloodDonorList();
                   });
                 },
               ),
@@ -196,8 +295,11 @@ class _BloodDonorDirectoryScreenState extends State<BloodDonorDirectoryScreen> {
                 onChangedAction: (String? newValue) {
                   // Handle dropdown value change
                   setState(() {
+                    // filteredBloodGroupWithLocation.add(newValue!);
                     selectedLocationList = newValue!;
+                    getFilteredBloodDonorList();
                   });
+                  // donorList = getBloodDonorList();
                 },
               ),
             ),
@@ -208,8 +310,15 @@ class _BloodDonorDirectoryScreenState extends State<BloodDonorDirectoryScreen> {
         ),
         Expanded(
           child: IconButton(
-            onPressed: () {},
-            icon: Icon(Icons.arrow_forward_ios),
+            onPressed: () {
+              setState(() {
+                selectedLocationList = '';
+                selectedRhFactor = '';
+                selectedBloodGroup = '';
+                getFilteredBloodDonorList();
+              });
+            },
+            icon: Icon(Icons.refresh),
             style: ButtonStyle(
                 //elevation: MaterialStatePropertyAll(10),
                 shape: MaterialStateProperty.all(RoundedRectangleBorder(
@@ -223,29 +332,73 @@ class _BloodDonorDirectoryScreenState extends State<BloodDonorDirectoryScreen> {
   }
 
   Widget initBloodDonorSearchFilter() {
-    return Row(
+    return Column(
       children: [
-        Flexible(
-          child: CustomTextFormField(
-            // isMandatory: false,
-            hint: AppConstant.searchPlainText,
-            keyboardInputType: TextInputType.text,
-            controller: searchController,
-            suffixIcon: Icons.search,
-          ),
+        Row(
+          children: [
+            Flexible(
+              child: TextField(
+                keyboardType: TextInputType.text,
+                onTap: () {},
+                // onChanged: ,
+                onChanged: (value) {
+                  print(value);
+                  setState(() {
+                    if (value.length > 2) {
+                      showSuggestion = true;
+                    } else {
+                      showSuggestion = false;
+                    }
+                  });
+                },
+
+                controller: searchController,
+                decoration: InputDecoration(
+                    suffixIcon: Icon(Icons.search),
+                    isDense: true,
+                    contentPadding: EdgeInsets.all(10),
+                    hintText: AppConstant.searchPlainText,
+                    border: OutlineInputBorder(
+                        borderSide: BorderSide(color: AppColor.grey),
+                        borderRadius: BorderRadius.circular(5))),
+              ),
+            ),
+          ],
         ),
-        // SizedBox(
-        //   width: 10,
-        // ),
-        // IconButton(
-        //   onPressed: () {},
-        //   icon: Icon(Icons.add),
-        //   style: ButtonStyle(
-        //       //elevation: MaterialStatePropertyAll(10),
-        //       shape: MaterialStateProperty.all(RoundedRectangleBorder(
-        //           borderRadius: BorderRadius.circular(5))),
-        //       side: MaterialStatePropertyAll(BorderSide(color: AppColor.grey))),
-        // )
+        Visibility(
+            visible: showSuggestion,
+            child: FutureBuilder<List<BloodDonorModel>>(
+              future: getSearchedBloodDonorList(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (snapshot.hasError) {
+                  return Center(
+                    child: Text('No result Found yet'),
+                  );
+                }  else {
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: snapshot.data!.length,
+                    itemBuilder: (context, index) {
+                      return BloodDonorInformationTab(
+                        deleteFunction: () {},
+                        editFunction: () {},
+                        photo: snapshot.data![index].photoUrl,
+                        isEligible:
+                        snapshot.data![index].isAbleToDonateBlood,
+                        donorName: snapshot.data![index].name,
+                        bloodGroupWithRh:
+                        snapshot.data![index].bloodGroup +
+                            snapshot.data![index].rhFactor,
+                      );
+                    },
+                  );
+                }
+              },
+            ))
       ],
     );
   }
@@ -253,7 +406,7 @@ class _BloodDonorDirectoryScreenState extends State<BloodDonorDirectoryScreen> {
   Widget initBloodDonorList() {
     return TitleIconButtonWithWhiteBackground(
         headline:
-            'মোট রক্তদাতা ${GlobalVar.englishNumberToBengali(totalDonor.toString())} জন',
+            'মোট রক্তদাতা ${GlobalVar.englishNumberToBengali(filteredBloodDonorList.length.toString())} জন',
         actionIcon: Icons.add,
         action: () async {
           loadData = await Navigator.push(context,
@@ -263,67 +416,65 @@ class _BloodDonorDirectoryScreenState extends State<BloodDonorDirectoryScreen> {
           }
         },
         whatToShow: FutureBuilder<List<BloodDonorModel>>(
-          future: donorList,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
-            } else if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
-            } else if (snapshot.data!.isEmpty) {
-              return Center(
-                child: Text('Please add Blood donor.'),
-              );
-            } else {
-              
-              return ListView.builder(
-                shrinkWrap: true,
-                physics: AlwaysScrollableScrollPhysics(),
-                itemCount: snapshot.data!.length,
-                itemBuilder: (context, index) {
-                  return BloodDonorInformationTab(
-                    photo: snapshot.data![index].photoUrl,
-                    donorName: snapshot.data![index].name,
-                    bloodGroupWithRh:
-                        '${snapshot.data![index].bloodGroup}${snapshot.data![index].rhFactor}',
-                    isEligible:
-                    snapshot.data![index].isAbleToDonateBlood,
-                    editFunction: () {
-                      // print('Edit Pressed');
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => AddBloodDonorScreen(
-                                    editDonorInfo:
-                                    snapshot.data![index],
-                                  )));
-                    },
-                    deleteFunction: () async {
-                      showDialog(
-                          context: context,
-                          builder: (context) => Center(
-                                child: CircularProgressIndicator(),
-                              ));
-                      if(snapshot.data![index].photoUrl.isNotEmpty){
-                        final desertRef = FirebaseStorage.instance.ref().child(
-                            "${AppConstant.bloodDonorGroupPath}/${snapshot.data![index].key}/${AppConstant.userImageName}");
+            future: getFilteredBloodDonorList(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting || !showLoading) {
+                return Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                //return Text('Error: ${snapshot.error}');
+                return Center(child: Text('Check Internet Connection'));
+              } else if (snapshot.data!.isEmpty) {
+                return Center(
+                  child: Text('Please add Blood donor.'),
+                );
+              } else {
+                return ListView.builder(
+                  shrinkWrap: true,
+                  physics: AlwaysScrollableScrollPhysics(),
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (context, index) {
+                    return BloodDonorInformationTab(
+                      photo: snapshot.data![index].photoUrl,
+                      donorName: snapshot.data![index].name,
+                      bloodGroupWithRh:
+                          '${snapshot.data![index].bloodGroup}${snapshot.data![index].rhFactor}',
+                      isEligible:
+                      snapshot.data![index].isAbleToDonateBlood,
+                      editFunction: () {
+                        // print('Edit Pressed');
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => AddBloodDonorScreen(
+                                      editDonorInfo:
+                                      snapshot.data![index],
+                                    )));
+                      },
+                      deleteFunction: () async {
+                        showDialog(
+                            context: context,
+                            builder: (context) => Center(
+                                  child: CircularProgressIndicator(),
+                                ));
+                        if (filteredBloodDonorList[index].photoUrl.isNotEmpty) {
+                          final desertRef = FirebaseStorage.instance.ref().child(
+                              "${GlobalVar.basePath}/${AppConstant.bloodDonorGroupPath}/${snapshot.data![index].key}/${AppConstant.userImageName}");
 
-                        await desertRef.delete();
-                      }
-                      DatabaseReference ref = FirebaseDatabase.instance.ref(
-                          "${AppConstant.bloodDonorGroupPath}/${snapshot.data![index].key}");
+                          await desertRef.delete();
+                        }
+                        DatabaseReference ref = FirebaseDatabase.instance.ref(
+                            "${GlobalVar.basePath}/${AppConstant.bloodDonorGroupPath}/${snapshot.data![index].key}");
 
-                      await ref.remove();
-                      setState(() {
-                        snapshot.data!.removeAt(index);
-                        totalDonor = snapshot.data!.length;
-                      });
-                      Navigator.of(context, rootNavigator: true).pop();
-                    },
-                  );
-                },
-              );
-            }
-          },
-        ));
+                        await ref.remove();
+                        setState(() {
+                          snapshot.data!.removeAt(index);
+                        });
+                        Navigator.of(context, rootNavigator: true).pop();
+                      },
+                    );
+                  },
+                );
+              }
+            }));
   }
 }

@@ -95,6 +95,10 @@ class _ProfileManageScreenState extends State<ProfileManageScreen> {
                 SizedBox(
                   width: 30,
                 ),
+                Text('Email: ${snapshot.data!.email}',style: TextStyle(fontSize: 30),),
+                SizedBox(
+                  width: 30,
+                ),
                 CustomButton(content: 'Change Password', contentColor: AppColor.white,
                     backgroundColor: AppColor.green, onPressed: (){
                       showDialog(context: context, builder: (context) {
@@ -134,6 +138,8 @@ class _ProfileManageScreenState extends State<ProfileManageScreen> {
                                 // Optionally, navigate to a sign-in screen
                               }
                               Navigator.of(context,rootNavigator: true).pop();
+                              Navigator.of(context,rootNavigator: true).pop();
+                              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>WelcomeScreen()), (route) => false);
                             }, child: Text('Update'))
                           ],
                         );
@@ -148,7 +154,7 @@ class _ProfileManageScreenState extends State<ProfileManageScreen> {
                       SharedPrefsManager.setSplash(false);
                       SharedPrefsManager.setProfilePhotoLink('');
                       SharedPrefsManager.setUID('');
-                      await FirebaseAuth.instance.signOut();
+
                       Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>WelcomeScreen()), (route) => true);
                     }),
               ],

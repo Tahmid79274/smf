@@ -2,6 +2,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:smf/models/entry_details_model.dart';
 import 'package:smf/utils/color/app_color.dart';
+import 'package:smf/utils/functionalities/functions.dart';
 import 'package:smf/utils/values/app_constant.dart';
 
 import '../../../../../models/transaction_model.dart';
@@ -37,7 +38,8 @@ class _BusinessTransactionDetailsScreenState
   double totalExpense = 0, totalIncome = 0, remainingBalance = 0;
 
   Future<List<EntryDetailsModel>> getEntryDetails() async {
-    print('Initiated');
+    print('Initiated:${GlobalVar.basePath}');
+    print('Path:${widget.path}');
     FirebaseDatabase database = FirebaseDatabase.instance;
 
     //database.ref("${AppConstant.manPowerGroupPath}/${groupNameController.text}/people0");
@@ -106,43 +108,22 @@ class _BusinessTransactionDetailsScreenState
       child: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: FutureBuilder<List<EntryDetailsModel>>(
-            future: _getEntriesFuture,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasError) {
-                return Center(child: Text('Please add some transactions..'));
-              } else if (snapshot.data!.isEmpty) {
-                return Text('Please add some transactions');
-              } else {
-                // filteredEntries = entries;
-                filteredEntries.clear();
-                for(var entry in entries){
-                  if(startDate.isBefore(DateTime.parse(entry.transactionDate))&& endDate.isAfter(DateTime.parse(entry.transactionDate))){
-                    filteredEntries.add(entry);
-                  }
-                  print('object');
-                }
-                return Column(
-                  children: [
-                    initBusinessTransactionDetailsTitleUi(),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    initReportUi(),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    initEntryTitleUi(),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                  ],
-                );
-              }
-            },
-          ),
+          child: Column(
+            children: [
+              initBusinessTransactionDetailsTitleUi(),
+              const SizedBox(
+                height: 10,
+              ),
+              initReportUi(),
+              const SizedBox(
+                height: 10,
+              ),
+              initEntryTitleUi(),
+              const SizedBox(
+                height: 10,
+              ),
+            ],
+          )
         ),
       ),
     );
@@ -298,68 +279,89 @@ class _BusinessTransactionDetailsScreenState
             });
           }
         },
-        whatToShow: Table(
-          border: TableBorder.all(
-              color: AppColor.nebula,
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(5),
-                  topRight: Radius.circular(5))),
-          children: [
-            TableRow(
-                decoration: BoxDecoration(
-                  color: AppColor.aquaHaze,
-                  // border: Border.all(color: AppColor.grey),
-                  // borderRadius: BorderRadius.only(topLeft: Radius.circular(5),topRight: Radius.circular(5))
-                ),
+        whatToShow: FutureBuilder<List<EntryDetailsModel>>(
+          future: _getEntriesFuture,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Center(child: Text('Please add some transactions..'));
+            } else if (snapshot.data!.isEmpty) {
+              return Text('Please add some transactions');
+            } else {
+              // filteredEntries = entries;
+              filteredEntries.clear();
+              for(var entry in entries){
+                if(startDate.isBefore(DateTime.parse(entry.transactionDate))&& endDate.isAfter(DateTime.parse(entry.transactionDate))){
+                  filteredEntries.add(entry);
+                }
+                print('object');
+              }
+              return Table(
+                border: TableBorder.all(
+                    color: AppColor.nebula,
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(5),
+                        topRight: Radius.circular(5))),
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(AppConstant.datePlainText,
+                  TableRow(
+                      decoration: BoxDecoration(
+                        color: AppColor.aquaHaze,
+                        // border: Border.all(color: AppColor.grey),
+                        // borderRadius: BorderRadius.only(topLeft: Radius.circular(5),topRight: Radius.circular(5))
+                      ),
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(AppConstant.datePlainText,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontSize: 15)),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(AppConstant.productNamePlainText,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontSize: 15)),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            AppConstant.moneyAmountPlainText,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 15),
+                          ),
+                        ),
+                      ]),
+                  ...filteredEntries.where((element) => startDate.isBefore(DateTime.parse(element.transactionDate))&& endDate.isAfter(DateTime.parse(element.transactionDate)))
+                      .map((e) => TableRow(children: [
+                    Text(e.transactionDate,
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 15)),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(AppConstant.productNamePlainText,
+                    Text(e.entryTitle,
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 15)),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      AppConstant.moneyAmountPlainText,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 15),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(e.isDebit ? '-' : '+',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 15,
+                                color: e.isDebit
+                                    ? AppColor.red
+                                    : AppColor.green)),
+                        Text(e.amount,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 15))
+                      ],
                     ),
-                  ),
-                ]),
-            ...filteredEntries.where((element) => startDate.isBefore(DateTime.parse(element.transactionDate))&& endDate.isAfter(DateTime.parse(element.transactionDate)))
-                .map((e) => TableRow(children: [
-              Text(e.transactionDate,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 15)),
-              Text(e.entryTitle,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 15)),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(e.isDebit ? '-' : '+',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontSize: 15,
-                          color: e.isDebit
-                              ? AppColor.red
-                              : AppColor.green)),
-                  Text(e.amount,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 15))
+                  ]))
+                      .toList()
                 ],
-              ),
-            ]))
-                .toList()
-          ],
+              );
+            }
+          },
         )
     );
   }

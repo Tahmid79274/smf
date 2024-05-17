@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:smf/screens/navigation/home_screen.dart';
 import 'package:smf/utils/functionalities/shared_prefs_manager.dart';
@@ -20,9 +21,21 @@ Future<void> main() async{
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  isLoggedIn = await SharedPrefsManager.getSplashStatus();
-  GlobalVar.basePath = await SharedPrefsManager.getUID();
-  print('UserID:${GlobalVar.basePath}');
+  FirebaseAuth.instance
+      .authStateChanges()
+      .listen((User? user) {
+    if (user == null) {
+      print('User is currently signed out!');
+    } else {
+      print('Before initialization:${GlobalVar.basePath}');
+      GlobalVar.basePath = user.email!.replaceAll('.', '_');
+      print('Before initialization:${GlobalVar.basePath}');
+      print('User is signed in! and the user is ${user.displayName}');
+    }
+  });
+  // isLoggedIn = await SharedPrefsManager.getSplashStatus();
+  // GlobalVar.basePath = await SharedPrefsManager.getUID();
+  // print('UserID:${GlobalVar.basePath}');
   runApp(const MyApp());
 }
 
@@ -39,7 +52,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: isLoggedIn?HomeScreen():WelcomeScreen(),
+        home: GlobalVar.basePath!=''?HomeScreen():WelcomeScreen(),
       );
   }
 }

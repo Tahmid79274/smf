@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:smf/models/group_member_model.dart';
 import 'package:smf/utils/extension/theme.dart';
@@ -20,26 +21,50 @@ class ManPowerGroupListScreen extends StatefulWidget {
 }
 
 class _ManPowerGroupListScreenState extends State<ManPowerGroupListScreen> {
+  TextEditingController searchController = TextEditingController();
 
   bool loadData = true;
+  bool showSuggestion = false;
+  int total = 0 ;
 
   List<String> locations = [];
+  String selectedLocation = '';
 
   List<GroupMemberModel> groupMembers = [];
+  List<GroupMemberModel> filteredGroupMembers = [];
   Map<String, String> groupMap = {};
+
+  List<GroupMemberModel> searchFilteredMemberList = [];
+  List<GroupMemberModel> filteredMemberList = [];
+  Future<List<GroupMemberModel>> getSearchedGroupMemberList() async {
+    searchFilteredMemberList = groupMembers
+        .where((element) =>
+            element.name.toLowerCase().startsWith(searchController.text))
+        .toList();
+    return searchFilteredMemberList;
+  }
 
   Future<List<GroupMemberModel>>? _groupMemberFuture;
 
+  Future<List<GroupMemberModel>> getFilteredGroupMemberList() async {
+    if(selectedLocation.isNotEmpty){
+      filteredGroupMembers = groupMembers.where((element) => element.cityName==selectedLocation).toList();
+      total = filteredGroupMembers.length;
+      return filteredGroupMembers;
+    }
+    return groupMembers;
+  }
+
   Future<List<GroupMemberModel>> getGroupMemberList() async {
-    GlobalVar.basePath = await SharedPrefsManager.getUID();
-    print('Initiated Man Power Group List of ${widget.selectedGroup}');
+    print('Initiated Man Power Group List of ${widget.selectedGroup} and base path is:${GlobalVar.basePath}');
     FirebaseDatabase database = FirebaseDatabase.instance;
 
     //database.ref("${AppConstant.manPowerGroupPath}/${groupNameController.text}/people0");
-    DatabaseReference ref = database
-        .ref("${GlobalVar.basePath}/${AppConstant.manPowerGroupPath}/${widget.selectedGroup}/");
+    DatabaseReference ref = database.ref(
+        "${GlobalVar.basePath}/${AppConstant.manPowerGroupPath}/${widget.selectedGroup}/");
     //print(ref.);
     groupMembers.clear();
+    locations.clear();
     await ref.once().then((event) {
       if (event.snapshot.exists) {
         // Extract the data as a Map
@@ -52,14 +77,25 @@ class _ManPowerGroupListScreenState extends State<ManPowerGroupListScreen> {
               groupMembers.add(GroupMemberModel(
                   key: key,
                   name: groupData[key][AppConstant.nameColumnText].toString(),
-                  mobileNumber: groupData[key][AppConstant.mobileColumnText].toString(),
-                  position: groupData[key][AppConstant.positionColumnText].toString(),
-                  cityName: groupData[key][AppConstant.cityNameColumnText].toString(),
+                  mobileNumber:
+                      groupData[key][AppConstant.mobileColumnText].toString(),
+                  position:
+                      groupData[key][AppConstant.positionColumnText].toString(),
+                  cityName:
+                      groupData[key][AppConstant.cityNameColumnText].toString(),
                   districtName: groupData[key]
-                  [AppConstant.districtNameColumnText].toString(),
-                  division: groupData[key][AppConstant.divisionColumnText].toString(),
-                  postCode: groupData[key][AppConstant.postCodeColumnText].toString(),
-                  photoUrl: groupData[key][AppConstant.profileImageColumnText].toString()));
+                          [AppConstant.districtNameColumnText]
+                      .toString(),
+                  division:
+                      groupData[key][AppConstant.divisionColumnText].toString(),
+                  postCode:
+                      groupData[key][AppConstant.postCodeColumnText].toString(),
+                  photoUrl: groupData[key][AppConstant.profileImageColumnText]
+                      .toString()));
+              if (!locations
+                  .contains(groupMembers.last.cityName.toLowerCase())) {
+                locations.add(groupMembers.last.cityName);
+              }
             });
           }
         }
@@ -68,16 +104,30 @@ class _ManPowerGroupListScreenState extends State<ManPowerGroupListScreen> {
         print("Group with ID '123' does not exist.");
       }
     });
-    groupMembers.sort((a, b) => a.name.compareTo(b.name),);
+    setState(() {
+      filteredMemberList = groupMembers;
+      if(selectedLocation.isNotEmpty){
+        _groupMemberFuture = getGroupMemberList();
+      }
+    });
+    groupMembers.sort(
+      (a, b) => a.name.compareTo(b.name),
+    );
     return groupMembers;
   }
 
   @override
   void initState() {
-    if(loadData){
+    if (loadData) {
       _groupMemberFuture = getGroupMemberList();
     }
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
   }
 
   @override
@@ -94,7 +144,7 @@ class _ManPowerGroupListScreenState extends State<ManPowerGroupListScreen> {
           const SizedBox(
             height: 10,
           ),
-          initSearchDonorUi(),
+          initSearchMemberUi(),
           const SizedBox(
             height: 10,
           ),
@@ -109,43 +159,56 @@ class _ManPowerGroupListScreenState extends State<ManPowerGroupListScreen> {
         title: GlobalVar.customNameDecoder(widget.selectedGroup));
   }
 
-  Widget initSearchDonorUi() {
+  Widget initSearchMemberUi() {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
       color: AppColor.white,
-      child: Row(
+      child: Column(
         children: [
-          Expanded(
-            flex: 2,
-            child: DropdownButtonFormField<String>(
-              isDense: true,
-              dropdownColor: AppColor.white,
-              icon: Icon(Icons.keyboard_arrow_down),
-              isExpanded: false,
-              //padding: EdgeInsets.all(10),
-              decoration: InputDecoration(
-                  fillColor: AppColor.white,
-                  isDense: true,
-                  contentPadding: EdgeInsets.all(10),
-                  border: OutlineInputBorder(
-                      borderSide: BorderSide(color: AppColor.red))),
-              hint: Text(
-                AppConstant.locationPlainText,
-                style: TextStyle(color: AppColor.alto),
-              ),
-              items: locations
-                  .map(
-                      (e) => DropdownMenuItem<String>(value: e, child: Text(e)))
-                  .toList(),
-              onChanged: (value) {},
+          DropdownButtonFormField<String>(
+            isDense: true,
+            dropdownColor: AppColor.white,
+            icon: Icon(Icons.keyboard_arrow_down),
+            isExpanded: false,
+            //padding: EdgeInsets.all(10),
+            decoration: InputDecoration(
+                fillColor: AppColor.white,
+                isDense: true,
+                contentPadding: EdgeInsets.all(10),
+                border: OutlineInputBorder(
+                    borderSide: BorderSide(color: AppColor.red))),
+            hint: Text(
+              AppConstant.locationPlainText,
+              style: TextStyle(color: AppColor.alto),
             ),
+            items: locations
+                .map(
+                    (e) => DropdownMenuItem<String>(value: e, child: Text(e)))
+                .toList(),
+            onChanged: (value) {
+              setState(() {
+                selectedLocation = value!;
+                _groupMemberFuture = getFilteredGroupMemberList();
+              });
+            },
           ),
           SizedBox(
-            width: 10,
+            height: 10,
           ),
-          Expanded(
-              flex: 3,
-              child: TextFormField(
+          Column(
+            children: [
+              TextField(
+                controller: searchController,
+                onChanged: (value) {
+                  print(value);
+                  setState(() {
+                    if (value.length > 2) {
+                      showSuggestion = true;
+                    } else {
+                      showSuggestion = false;
+                    }
+                  });
+                },
                 decoration: InputDecoration(
                     fillColor: AppColor.white,
                     hoverColor: AppColor.white,
@@ -160,7 +223,78 @@ class _ManPowerGroupListScreenState extends State<ManPowerGroupListScreen> {
                     hintStyle: TextStyle(color: AppColor.alto),
                     border: OutlineInputBorder(
                         borderSide: BorderSide(color: AppColor.alto))),
-              )),
+              ),
+              Visibility(
+                  visible: showSuggestion,
+                  child: FutureBuilder<List<GroupMemberModel>>(
+                    future: getFilteredGroupMemberList(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else if (snapshot.hasError) {
+                        return Center(
+                          child: Text('No result Found yet'),
+                        );
+                      } else if (snapshot.data!.isEmpty) {
+                        return Center(
+                          child: Text('No Data Found.....'),
+                        );
+                      } else {
+                        return ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (context, index) {
+                            return ManPowerTile(
+                              editFunction: () async {
+                                loadData = await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => AddManpowerScreen(
+                                              groupName: widget.selectedGroup,
+                                              editGroupMember:
+                                                  snapshot.data![index],
+                                            )));
+                                if (loadData) {
+                                  _groupMemberFuture = getGroupMemberList();
+                                }
+                              },
+                              deleteFunction: ()async {
+                                showDialog(
+                                    context: context,
+                                    builder: (context) => Center(
+                                      child: CircularProgressIndicator(),
+                                    ));
+                                if (snapshot.data![index].photoUrl.isNotEmpty) {
+                                  final desertRef = FirebaseStorage.instance.ref().child(
+                                      "${GlobalVar.basePath}/${AppConstant.manPowerGroupPath}/${widget.selectedGroup}/${snapshot.data![index].key}/${AppConstant.userImageName}");
+
+                                  await desertRef.delete();
+                                }
+                                DatabaseReference ref = FirebaseDatabase.instance.ref(
+                                    "${GlobalVar.basePath}/${AppConstant.manPowerGroupPath}/${widget.selectedGroup}/${snapshot.data![index].key}");
+
+                                await ref.remove();
+                                setState(() {
+                                  snapshot.data!.removeAt(index);
+                                });
+                                Navigator.of(context, rootNavigator: true).pop();
+                                _groupMemberFuture = getGroupMemberList();
+                                getFilteredGroupMemberList();
+                              },
+                              imagePath: snapshot.data![index].photoUrl,
+                              address: snapshot.data![index].cityName,
+                              name: snapshot.data![index].name,
+                              phone: snapshot.data![index].mobileNumber,
+                            );
+                          },
+                        );
+                      }
+                    },
+                  ))
+            ],
+          ),
         ],
       ),
     );
@@ -169,7 +303,7 @@ class _ManPowerGroupListScreenState extends State<ManPowerGroupListScreen> {
   Widget initManpowerListUi() {
     return TitleIconButtonWithWhiteBackground(
         headline:
-            'মোট জনশক্তি ${GlobalVar.englishNumberToBengali(groupMembers.length.toString())} জন',
+            'মোট জনশক্তি ${GlobalVar.englishNumberToBengali(total.toString())} জন',
         actionIcon: Icons.add,
         action: () async {
           loadData = await Navigator.push(
@@ -178,7 +312,7 @@ class _ManPowerGroupListScreenState extends State<ManPowerGroupListScreen> {
                   builder: (context) => AddManpowerScreen(
                         groupName: widget.selectedGroup,
                       )));
-          if(loadData){
+          if (loadData) {
             _groupMemberFuture = getGroupMemberList();
           }
         },
@@ -191,12 +325,13 @@ class _ManPowerGroupListScreenState extends State<ManPowerGroupListScreen> {
               return Text('Error: ${snapshot.error}');
             } else if (snapshot.data!.isEmpty) {
               return Center(
-                child: Text('Please add Blood donor.'),
+                child: Text('Please add Group Member.'),
               );
             } else {
               //setState(() {
               //filteredBloodDonorList = snapshot.data!;
               //});
+              total = snapshot.data!.length;
               return ListView.builder(
                 shrinkWrap: true,
                 physics: AlwaysScrollableScrollPhysics(),
@@ -216,7 +351,7 @@ class _ManPowerGroupListScreenState extends State<ManPowerGroupListScreen> {
                                     groupName: widget.selectedGroup,
                                     editGroupMember: snapshot.data![index],
                                   )));
-                      if(loadData){
+                      if (loadData) {
                         _groupMemberFuture = getGroupMemberList();
                       }
                     },
@@ -226,7 +361,7 @@ class _ManPowerGroupListScreenState extends State<ManPowerGroupListScreen> {
                           builder: (context) => Center(
                                 child: CircularProgressIndicator(),
                               ));
-                      if(snapshot.data![index].photoUrl.isNotEmpty){
+                      if (snapshot.data![index].photoUrl.isNotEmpty) {
                         final desertRef = FirebaseStorage.instance.ref().child(
                             "${GlobalVar.basePath}/${AppConstant.manPowerGroupPath}/${widget.selectedGroup}/${snapshot.data![index].key}/${AppConstant.userImageName}");
 
@@ -289,7 +424,12 @@ class ManPowerTile extends StatelessWidget {
       ),
       title: Text(
         name,
-        style: TextStyle(fontSize: 20, color: AppColor.sepiaBlack),
+        overflow: TextOverflow.fade,
+        maxLines: 1,
+        style: TextStyle(
+          fontSize: 20,
+          color: AppColor.sepiaBlack,
+        ),
       ),
       subtitle: Column(
         mainAxisSize: MainAxisSize.min,

@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:smf/utils/functionalities/firebase_database_functionality.dart';
 import 'package:smf/utils/functionalities/shared_prefs_manager.dart';
 import 'package:smf/utils/values/app_constant.dart';
 
@@ -118,7 +119,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 border: borderColorAltoRadius5()),
           ),
-          forgotPasswordUi(() {})
+          //forgotPasswordUi(() {})
         ],
       ),
     );
@@ -135,26 +136,17 @@ class _LoginScreenState extends State<LoginScreen> {
             contentColor: AppColor.white,
             backgroundColor: AppColor.killarney,
             onPressed: () async {
+              showLoader(context);
               try {
-                showDialog(
-                    context: context,
-                    builder: (context) =>
-                        Center(child: CircularProgressIndicator()));
                 print(
                     'Before check-${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}');
                 final credential = await FirebaseAuth.instance
                     .signInWithEmailAndPassword(
                         email: emailController.text,
-                        password: passwordController.text)
-                    .timeout(Duration(seconds: 5));
+                        password: passwordController.text)/*
+                    .timeout(Duration(seconds: 5))*/;
+                print('After Login Check ends:${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}');
 
-
-                print(
-                    'After check-${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}');
-                GlobalVar.basePath = emailController.text.replaceAll('.', '_');
-                SharedPrefsManager.setUID(emailController.text.replaceAll('.', '_'));
-                print('Email:${GlobalVar.basePath}');
-                print('UserID:${GlobalVar.basePath}');
               } catch (e) {
                 if (e is FirebaseAuthException) {
                   if (e.code == 'user-not-found') {
@@ -173,28 +165,46 @@ class _LoginScreenState extends State<LoginScreen> {
                   print("An unexpected error occurred: ${e}");
                 }
               }
-              Navigator.of(context, rootNavigator: true).pop();
-              SharedPrefsManager.setSplash(true);
-              if (GlobalVar.basePath.isNotEmpty) {
-                Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => HomeScreen()),
-                    (route) => false);
-              } else {
-                showErrorSnackBar(
-                    'Something went wrong. Please try 5 minutes later', context);
-              }
+              removeLoader(context);
+              FirebaseAuth.instance
+                  .authStateChanges()
+                  .listen((User? user) {
+                if (user != null) {
+                  GlobalVar.basePath = user.email!.replaceAll('.', '_');
+                  print('User Email after login:${GlobalVar.basePath}');
+                  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>HomeScreen()), (route) => false);
+                }
+                else{
+                  print('No email in login page');
+                }
+              });
             }),
         SizedBox(
           height: 10,
         ),
-        orTextUI(),
+        // orTextUI(),
         SizedBox(
           height: 10,
         ),
-        SocialLoginUi(
-          onTapAction: () {},
-        )
+        // SocialLoginUi(
+        //   onTapAction: () async {
+        //     // UserCredential user = await CustomFirebaseFunctionality.signInWithGoogle();
+        //     await CustomFirebaseFunctionality.signInWithGoogle();
+        //     // print('Google User email is:${user.user!.email}');
+        //     FirebaseAuth.instance
+        //         .authStateChanges()
+        //         .listen((User? user) {
+        //       if (user != null) {
+        //         GlobalVar.basePath = user.email!.replaceAll('.', '_');
+        //         print('User Email after login:${GlobalVar.basePath}');
+        //         // Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>HomeScreen()), (route) => false);
+        //       }
+        //       else{
+        //         print('No email in login page');
+        //       }
+        //     });
+        //   },
+        // )
       ],
     );
   }
