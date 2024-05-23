@@ -248,21 +248,32 @@ class _AccountScreenState extends State<AccountScreen> {
                       getAccountList = getAccounts();
                     });
                   },
-                  deleteAction: () async {
-                    showDialog(context: context, builder: (context)=>Center(child: CircularProgressIndicator(),));
-                    if(snapshot.data![index].imageUrl.isNotEmpty){
-                      final desertRef = FirebaseStorage.instance.ref().child(
-                          "${GlobalVar.basePath}/${AppConstant.accountPath}/${snapshot.data![index].key}/${AppConstant.userImageName}");
+                  deleteAction: () {
+                    showDialog(context: context, builder: (context)=>AlertDialog(
+                      content: Text('Are You really want to delete?'),
+                      actions: [
+                        TextButton(onPressed: (){
+                          Navigator.of(context,rootNavigator: true).pop();
+                        }, child: Text('No')),
+                        TextButton(onPressed: ()async{
+                          showDialog(context: context, builder: (context)=>Center(child: CircularProgressIndicator(),));
+                          if(snapshot.data![index].imageUrl.isNotEmpty){
+                            final desertRef = FirebaseStorage.instance.ref().child(
+                                "${GlobalVar.basePath}/${AppConstant.accountPath}/${snapshot.data![index].key}/${AppConstant.userImageName}");
 
-                      await desertRef.delete();
-                    }
-                    DatabaseReference ref = FirebaseDatabase.instance.ref("${GlobalVar.basePath}/${AppConstant.accountPath}/${snapshot.data![index].key}");
+                            await desertRef.delete();
+                          }
+                          DatabaseReference ref = FirebaseDatabase.instance.ref("${GlobalVar.basePath}/${AppConstant.accountPath}/${snapshot.data![index].key}");
 
-                    await ref.remove();
-                    setState(() {
-                      snapshot.data!.removeAt(index);
-                    });
-                    Navigator.of(context,rootNavigator: true).pop();
+                          await ref.remove();
+                          setState(() {
+                            snapshot.data!.removeAt(index);
+                          });
+                          Navigator.of(context,rootNavigator: true).pop();
+                          Navigator.of(context,rootNavigator: true).pop();
+                        }, child: Text('Yes'))
+                      ],
+                    ));
                   },
                 );
               },

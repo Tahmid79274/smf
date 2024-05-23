@@ -3,10 +3,7 @@ class GroupMemberModel {
       name,
       mobileNumber,
       position,
-      cityName,
-      districtName,
-      postCode,
-      division,
+      address,
       photoUrl;
 
   GroupMemberModel(
@@ -14,9 +11,6 @@ class GroupMemberModel {
       required this.name,
       required this.mobileNumber,
       required this.position,
-      required this.cityName,
-      required this.districtName,
-      required this.division,
-      required this.postCode,
+      required this.address,
       required this.photoUrl});
 }

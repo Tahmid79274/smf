@@ -47,11 +47,7 @@ class _ManPowerGroupListScreenState extends State<ManPowerGroupListScreen> {
   Future<List<GroupMemberModel>>? _groupMemberFuture;
 
   Future<List<GroupMemberModel>> getFilteredGroupMemberList() async {
-    if(selectedLocation.isNotEmpty){
-      filteredGroupMembers = groupMembers.where((element) => element.cityName==selectedLocation).toList();
-      total = filteredGroupMembers.length;
-      return filteredGroupMembers;
-    }
+    total = groupMembers.length;
     return groupMembers;
   }
 
@@ -81,21 +77,11 @@ class _ManPowerGroupListScreenState extends State<ManPowerGroupListScreen> {
                       groupData[key][AppConstant.mobileColumnText].toString(),
                   position:
                       groupData[key][AppConstant.positionColumnText].toString(),
-                  cityName:
-                      groupData[key][AppConstant.cityNameColumnText].toString(),
-                  districtName: groupData[key]
-                          [AppConstant.districtNameColumnText]
-                      .toString(),
-                  division:
-                      groupData[key][AppConstant.divisionColumnText].toString(),
-                  postCode:
-                      groupData[key][AppConstant.postCodeColumnText].toString(),
+                  address:
+                      groupData[key][AppConstant.addressColumnText].toString(),
+
                   photoUrl: groupData[key][AppConstant.profileImageColumnText]
                       .toString()));
-              if (!locations
-                  .contains(groupMembers.last.cityName.toLowerCase())) {
-                locations.add(groupMembers.last.cityName);
-              }
             });
           }
         }
@@ -165,136 +151,102 @@ class _ManPowerGroupListScreenState extends State<ManPowerGroupListScreen> {
       color: AppColor.white,
       child: Column(
         children: [
-          DropdownButtonFormField<String>(
-            isDense: true,
-            dropdownColor: AppColor.white,
-            icon: Icon(Icons.keyboard_arrow_down),
-            isExpanded: false,
-            //padding: EdgeInsets.all(10),
-            decoration: InputDecoration(
-                fillColor: AppColor.white,
-                isDense: true,
-                contentPadding: EdgeInsets.all(10),
-                border: OutlineInputBorder(
-                    borderSide: BorderSide(color: AppColor.red))),
-            hint: Text(
-              AppConstant.locationPlainText,
-              style: TextStyle(color: AppColor.alto),
-            ),
-            items: locations
-                .map(
-                    (e) => DropdownMenuItem<String>(value: e, child: Text(e)))
-                .toList(),
+          TextField(
+            controller: searchController,
             onChanged: (value) {
+              print(value);
               setState(() {
-                selectedLocation = value!;
-                _groupMemberFuture = getFilteredGroupMemberList();
+                if (value.length > 2) {
+                  showSuggestion = true;
+                } else {
+                  showSuggestion = false;
+                }
               });
             },
+            decoration: InputDecoration(
+                fillColor: AppColor.white,
+                hoverColor: AppColor.white,
+                focusColor: AppColor.white,
+                isDense: true,
+                contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                suffixIcon: Icon(
+                  Icons.search,
+                  color: AppColor.alto,
+                ),
+                hintText: AppConstant.nameOrNumberPlainText,
+                hintStyle: TextStyle(color: AppColor.alto),
+                border: OutlineInputBorder(
+                    borderSide: BorderSide(color: AppColor.alto))),
           ),
-          SizedBox(
-            height: 10,
-          ),
-          Column(
-            children: [
-              TextField(
-                controller: searchController,
-                onChanged: (value) {
-                  print(value);
-                  setState(() {
-                    if (value.length > 2) {
-                      showSuggestion = true;
-                    } else {
-                      showSuggestion = false;
-                    }
-                  });
-                },
-                decoration: InputDecoration(
-                    fillColor: AppColor.white,
-                    hoverColor: AppColor.white,
-                    focusColor: AppColor.white,
-                    isDense: true,
-                    contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                    suffixIcon: Icon(
-                      Icons.search,
-                      color: AppColor.alto,
-                    ),
-                    hintText: AppConstant.nameOrNumberPlainText,
-                    hintStyle: TextStyle(color: AppColor.alto),
-                    border: OutlineInputBorder(
-                        borderSide: BorderSide(color: AppColor.alto))),
-              ),
-              Visibility(
-                  visible: showSuggestion,
-                  child: FutureBuilder<List<GroupMemberModel>>(
-                    future: getFilteredGroupMemberList(),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      } else if (snapshot.hasError) {
-                        return Center(
-                          child: Text('No result Found yet'),
-                        );
-                      } else if (snapshot.data!.isEmpty) {
-                        return Center(
-                          child: Text('No Data Found.....'),
-                        );
-                      } else {
-                        return ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: snapshot.data!.length,
-                          itemBuilder: (context, index) {
-                            return ManPowerTile(
-                              editFunction: () async {
-                                loadData = await Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => AddManpowerScreen(
-                                              groupName: widget.selectedGroup,
-                                              editGroupMember:
-                                                  snapshot.data![index],
-                                            )));
-                                if (loadData) {
-                                  _groupMemberFuture = getGroupMemberList();
-                                }
-                              },
-                              deleteFunction: ()async {
-                                showDialog(
-                                    context: context,
-                                    builder: (context) => Center(
-                                      child: CircularProgressIndicator(),
-                                    ));
-                                if (snapshot.data![index].photoUrl.isNotEmpty) {
-                                  final desertRef = FirebaseStorage.instance.ref().child(
-                                      "${GlobalVar.basePath}/${AppConstant.manPowerGroupPath}/${widget.selectedGroup}/${snapshot.data![index].key}/${AppConstant.userImageName}");
-
-                                  await desertRef.delete();
-                                }
-                                DatabaseReference ref = FirebaseDatabase.instance.ref(
-                                    "${GlobalVar.basePath}/${AppConstant.manPowerGroupPath}/${widget.selectedGroup}/${snapshot.data![index].key}");
-
-                                await ref.remove();
-                                setState(() {
-                                  snapshot.data!.removeAt(index);
-                                });
-                                Navigator.of(context, rootNavigator: true).pop();
-                                _groupMemberFuture = getGroupMemberList();
-                                getFilteredGroupMemberList();
-                              },
-                              imagePath: snapshot.data![index].photoUrl,
-                              address: snapshot.data![index].cityName,
-                              name: snapshot.data![index].name,
-                              phone: snapshot.data![index].mobileNumber,
-                            );
+          Visibility(
+              visible: showSuggestion,
+              child: FutureBuilder<List<GroupMemberModel>>(
+                future: getSearchedGroupMemberList(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else if (snapshot.hasError) {
+                    return Center(
+                      child: Text('No result Found yet'),
+                    );
+                  } else if (snapshot.data!.isEmpty) {
+                    return Center(
+                      child: Text('No Data Found.....'),
+                    );
+                  } else {
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (context, index) {
+                        return ManPowerTile(
+                          editFunction: () async {
+                            loadData = await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => AddManpowerScreen(
+                                          groupName: widget.selectedGroup,
+                                          editGroupMember:
+                                              snapshot.data![index],
+                                        )));
+                            if (loadData) {
+                              _groupMemberFuture = getGroupMemberList();
+                            }
                           },
+                          deleteFunction: ()async {
+                            showDialog(
+                                context: context,
+                                builder: (context) => Center(
+                                  child: CircularProgressIndicator(),
+                                ));
+                            if (snapshot.data![index].photoUrl.isNotEmpty) {
+                              final desertRef = FirebaseStorage.instance.ref().child(
+                                  "${GlobalVar.basePath}/${AppConstant.manPowerGroupPath}/${widget.selectedGroup}/${snapshot.data![index].key}/${AppConstant.userImageName}");
+
+                              await desertRef.delete();
+                            }
+                            DatabaseReference ref = FirebaseDatabase.instance.ref(
+                                "${GlobalVar.basePath}/${AppConstant.manPowerGroupPath}/${widget.selectedGroup}/${snapshot.data![index].key}");
+
+                            await ref.remove();
+                            setState(() {
+                              snapshot.data!.removeAt(index);
+                            });
+                            Navigator.of(context, rootNavigator: true).pop();
+                            _groupMemberFuture = getGroupMemberList();
+                            getFilteredGroupMemberList();
+                          },
+                          imagePath: snapshot.data![index].photoUrl,
+                          address: snapshot.data![index].address,
+                          name: snapshot.data![index].name,
+                          phone: snapshot.data![index].mobileNumber,
                         );
-                      }
-                    },
-                  ))
-            ],
-          ),
+                      },
+                    );
+                  }
+                },
+              ))
         ],
       ),
     );
@@ -341,7 +293,7 @@ class _ManPowerGroupListScreenState extends State<ManPowerGroupListScreen> {
                     imagePath: snapshot.data![index].photoUrl,
                     name: snapshot.data![index].name,
                     address:
-                        '${snapshot.data![index].cityName},${snapshot.data![index].districtName},${snapshot.data![index].division}-${snapshot.data![index].postCode}',
+                        snapshot.data![index].address,
                     phone: snapshot.data![index].mobileNumber,
                     editFunction: () async {
                       loadData = await Navigator.push(
@@ -355,26 +307,37 @@ class _ManPowerGroupListScreenState extends State<ManPowerGroupListScreen> {
                         _groupMemberFuture = getGroupMemberList();
                       }
                     },
-                    deleteFunction: () async {
-                      showDialog(
-                          context: context,
-                          builder: (context) => Center(
-                                child: CircularProgressIndicator(),
-                              ));
-                      if (snapshot.data![index].photoUrl.isNotEmpty) {
-                        final desertRef = FirebaseStorage.instance.ref().child(
-                            "${GlobalVar.basePath}/${AppConstant.manPowerGroupPath}/${widget.selectedGroup}/${snapshot.data![index].key}/${AppConstant.userImageName}");
+                    deleteFunction: () {
+                      showDialog(context: context, builder: (context)=>AlertDialog(
+                        content: Text('Are you want to delete the member?'),
+                        actions: [
+                          TextButton(onPressed: (){
+                            Navigator.of(context,rootNavigator: true).pop();
+                          }, child: Text('No')),
+                          TextButton(onPressed: ()async{
+                            showDialog(
+                                context: context,
+                                builder: (context) => Center(
+                                  child: CircularProgressIndicator(),
+                                ));
+                            if (snapshot.data![index].photoUrl.isNotEmpty) {
+                              final desertRef = FirebaseStorage.instance.ref().child(
+                                  "${GlobalVar.basePath}/${AppConstant.manPowerGroupPath}/${widget.selectedGroup}/${snapshot.data![index].key}/${AppConstant.userImageName}");
 
-                        await desertRef.delete();
-                      }
-                      DatabaseReference ref = FirebaseDatabase.instance.ref(
-                          "${GlobalVar.basePath}/${AppConstant.manPowerGroupPath}/${widget.selectedGroup}/${snapshot.data![index].key}");
+                              await desertRef.delete();
+                            }
+                            DatabaseReference ref = FirebaseDatabase.instance.ref(
+                                "${GlobalVar.basePath}/${AppConstant.manPowerGroupPath}/${widget.selectedGroup}/${snapshot.data![index].key}");
 
-                      await ref.remove();
-                      setState(() {
-                        snapshot.data!.removeAt(index);
-                      });
-                      Navigator.of(context, rootNavigator: true).pop();
+                            await ref.remove();
+                            setState(() {
+                              snapshot.data!.removeAt(index);
+                            });
+                            Navigator.of(context, rootNavigator: true).pop();
+                            Navigator.of(context, rootNavigator: true).pop();
+                          }, child: Text('Yes')),
+                        ],
+                      ));
                     },
                   );
                 },

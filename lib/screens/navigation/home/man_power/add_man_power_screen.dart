@@ -26,10 +26,7 @@ class _AddManpowerScreenState extends State<AddManpowerScreen> {
   TextEditingController nameController = TextEditingController();
   TextEditingController mobileNumberController = TextEditingController();
   TextEditingController positionController = TextEditingController();
-  TextEditingController cityNameController = TextEditingController();
-  TextEditingController districtNameController = TextEditingController();
-  TextEditingController postCodeController = TextEditingController();
-  TextEditingController divisionController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
 
   String _imagePath = '';
   String imageUrl = '';
@@ -52,10 +49,7 @@ class _AddManpowerScreenState extends State<AddManpowerScreen> {
       nameController.text = widget.editGroupMember!.name;
       mobileNumberController.text = widget.editGroupMember!.mobileNumber;
       positionController.text = widget.editGroupMember!.position;
-      cityNameController.text = widget.editGroupMember!.cityName;
-      districtNameController.text = widget.editGroupMember!.districtName;
-      postCodeController.text = widget.editGroupMember!.postCode;
-      divisionController.text = widget.editGroupMember!.division;
+      addressController.text = widget.editGroupMember!.address;
       imageUrl = widget.editGroupMember!.photoUrl;
     }
     super.initState();
@@ -66,10 +60,7 @@ class _AddManpowerScreenState extends State<AddManpowerScreen> {
     nameController.dispose();
     mobileNumberController.dispose();
     positionController.dispose();
-    cityNameController.dispose();
-    districtNameController.dispose();
-    postCodeController.dispose();
-    divisionController.dispose();
+    addressController.dispose();
     super.dispose();
   }
 
@@ -173,33 +164,12 @@ class _AddManpowerScreenState extends State<AddManpowerScreen> {
                 ),
                 CustomTextFormField(
                     // isMandatory: false,
-                    hint: AppConstant.cityNamePlainText,
-                    controller: cityNameController,
+                    hint: AppConstant.addressPlainText,
+                    controller: addressController,
                     keyboardInputType: TextInputType.text),
                 SizedBox(
                   height: 10,
                 ),
-                CustomTextFormField(
-                    // isMandatory: false,
-                    hint: AppConstant.districtNamePlainText,
-                    controller: districtNameController,
-                    keyboardInputType: TextInputType.text),
-                SizedBox(
-                  height: 10,
-                ),
-                CustomTextFormField(
-                    // isMandatory: false,
-                    hint: AppConstant.postCodePlainText,
-                    controller: postCodeController,
-                    keyboardInputType: TextInputType.number),
-                SizedBox(
-                  height: 10,
-                ),
-                CustomTextFormField(
-                    // isMandatory: false,
-                    hint: AppConstant.divisionPlainText,
-                    controller: divisionController,
-                    keyboardInputType: TextInputType.text),
               ],
             ),
             SizedBox(
@@ -286,14 +256,8 @@ class _AddManpowerScreenState extends State<AddManpowerScreen> {
                           positionController.text,
                           AppConstant.postCodeColumnText:
                               positionController.text,
-                          AppConstant.cityNameColumnText:
-                              cityNameController.text,
-                          AppConstant.districtNameColumnText:
-                              districtNameController.text,
-                          AppConstant.postCodeColumnText:
-                              postCodeController.text,
-                          AppConstant.divisionColumnText:
-                              divisionController.text,
+                          AppConstant.addressColumnText:
+                              addressController.text,
                           AppConstant.profileImageColumnText: downloadUrl,
                         });
                       });
@@ -309,11 +273,7 @@ class _AddManpowerScreenState extends State<AddManpowerScreen> {
                         AppConstant.positionColumnText:
                         positionController.text,
                         AppConstant.postCodeColumnText: positionController.text,
-                        AppConstant.cityNameColumnText: cityNameController.text,
-                        AppConstant.districtNameColumnText:
-                            districtNameController.text,
-                        AppConstant.postCodeColumnText: postCodeController.text,
-                        AppConstant.divisionColumnText: divisionController.text,
+                        AppConstant.addressColumnText: addressController.text,
                       });
                     }
                     Navigator.of(context, rootNavigator: true).pop();

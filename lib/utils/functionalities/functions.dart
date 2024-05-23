@@ -23,13 +23,19 @@ class GlobalVar {
   }
 
   static bool bloodDonorStatus(String lastDateBloodDonated) {
-    DateTime lastDate = DateTime.parse(lastDateBloodDonated);
-    print('Last date frm function:$lastDate');
-    print('difference frm function:${lastDate.difference(DateTime.now()).inDays}');
-    if (DateTime.now().difference(lastDate).inDays>=90) {
-      return true;
+    if(lastDateBloodDonated.isEmpty){
+      return false;
     }
-    return false;
+    else{
+      DateTime lastDate = DateTime.parse(lastDateBloodDonated);
+      print('Last date frm function:$lastDate');
+      print(
+          'difference frm function:${lastDate.difference(DateTime.now()).inDays}');
+      if (DateTime.now().difference(lastDate).inDays >= 90) {
+        return true;
+      }
+      return false;
+    }
   }
 
   static Map<String, String> englishDigitToBengaliDigitMap = {

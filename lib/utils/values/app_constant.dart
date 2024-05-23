@@ -11,6 +11,7 @@ abstract class AppConstant{
   static String welcomePlainText = 'ফিরে আসার জন্য স্বাগতম';
   static String loginToYourAccountPlainText = 'আপনার অ্যাকাউন্ট লগইন করুন';
   static String emailPlainText = 'ইমেইল';
+  static String addressPlainText = ' ঠিকানা';
   static String passwordPlainText = 'পাসওয়ার্ড';
   static String forgotPasswordPlainText = 'পাসওয়ার্ড ভুলে গেছেন?';
   static String examplePlainText = 'jhon@gmail.com';
@@ -31,7 +32,6 @@ abstract class AppConstant{
   static String saveEntryPlainText = 'সেভ করুন';
   static String companyNamePlainText = 'প্রতিষ্ঠানের নাম';
   static String ownershipPlainText = 'স্বত্বাধিকারী';
-  static String addressPlainText = 'ঠিকানা';
   static String logoPlainText = 'লোগো';
   static String reportPlainText = 'রিপোর্ট ';
   static String removePlainText = 'মুছে ফেলুন';

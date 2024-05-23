@@ -33,11 +33,10 @@ class _BloodDonorDirectoryScreenState extends State<BloodDonorDirectoryScreen> {
   String selectedBloodGroup = '';
   List<String> rhFactorList = ['+', '-'];
   String selectedRhFactor = '';
-  List<String> locationList = [];
-  String selectedLocationList = '';
 
   double height = 0;
   double width = 0;
+  int divisionFactor = 3;
 
   List<BloodDonorModel> bloodDonorList = [];
   List<BloodDonorModel> filteredBloodDonorList = [];
@@ -54,19 +53,7 @@ class _BloodDonorDirectoryScreenState extends State<BloodDonorDirectoryScreen> {
   }
 
   Future<List<BloodDonorModel>> getFilteredBloodDonorList() async {
-    if (selectedBloodGroup.isNotEmpty &&
-        selectedLocationList.isNotEmpty &&
-        selectedRhFactor.isNotEmpty) {
-      filteredBloodDonorList = bloodDonorList
-          .where(
-            (element) =>
-                element.bloodGroup == selectedBloodGroup &&
-                element.rhFactor == selectedRhFactor &&
-                element.cityName == selectedLocationList,
-          )
-          .toList();
-      return filteredBloodDonorList;
-    } else if (selectedBloodGroup.isNotEmpty &&
+     if (selectedBloodGroup.isNotEmpty &&
         selectedRhFactor.isNotEmpty) {
       filteredBloodDonorList = bloodDonorList
           .where(
@@ -76,31 +63,11 @@ class _BloodDonorDirectoryScreenState extends State<BloodDonorDirectoryScreen> {
           )
           .toList();
       return filteredBloodDonorList;
-    } else if (selectedBloodGroup.isNotEmpty &&
-        selectedLocationList.isNotEmpty) {
-      filteredBloodDonorList = bloodDonorList
-          .where(
-              (element) =>
-          element.bloodGroup == selectedBloodGroup &&
-              element.cityName == selectedLocationList
-      )
-          .toList();
-      return filteredBloodDonorList;
-    }else if (selectedBloodGroup.isNotEmpty ) {
+    } else if (selectedBloodGroup.isNotEmpty ) {
       filteredBloodDonorList = bloodDonorList
           .where(
               (element) =>
           element.bloodGroup == selectedBloodGroup
-      )
-          .toList();
-      return filteredBloodDonorList;
-    } else if (selectedRhFactor.isNotEmpty &&
-        selectedLocationList.isNotEmpty) {
-      filteredBloodDonorList = bloodDonorList
-          .where(
-              (element) =>
-          element.rhFactor == selectedRhFactor &&
-              element.cityName == selectedLocationList
       )
           .toList();
       return filteredBloodDonorList;
@@ -112,15 +79,7 @@ class _BloodDonorDirectoryScreenState extends State<BloodDonorDirectoryScreen> {
       )
           .toList();
       return filteredBloodDonorList;
-    } else if (selectedLocationList.isNotEmpty) {
-      filteredBloodDonorList = bloodDonorList
-          .where(
-              (element) =>
-          element.cityName == selectedLocationList
-      )
-          .toList();
-      return filteredBloodDonorList;
-    }else{
+    } else{
       filteredBloodDonorList = bloodDonorList;
       return filteredBloodDonorList;
     }
@@ -141,9 +100,14 @@ class _BloodDonorDirectoryScreenState extends State<BloodDonorDirectoryScreen> {
         Map<dynamic, dynamic> groupData =
             event.snapshot.value as Map<dynamic, dynamic>;
         for (var key in groupData.keys) {
-          String nextTime = GlobalVar.nextDateToDonateBlood(groupData[key]
-                  [AppConstant.lastDateOfBloodDonationColumnText]
-              .toString());
+          String nextTime = '';
+          if(groupData[key]
+          [AppConstant.lastDateOfBloodDonationColumnText]
+              .toString().isNotEmpty){
+            nextTime = GlobalVar.nextDateToDonateBlood(groupData[key]
+            [AppConstant.lastDateOfBloodDonationColumnText]
+                .toString());
+          }
           print(
               '$key and the name is ${GlobalVar.customNameDecoder(key).toString()}');
           print(
@@ -166,17 +130,9 @@ class _BloodDonorDirectoryScreenState extends State<BloodDonorDirectoryScreen> {
                 dateOfBirth: groupData[key][AppConstant.dateOfBirthColumnText]
                     .toString(),
                 nextDateOfBloodDonated: nextTime,
-                email: groupData[key][AppConstant.emailColumnText].toString(),
+                address: groupData[key][AppConstant.addressColumnText].toString(),
                 phoneNumber:
                     groupData[key][AppConstant.mobileColumnText].toString(),
-                cityName:
-                    groupData[key][AppConstant.cityNameColumnText].toString(),
-                divisionName:
-                    groupData[key][AppConstant.divisionColumnText].toString(),
-                districtName: groupData[key][AppConstant.districtNameColumnText]
-                    .toString(),
-                postCode:
-                    groupData[key][AppConstant.postCodeColumnText].toString(),
                 photoUrl: groupData[key][AppConstant.profileImageColumnText]
                     .toString(),
                 lastDateOfBloodDonated: groupData[key]
@@ -185,11 +141,6 @@ class _BloodDonorDirectoryScreenState extends State<BloodDonorDirectoryScreen> {
                 isAbleToDonateBlood: GlobalVar.bloodDonorStatus(groupData[key]
                         [AppConstant.lastDateOfBloodDonationColumnText]
                     .toString())));
-            if (!locationList
-                .contains(bloodDonorList.last.cityName.replaceAll(' ', ''))) {
-              locationList
-                  .add(bloodDonorList.last.cityName.replaceAll(' ', ''));
-            }
           });
         }
       } else {
@@ -258,7 +209,7 @@ class _BloodDonorDirectoryScreenState extends State<BloodDonorDirectoryScreen> {
           mainAxisSize: MainAxisSize.min,
           children: [
             SizedBox(
-              width: width / 4,
+              width: width / divisionFactor,
               child: CustomDropdownButton(
                 hintText: AppConstant.bloodGroupPlainText,
                 dropdownList: bloodGroupList,
@@ -273,7 +224,7 @@ class _BloodDonorDirectoryScreenState extends State<BloodDonorDirectoryScreen> {
               ),
             ),
             SizedBox(
-              width: width / 4,
+              width: width / divisionFactor,
               child: CustomDropdownButton(
                 hintText: AppConstant.rhFactorPlainText,
                 dropdownList: rhFactorList,
@@ -287,22 +238,7 @@ class _BloodDonorDirectoryScreenState extends State<BloodDonorDirectoryScreen> {
                 },
               ),
             ),
-            SizedBox(
-              width: width / 4,
-              child: CustomDropdownButton(
-                hintText: AppConstant.locationPlainText,
-                dropdownList: locationList,
-                onChangedAction: (String? newValue) {
-                  // Handle dropdown value change
-                  setState(() {
-                    // filteredBloodGroupWithLocation.add(newValue!);
-                    selectedLocationList = newValue!;
-                    getFilteredBloodDonorList();
-                  });
-                  // donorList = getBloodDonorList();
-                },
-              ),
-            ),
+
           ],
         ),
         SizedBox(
@@ -312,7 +248,6 @@ class _BloodDonorDirectoryScreenState extends State<BloodDonorDirectoryScreen> {
           child: IconButton(
             onPressed: () {
               setState(() {
-                selectedLocationList = '';
                 selectedRhFactor = '';
                 selectedBloodGroup = '';
                 getFilteredBloodDonorList();
@@ -450,26 +385,37 @@ class _BloodDonorDirectoryScreenState extends State<BloodDonorDirectoryScreen> {
                                       snapshot.data![index],
                                     )));
                       },
-                      deleteFunction: () async {
-                        showDialog(
-                            context: context,
-                            builder: (context) => Center(
-                                  child: CircularProgressIndicator(),
-                                ));
-                        if (filteredBloodDonorList[index].photoUrl.isNotEmpty) {
-                          final desertRef = FirebaseStorage.instance.ref().child(
-                              "${GlobalVar.basePath}/${AppConstant.bloodDonorGroupPath}/${snapshot.data![index].key}/${AppConstant.userImageName}");
+                      deleteFunction: ()  {
+                        showDialog(context: context, builder: (context)=>AlertDialog(
+                          content: Text('Are you really want to delete the person?'),
+                          actions: [
+                            TextButton(onPressed: (){
+                              Navigator.of(context,rootNavigator: true).pop();
+                            }, child: Text('No')),
+                            TextButton(onPressed: ()async{
+                              showDialog(
+                                  context: context,
+                                  builder: (context) => Center(
+                                    child: CircularProgressIndicator(),
+                                  ));
+                              if (filteredBloodDonorList[index].photoUrl.isNotEmpty) {
+                                final desertRef = FirebaseStorage.instance.ref().child(
+                                    "${GlobalVar.basePath}/${AppConstant.bloodDonorGroupPath}/${snapshot.data![index].key}/${AppConstant.userImageName}");
 
-                          await desertRef.delete();
-                        }
-                        DatabaseReference ref = FirebaseDatabase.instance.ref(
-                            "${GlobalVar.basePath}/${AppConstant.bloodDonorGroupPath}/${snapshot.data![index].key}");
+                                await desertRef.delete();
+                              }
+                              DatabaseReference ref = FirebaseDatabase.instance.ref(
+                                  "${GlobalVar.basePath}/${AppConstant.bloodDonorGroupPath}/${snapshot.data![index].key}");
 
-                        await ref.remove();
-                        setState(() {
-                          snapshot.data!.removeAt(index);
-                        });
-                        Navigator.of(context, rootNavigator: true).pop();
+                              await ref.remove();
+                              setState(() {
+                                snapshot.data!.removeAt(index);
+                              });
+                              Navigator.of(context, rootNavigator: true).pop();
+                              Navigator.of(context, rootNavigator: true).pop();
+                            }, child: Text('Yes')),
+                          ],
+                        ));
                       },
                     );
                   },

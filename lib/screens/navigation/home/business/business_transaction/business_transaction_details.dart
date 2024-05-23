@@ -13,11 +13,9 @@ class BusinessTransactionDetailsScreen extends StatefulWidget {
   BusinessTransactionDetailsScreen(
       {super.key,
       required this.selectedTransaction,
-      required this.path,
-      this.imageUrl});
+      required this.path});
   TransactionModel selectedTransaction;
   String path;
-  String? imageUrl;
 
   @override
   State<BusinessTransactionDetailsScreen> createState() =>
@@ -133,23 +131,18 @@ class _BusinessTransactionDetailsScreenState
     return Row(
       mainAxisSize: MainAxisSize.max,
       children: [
-        Container(
-          padding: EdgeInsets.all(10),
-          height: 50,
-          width: 50,
-          decoration: widget.imageUrl!.isEmpty
-              ? BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColor.white,
-                  borderRadius: BorderRadius.circular(5))
-              : BoxDecoration(
-                  shape: BoxShape.circle,
-                  image: DecorationImage(
-                      image: NetworkImage(widget.imageUrl!), fit: BoxFit.fill)),
-        ),
-        const SizedBox(
-          width: 10,
-        ),
+        // Container(
+        //   padding: EdgeInsets.all(10),
+        //   height: 50,
+        //   width: 50,
+        //   decoration: BoxDecoration(
+        //           shape: BoxShape.circle,
+        //           color: AppColor.white,
+        //           borderRadius: BorderRadius.circular(5)),
+        // ),
+        // const SizedBox(
+        //   width: 10,
+        // ),
         Flexible(
             child: BusinessTitleWithIcon(
           title: widget.selectedTransaction.transactionName,
@@ -270,8 +263,6 @@ class _BusinessTransactionDetailsScreenState
                   builder: (context) => AddNewBusinessTransactionEntryScreen(
                         path: widget.path,
                         selectedTransaction: widget.selectedTransaction,
-                        imageUrl:
-                            widget.imageUrl!.isNotEmpty ? widget.imageUrl! : '',
                       )));
           if (loadData) {
             setState(() {

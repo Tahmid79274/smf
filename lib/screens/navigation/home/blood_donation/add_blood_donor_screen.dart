@@ -36,11 +36,7 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
   TextEditingController nameController = TextEditingController();
   TextEditingController dateOfBirthController = TextEditingController();
   TextEditingController phoneNumberController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController cityNameController = TextEditingController();
-  TextEditingController districtNameController = TextEditingController();
-  TextEditingController postCodeController = TextEditingController();
-  TextEditingController divisionController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
   TextEditingController lastDateOfBloodDonationController =
       TextEditingController();
   TextEditingController abilityToDonateBloodController =
@@ -70,11 +66,7 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
       selectedBloodGroup = widget.editDonorInfo!.bloodGroup;
       selectedRhFactor = widget.editDonorInfo!.rhFactor;
       phoneNumberController.text = widget.editDonorInfo!.phoneNumber;
-      emailController.text = widget.editDonorInfo!.email;
-      cityNameController.text = widget.editDonorInfo!.cityName;
-      districtNameController.text = widget.editDonorInfo!.districtName;
-      postCodeController.text = widget.editDonorInfo!.postCode;
-      divisionController.text = widget.editDonorInfo!.divisionName;
+      addressController.text = widget.editDonorInfo!.address;
       lastDateOfBloodDonationController.text =
           widget.editDonorInfo!.lastDateOfBloodDonated;
       abilityToDonateBloodController.text = GlobalVar.bloodDonorStatus(
@@ -94,11 +86,7 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
     nameController.dispose();
     dateOfBirthController.dispose();
     phoneNumberController.dispose();
-    emailController.dispose();
-    cityNameController.dispose();
-    districtNameController.dispose();
-    postCodeController.dispose();
-    divisionController.dispose();
+    addressController.dispose();
     lastDateOfBloodDonationController.dispose();
     abilityToDonateBloodController.dispose();
     nextDateToAbleToDonateBloodController.dispose();
@@ -259,43 +247,9 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
                 ),
                 CustomTextFormField(
                   // isMandatory: false,
-                    hint: AppConstant.emailPlainText,
-                    controller: emailController,
-                    keyboardInputType: TextInputType.emailAddress),
-                SizedBox(
-                  height: 10,
-                ),
-                GridView(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 5,
-                      childAspectRatio: 5,
-                      mainAxisSpacing: 10),
-                  children: [
-                    CustomTextFormField(
-                        // isMandatory: false,
-                        hint: AppConstant.cityNamePlainText,
-                        controller: cityNameController,
-                        keyboardInputType: TextInputType.text),
-                    CustomTextFormField(
-                        // isMandatory: false,
-                        hint: AppConstant.districtNamePlainText,
-                        controller: districtNameController,
-                        keyboardInputType: TextInputType.text),
-                    CustomTextFormField(
-                        // isMandatory: false,
-                        hint: AppConstant.postCodePlainText,
-                        controller: postCodeController,
-                        keyboardInputType: TextInputType.number),
-                    CustomTextFormField(
-                        // isMandatory: false,
-                        hint: AppConstant.divisionPlainText,
-                        controller: divisionController,
-                        keyboardInputType: TextInputType.text),
-                  ],
-                ),
+                    hint: AppConstant.addressPlainText,
+                    controller: addressController,
+                    keyboardInputType: TextInputType.text),
               ],
             ),
             SizedBox(
@@ -460,15 +414,7 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
                           AppConstant.rhFactorColumnText: selectedRhFactor,
                           AppConstant.mobileColumnText:
                           phoneNumberController.text,
-                          AppConstant.emailColumnText: emailController.text,
-                          AppConstant.cityNameColumnText:
-                          cityNameController.text,
-                          AppConstant.districtNameColumnText:
-                          districtNameController.text,
-                          AppConstant.postCodeColumnText:
-                          postCodeController.text,
-                          AppConstant.divisionColumnText:
-                          divisionController.text,
+                          AppConstant.addressColumnText: addressController.text,
                           AppConstant.lastDateOfBloodDonationColumnText:
                           lastDateOfBloodDonationController.text,
                           AppConstant.profileImageColumnText: downloadUrl,
@@ -486,12 +432,7 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
                         AppConstant.rhFactorColumnText: selectedRhFactor,
                         AppConstant.mobileColumnText:
                         phoneNumberController.text,
-                        AppConstant.emailColumnText: emailController.text,
-                        AppConstant.cityNameColumnText: cityNameController.text,
-                        AppConstant.districtNameColumnText:
-                        districtNameController.text,
-                        AppConstant.postCodeColumnText: postCodeController.text,
-                        AppConstant.divisionColumnText: divisionController.text,
+                        AppConstant.addressColumnText: addressController.text,
                         AppConstant.lastDateOfBloodDonationColumnText:
                         lastDateOfBloodDonationController.text,
                       });

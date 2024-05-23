@@ -16,9 +16,8 @@ class AddNewBusinessTransactionEntryScreen extends StatefulWidget {
   AddNewBusinessTransactionEntryScreen(
       {super.key,
       required this.path,
-      required this.imageUrl,
       required this.selectedTransaction});
-  String path, imageUrl;
+  String path;
   TransactionModel selectedTransaction;
 
   @override

@@ -50,7 +50,7 @@ class _BusinessAccountInformationScreenState
         // Extract the data as a Map
         Map<dynamic, dynamic> groupData =
             event.snapshot.value as Map<dynamic, dynamic>;
-        //print('Business Account map:$groupData');
+        // print('Business Account map:$groupData');
         for (var key in groupData.keys) {
           if (key == AppConstant.transactionsColumnText) {
             setState(() {
@@ -60,12 +60,12 @@ class _BusinessAccountInformationScreenState
                 // print('Transaction Keys are:$transactionKey');
                 // print(
                 //     '$transactionKey has:${groupData[key][transactionKey][AppConstant.entryColumnText]}');
-                print('Entry Key:${groupData[key][transactionKey][AppConstant.entryColumnText].length}');
+                // print('Entry Key:${groupData[key][transactionKey][AppConstant.entryColumnText].length}');
                 if(groupData[key][transactionKey][AppConstant.entryColumnText].isNotEmpty){
                   for (var entryKey in groupData[key][transactionKey]
                   [AppConstant.entryColumnText]
                       .keys) {
-                    // print('${groupData[key][transactionKey][AppConstant.entryColumnText][entryKey][AppConstant.entryTitleColumnText]}');
+                    //print('Entry:${groupData[key][transactionKey][AppConstant.entryColumnText][entryKey][AppConstant.entryTitleColumnText]}');
                     entryList.add(EntryDetailsModel(
                         entryTitle: groupData[key][transactionKey]
                         [AppConstant.entryColumnText][entryKey]
@@ -89,14 +89,8 @@ class _BusinessAccountInformationScreenState
                     // print('${entryList.last.entryTitle} is a ${entryList.last.isDebit}');
                   }
                 }
+                // print('Transaction is ${groupData[key][transactionKey][AppConstant.nameColumnText]}');
 
-                // totalIncome += double.parse(groupData[key][transactionKey]
-                //         [AppConstant.incomeColumnText]
-                //     .toString());
-                // totalExpense += double.parse(groupData[key][transactionKey]
-                //         [AppConstant.expenseColumnText]
-                //     .toString());
-                // remainingBalance = totalIncome - totalExpense;
                 try {
                   transactionList.add(TransactionModel(
                                       key: transactionKey,
@@ -116,15 +110,14 @@ class _BusinessAccountInformationScreenState
                 } catch (e) {
                   print(e);
                 }
-                // print('Before length:${transactionList.last.entries.length}');
+                print('Before length:${transactionList.last.entries.length}');
                 entryList= [];
-                // print('After length:${transactionList.last.entries.length}');
+                print('After length:${transactionList.last.entries.length}');
               }
             });
           }
         }
-
-        //print('Transactions:$transactionList');
+        // print('Transactions:$transactionList');
       } else {
         //print("Group with ID '123' does not exist.");
       }
@@ -133,18 +126,21 @@ class _BusinessAccountInformationScreenState
       (a, b) => a.transactionName.compareTo(b.transactionName),
     );
     for(TransactionModel transactionModel in transactionList){
-      for(EntryDetailsModel entry in transactionModel.entries){
-        // print('${transactionModel.transactionName} has ${entry.entryTitle} and it is ${entry.isDebit}');
-        DateTime entryDate = DateTime.parse(entry.transactionDate);
-        print('Entry date is $entryDate which occurs after $startDate\'s and before $endDate');
-        if(entryDate.isAfter(startDate) && entryDate.isBefore(endDate)){
-          if (entry.isDebit) {
-            totalExpense +=
-                double.parse(entry.amount);
-          }
-          else {
-            totalIncome +=
-                double.parse(entry.amount);
+      if(transactionModel.entries.isNotEmpty){
+        for(EntryDetailsModel entry in transactionModel.entries){
+          // print('${transactionModel.transactionName} has ${entry.entryTitle} and it is ${entry.isDebit}');
+          DateTime entryDate = DateTime.parse(entry.transactionDate);
+          // print('Entry date is $entryDate which occurs after $startDate\'s and before $endDate');
+          if(entryDate.isAfter(startDate) && entryDate.isBefore(endDate)){
+            print('true');
+            if (entry.isDebit) {
+              totalExpense +=
+                  double.parse(entry.amount);
+            }
+            else {
+              totalIncome +=
+                  double.parse(entry.amount);
+            }
           }
         }
       }
@@ -152,6 +148,7 @@ class _BusinessAccountInformationScreenState
     setState(() {
       remainingBalance = totalIncome -totalExpense;
     });
+    print('');
     return transactionList;
   }
 
@@ -400,6 +397,7 @@ class _BusinessAccountInformationScreenState
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
+            print('The error is ${snapshot.error}');
             return Text('Please add transaction..');
           } else if (snapshot.data!.isEmpty) {
             return Text('Please add transaction');
@@ -424,9 +422,6 @@ class _BusinessAccountInformationScreenState
                                     path:
                                         '${widget.path}/${AppConstant.transactionsColumnText}/${snapshot.data![index].key}',
                                     selectedTransaction: snapshot.data![index],
-                                    imageUrl: widget
-                                            .selectedBusinessAccount.imageUrl ??
-                                        '',
                                   ))).whenComplete(() {
                         _transactionTabsFuture = getTransactionTabsList();
                       });

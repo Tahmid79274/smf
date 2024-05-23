@@ -241,18 +241,41 @@ class _ManPowerGroupScreenState extends State<ManPowerGroupScreen> {
                     mainAxisSpacing: 10,
                     childAspectRatio: 1),
                 itemBuilder: (context, index) {
-                  return CardAquaHazeWithColumnIconAndTitle(
-                    longPressAction: ()async{
+                  return CardAquaHazeWithColumnIconAndTitle2(
+
+                    deleteAction: ()async{
+                      // showDialog(context: context, builder: (context)=>Center(child: CircularProgressIndicator(),));
+                      //
+                      //         DatabaseReference ref = FirebaseDatabase.instance.ref("${GlobalVar.basePath}/${AppConstant.manPowerGroupPath}/${groupMap[groups[index]]!}");
+                      //
+                      //         await ref.remove();
+                      //         setState(() {
+                      //           groups.removeAt(index);
+                      //         });
+                      //         Navigator.of(context,rootNavigator: true).pop();
                       // ${GlobalVar.basePath}/
-                      showDialog(context: context, builder: (context)=>Center(child: CircularProgressIndicator(),));
+                      showDialog(context: context, builder: (context) {
+                        return AlertDialog(
+                          content: Text('Are you really want to delete the group?'),
+                          actions: [
+                            TextButton(onPressed: (){
+                              Navigator.of(context,rootNavigator: true).pop();
+                            }, child: Text('No')),
+                            TextButton(onPressed: ()async{
+                              showDialog(context: context, builder: (context)=>Center(child: CircularProgressIndicator(),));
 
-                      DatabaseReference ref = FirebaseDatabase.instance.ref("${GlobalVar.basePath}/${AppConstant.manPowerGroupPath}/${groupMap[groups[index]]!}");
+                              DatabaseReference ref = FirebaseDatabase.instance.ref("${GlobalVar.basePath}/${AppConstant.manPowerGroupPath}/${groupMap[groups[index]]!}");
 
-                      await ref.remove();
-                      setState(() {
-                        groups.removeAt(index);
-                      });
-                      Navigator.of(context,rootNavigator: true).pop();
+                              await ref.remove();
+                              setState(() {
+                                groups.removeAt(index);
+                              });
+                              Navigator.of(context,rootNavigator: true).pop();
+                              Navigator.of(context,rootNavigator: true).pop();
+                            }, child: Text('Yes')),
+                          ],
+                        );
+                      },);
                     },
                     title: groups[index],
                     action: () {

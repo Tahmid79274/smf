@@ -5,11 +5,7 @@ class BloodDonorModel {
       bloodGroup,
       rhFactor,
       phoneNumber,
-  email,
-      cityName,
-      districtName,
-      divisionName,
-      postCode,
+  address,
       lastDateOfBloodDonated,
       nextDateOfBloodDonated,
       photoUrl;
@@ -22,14 +18,10 @@ class BloodDonorModel {
       required this.bloodGroup,
       required this.dateOfBirth,
       required this.nextDateOfBloodDonated,
-      required this.cityName,
-      required this.divisionName,
-      required this.districtName,
-      required this.postCode,
+      required this.address,
       required this.photoUrl,
       required this.lastDateOfBloodDonated,
       required this.isAbleToDonateBlood,
       required this.phoneNumber,
-      required this.email,
       });
 }

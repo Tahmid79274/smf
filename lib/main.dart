@@ -27,15 +27,15 @@ Future<void> main() async{
     if (user == null) {
       print('User is currently signed out!');
     } else {
-      print('Before initialization:${GlobalVar.basePath}');
+      // print('Before initialization:${GlobalVar.basePath}');
       GlobalVar.basePath = user.email!.replaceAll('.', '_');
-      print('Before initialization:${GlobalVar.basePath}');
-      print('User is signed in! and the user is ${user.displayName}');
+      // print('after initialization:${GlobalVar.basePath}');
+      // print('User is signed in! and the user is ${user.displayName}');
     }
   });
   // isLoggedIn = await SharedPrefsManager.getSplashStatus();
-  // GlobalVar.basePath = await SharedPrefsManager.getUID();
-  // print('UserID:${GlobalVar.basePath}');
+  GlobalVar.basePath = 'sakermiazi230@gmail_com';
+  print('Sak:${GlobalVar.basePath}');
   runApp(const MyApp());
 }
 
