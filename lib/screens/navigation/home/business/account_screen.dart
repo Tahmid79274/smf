@@ -213,19 +213,20 @@ class _AccountScreenState extends State<AccountScreen> {
           } else if (snapshot.data!.isEmpty) {
             return Center(child: Text('Please add some accounts'));
           } else {
-            return GridView.builder(
+            return ListView.builder(
               itemCount: snapshot.data!.length,
               shrinkWrap: true,
               scrollDirection: Axis.vertical,
               physics: AlwaysScrollableScrollPhysics(),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                  childAspectRatio: 1.5),
+              // gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              //     crossAxisCount: 2,
+              //     crossAxisSpacing: 10,
+              //     mainAxisSpacing: 10,
+              //     childAspectRatio: 1.5),
               itemBuilder: (context, index) {
+                int digit = index+1;
                 return MyBusinessTileUi(
-                  title: snapshot.data![index].companyName,
+                  title: '${GlobalVar.englishNumberToBengali(digit.toString())}.${snapshot.data![index].companyName}',
                   imagePath: snapshot.data![index].imageUrl,
                   context: context,
                   onTapAction: () {

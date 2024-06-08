@@ -34,8 +34,8 @@ Future<void> main() async{
     }
   });
   // isLoggedIn = await SharedPrefsManager.getSplashStatus();
-  GlobalVar.basePath = 'sakermiazi230@gmail_com';
-  print('Sak:${GlobalVar.basePath}');
+  // GlobalVar.basePath = 'sakermiazi230@gmail_com';
+  // print('Sak:${GlobalVar.basePath}');
   runApp(const MyApp());
 }
 

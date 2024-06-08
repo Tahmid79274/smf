@@ -231,16 +231,17 @@ class _ManPowerGroupScreenState extends State<ManPowerGroupScreen> {
             else {
               //groups = snapshot.data!;
               //print('Snapshot values:${snapshot.data!}');
-              return GridView.builder(padding: EdgeInsets.all(10),
+              return ListView.builder(padding: EdgeInsets.all(10),
                 itemCount: groups.length,
                 physics: AlwaysScrollableScrollPhysics(),
                 shrinkWrap: true,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
-                    childAspectRatio: 1),
+                // gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                //     crossAxisCount: 3,
+                //     crossAxisSpacing: 10,
+                //     mainAxisSpacing: 10,
+                //     childAspectRatio: 1),
                 itemBuilder: (context, index) {
+                int digit = index+1;
                   return CardAquaHazeWithColumnIconAndTitle2(
 
                     deleteAction: ()async{
@@ -277,7 +278,7 @@ class _ManPowerGroupScreenState extends State<ManPowerGroupScreen> {
                         );
                       },);
                     },
-                    title: groups[index],
+                    title: '${GlobalVar.englishNumberToBengali(digit.toString())}.${groups[index]}',
                     action: () {
                       //print('You pressed ${groups[index]} which means ${groupMap[groups[index]]}');
                       searchGroupNameController.clear();

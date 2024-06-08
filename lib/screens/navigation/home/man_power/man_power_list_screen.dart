@@ -47,6 +47,9 @@ class _ManPowerGroupListScreenState extends State<ManPowerGroupListScreen> {
   Future<List<GroupMemberModel>>? _groupMemberFuture;
 
   Future<List<GroupMemberModel>> getFilteredGroupMemberList() async {
+    setState(() {
+
+    });
     total = groupMembers.length;
     return groupMembers;
   }
@@ -255,7 +258,7 @@ class _ManPowerGroupListScreenState extends State<ManPowerGroupListScreen> {
   Widget initManpowerListUi() {
     return TitleIconButtonWithWhiteBackground(
         headline:
-            'মোট জনশক্তি ${GlobalVar.englishNumberToBengali(total.toString())} জন',
+            'মোট জনশক্তি ${GlobalVar.englishNumberToBengali(groupMembers.length.toString())} জন',
         actionIcon: Icons.add,
         action: () async {
           loadData = await Navigator.push(
@@ -283,15 +286,16 @@ class _ManPowerGroupListScreenState extends State<ManPowerGroupListScreen> {
               //setState(() {
               //filteredBloodDonorList = snapshot.data!;
               //});
-              total = snapshot.data!.length;
+              // total = snapshot.data!.length;
               return ListView.builder(
                 shrinkWrap: true,
                 physics: AlwaysScrollableScrollPhysics(),
                 itemCount: snapshot.data!.length,
                 itemBuilder: (context, index) {
+                  int digit = index+1;
                   return ManPowerTile(
                     imagePath: snapshot.data![index].photoUrl,
-                    name: snapshot.data![index].name,
+                    name: '${GlobalVar.englishNumberToBengali(digit.toString())}.${snapshot.data![index].name}',
                     address:
                         snapshot.data![index].address,
                     phone: snapshot.data![index].mobileNumber,

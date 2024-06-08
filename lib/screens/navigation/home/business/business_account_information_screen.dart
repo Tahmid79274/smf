@@ -410,9 +410,10 @@ class _BusinessAccountInformationScreenState
                   crossAxisCount: 3, mainAxisSpacing: 10, crossAxisSpacing: 10),
               padding: const EdgeInsets.all(10),
               itemBuilder: (context, index) {
+                int digit = index+1;
                 return CardAquaHazeWithColumnIconAndTitle(
                   longPressAction: (){},
-                    title: snapshot.data![index].transactionName,
+                    title: '${GlobalVar.englishNumberToBengali(digit.toString())}.${snapshot.data![index].transactionName}',
                     action: () {
                       Navigator.push(
                           context,

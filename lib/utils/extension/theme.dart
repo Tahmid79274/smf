@@ -147,9 +147,9 @@ class CustomButton extends StatelessWidget {
             backgroundColor: MaterialStateProperty.all<Color>(backgroundColor),
             minimumSize: MaterialStateProperty.all(
                 Size(MediaQuery.of(context).size.width - 40, 40)),
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5)))));
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5)))));
   }
 }
 
@@ -500,67 +500,57 @@ class CardAquaHazeWithColumnIconAndTitle2 extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Row(
-            // mainAxisAlignment: MainAxisAlignment.center,
-            // crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Expanded(
-                flex: 4,
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Image.asset(
-                        AppConstant.imageBasePath + AppConstant.manPowerGroupLogoPath,
-                        width: 30,
-                        height: 30,
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Expanded(
-                        child: Text(
-                          title,
-                          textAlign: TextAlign.center,
-                          maxLines: 2,
-                          style: TextStyle(fontSize: 17),
-                          overflow: TextOverflow.visible,
-                        ),
-                      )
-                    ],
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Image.asset(
+                    AppConstant.imageBasePath + AppConstant.manPowerGroupLogoPath,
+                    width: 30,
+                    height: 30,
                   ),
-                ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    title,
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                    style: TextStyle(fontSize: 17),
+                    overflow: TextOverflow.visible,
+                  )
+                ],
               ),
               //SizedBox(width: 10,),
-              Expanded(
-                flex: 1,
-                child: PopupMenuButton(
-                  padding: EdgeInsets.zero,
-                  offset: Offset.zero,
-                  icon: Icon(Icons.more_vert),
-                  color: AppColor.white,
-                  itemBuilder: (context) {
-                    return [
-                      PopupMenuItem(
-                          onTap: deleteAction,
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.delete,
-                                color: AppColor.butterCup,
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text(
-                                AppConstant.removePlainText,
-                                style: TextStyle(color: AppColor.butterCup),
-                              ),
-                            ],
-                          )),
-                    ];
-                  },
-                ),
+              PopupMenuButton(
+                padding: EdgeInsets.zero,
+                offset: Offset.zero,
+                icon: Icon(Icons.more_vert),
+                color: AppColor.white,
+                itemBuilder: (context) {
+                  return [
+                    PopupMenuItem(
+                        onTap: deleteAction,
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.delete,
+                              color: AppColor.butterCup,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              AppConstant.removePlainText,
+                              style: TextStyle(color: AppColor.butterCup),
+                            ),
+                          ],
+                        )),
+                  ];
+                },
               )
             ],
           ),

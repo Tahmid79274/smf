@@ -368,9 +368,10 @@ class _BloodDonorDirectoryScreenState extends State<BloodDonorDirectoryScreen> {
                   physics: AlwaysScrollableScrollPhysics(),
                   itemCount: snapshot.data!.length,
                   itemBuilder: (context, index) {
+                    int digit = index+1;
                     return BloodDonorInformationTab(
                       photo: snapshot.data![index].photoUrl,
-                      donorName: snapshot.data![index].name,
+                      donorName: '${GlobalVar.englishNumberToBengali(digit.toString())}.${snapshot.data![index].name}',
                       bloodGroupWithRh:
                           '${snapshot.data![index].bloodGroup}${snapshot.data![index].rhFactor}',
                       isEligible:
