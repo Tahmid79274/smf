@@ -402,12 +402,12 @@ class _BusinessAccountInformationScreenState
           } else if (snapshot.data!.isEmpty) {
             return Text('Please add transaction');
           } else {
-            return GridView.builder(
+            return ListView.builder(
               itemCount: snapshot.data!.length,
               shrinkWrap: true,
               physics: const AlwaysScrollableScrollPhysics(),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3, mainAxisSpacing: 10, crossAxisSpacing: 10),
+              // gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              //     crossAxisCount: 3, mainAxisSpacing: 10, crossAxisSpacing: 10),
               padding: const EdgeInsets.all(10),
               itemBuilder: (context, index) {
                 int digit = index+1;

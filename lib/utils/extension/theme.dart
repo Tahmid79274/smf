@@ -444,37 +444,38 @@ class CardAquaHazeWithColumnIconAndTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.zero,
-      clipBehavior: Clip.antiAliasWithSaveLayer,
-      color: AppColor.aquaHaze,
-      child: InkWell(
-        onLongPress: longPressAction,
-        onTap: action,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Image.asset(
-                AppConstant.imageBasePath + AppConstant.manPowerGroupLogoPath,
-                width: 30,
-                height: 30,
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Expanded(
-                child: Text(
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Card(
+        margin: EdgeInsets.zero,
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        color: AppColor.aquaHaze,
+        child: InkWell(
+          onLongPress: longPressAction,
+          onTap: action,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Image.asset(
+                  AppConstant.imageBasePath + AppConstant.manPowerGroupLogoPath,
+                  width: 30,
+                  height: 30,
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Text(
                   title,
                   textAlign: TextAlign.center,
                   maxLines: 2,
                   style: TextStyle(fontSize: 17),
                   overflow: TextOverflow.visible,
-                ),
-              )
-            ],
+                )
+              ],
+            ),
           ),
         ),
       ),
