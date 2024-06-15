@@ -39,7 +39,7 @@ class _ManPowerGroupListScreenState extends State<ManPowerGroupListScreen> {
   Future<List<GroupMemberModel>> getSearchedGroupMemberList() async {
     searchFilteredMemberList = groupMembers
         .where((element) =>
-            element.name.toLowerCase().startsWith(searchController.text))
+            element.name.toLowerCase().startsWith(searchController.text) || element.address.toLowerCase().startsWith(searchController.text))
         .toList();
     return searchFilteredMemberList;
   }
@@ -176,7 +176,7 @@ class _ManPowerGroupListScreenState extends State<ManPowerGroupListScreen> {
                   Icons.search,
                   color: AppColor.alto,
                 ),
-                hintText: AppConstant.nameOrNumberPlainText,
+                hintText: AppConstant.nameOrVillagePlainText,
                 hintStyle: TextStyle(color: AppColor.alto),
                 border: OutlineInputBorder(
                     borderSide: BorderSide(color: AppColor.alto))),
@@ -289,7 +289,7 @@ class _ManPowerGroupListScreenState extends State<ManPowerGroupListScreen> {
               // total = snapshot.data!.length;
               return ListView.builder(
                 shrinkWrap: true,
-                physics: AlwaysScrollableScrollPhysics(),
+                physics: NeverScrollableScrollPhysics(),
                 itemCount: snapshot.data!.length,
                 itemBuilder: (context, index) {
                   int digit = index+1;

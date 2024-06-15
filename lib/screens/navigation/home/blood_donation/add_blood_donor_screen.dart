@@ -37,6 +37,8 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
   TextEditingController dateOfBirthController = TextEditingController();
   TextEditingController phoneNumberController = TextEditingController();
   TextEditingController addressController = TextEditingController();
+  TextEditingController numberOfBloodDonatedController =
+      TextEditingController();
   TextEditingController lastDateOfBloodDonationController =
       TextEditingController();
   TextEditingController abilityToDonateBloodController =
@@ -76,6 +78,10 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
       nextDateToAbleToDonateBloodController.text =
           widget.editDonorInfo!.nextDateOfBloodDonated;
       imageUrl = widget.editDonorInfo!.photoUrl;
+      numberOfBloodDonatedController.text =
+          widget.editDonorInfo!.numberOfBloodDonated == 'null'
+              ? GlobalVar.englishNumberToBengali('0')
+              : widget.editDonorInfo!.numberOfBloodDonated;
     }
     print('Blood Group is:$selectedBloodGroup$selectedRhFactor');
     super.initState();
@@ -90,6 +96,7 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
     lastDateOfBloodDonationController.dispose();
     abilityToDonateBloodController.dispose();
     nextDateToAbleToDonateBloodController.dispose();
+    numberOfBloodDonatedController.dispose();
     super.dispose();
   }
 
@@ -163,7 +170,7 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
                   height: 10,
                 ),
                 CustomTextFormField(
-                  // isMandatory: true,
+                    // isMandatory: true,
                     hint: AppConstant.namePlainText,
                     controller: nameController,
                     keyboardInputType: TextInputType.text),
@@ -213,7 +220,9 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
                       mainAxisSpacing: 10),
                   children: [
                     CustomDropdownButton(
-                      hintText: widget.editDonorInfo==null?AppConstant.bloodGroupPlainText:widget.editDonorInfo!.bloodGroup,
+                      hintText: widget.editDonorInfo == null
+                          ? AppConstant.bloodGroupPlainText
+                          : widget.editDonorInfo!.bloodGroup,
                       dropdownList: bloodGroupList,
                       onChangedAction: (String? newValue) {
                         // Handle dropdown value change
@@ -223,7 +232,9 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
                       },
                     ),
                     CustomDropdownButton(
-                      hintText: widget.editDonorInfo==null?AppConstant.rhFactorPlainText:widget.editDonorInfo!.rhFactor,
+                      hintText: widget.editDonorInfo == null
+                          ? AppConstant.rhFactorPlainText
+                          : widget.editDonorInfo!.rhFactor,
                       dropdownList: rhFactorList,
                       onChangedAction: (String? newValue) {
                         // Handle dropdown value change
@@ -238,7 +249,7 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
                   height: 10,
                 ),
                 CustomTextFormField(
-                  // isMandatory: true,
+                    // isMandatory: true,
                     hint: AppConstant.phoneNumberPlainText,
                     controller: phoneNumberController,
                     keyboardInputType: TextInputType.phone),
@@ -246,7 +257,7 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
                   height: 10,
                 ),
                 CustomTextFormField(
-                  // isMandatory: false,
+                    // isMandatory: false,
                     hint: AppConstant.addressPlainText,
                     controller: addressController,
                     keyboardInputType: TextInputType.text),
@@ -308,7 +319,16 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
             SizedBox(
               height: 10,
             ),
+            //numberOfBloodDonatedPlainText
             CustomTextFormField(
+                // isMandatory: true,
+                hint: AppConstant.numberOfBloodDonatedPlainText,
+                controller: numberOfBloodDonatedController,
+                keyboardInputType: TextInputType.number),
+            SizedBox(
+              height: 10,
+            ),
+            /*CustomTextFormField(
                 // isMandatory: true,
                 hint: AppConstant.abilityToDonateBloodPlainText,
                 controller: abilityToDonateBloodController,
@@ -323,7 +343,7 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
                 keyboardInputType: TextInputType.datetime),
             SizedBox(
               height: 10,
-            ),
+            ),*/
             CustomButton(
                 content: widget.editDonorInfo == null
                     ? AppConstant.addPlainText
@@ -338,22 +358,22 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
                           'Please add Blood Group and Rh Factor',
                           style: TextStyle(color: AppColor.white),
                         )));
-                  }else{
+                  } else {
                     showLoader(context);
                     if (widget.editDonorInfo == null) {
                       String downloadUrl = '';
                       String uniqueName =
-                      GlobalVar.customNameEncoder(nameController.text);
+                          GlobalVar.customNameEncoder(nameController.text);
                       final storageRef = FirebaseStorage.instance.ref();
                       if (_imagePath.isNotEmpty) {
                         File file = File(_imagePath);
                         final metadata =
-                        SettableMetadata(contentType: "image/jpeg");
+                            SettableMetadata(contentType: "image/jpeg");
                         print('Image Path: $_imagePath');
                         print('File Path: ${file.path}');
                         final uploadTask = storageRef
                             .child(
-                            "${GlobalVar.basePath}/${AppConstant.bloodDonorGroupPath}/$uniqueName/${AppConstant.userImageName}")
+                                "${GlobalVar.basePath}/${AppConstant.bloodDonorGroupPath}/$uniqueName/${AppConstant.userImageName}")
                             .putFile(file, metadata);
                         print(
                             'Image Upload Time:${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}');
@@ -373,16 +393,16 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
                               print("Upload was canceled");
                               break;
                             case TaskState.error:
-                            // Handle unsuccessful uploads
+                              // Handle unsuccessful uploads
                               print('Error occured');
                               break;
                             case TaskState.success:
-                            // Handle successful uploads on complete
-                            // ...
+                              // Handle successful uploads on complete
+                              // ...
                               print(
                                   'Time to get url:${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}');
                               downloadUrl =
-                              await taskSnapshot.ref.getDownloadURL();
+                                  await taskSnapshot.ref.getDownloadURL();
                               print('Successfull');
                               print('download url:$downloadUrl');
                               print(
@@ -392,7 +412,7 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
                         });
                       }
                       await Future.delayed(
-                          Duration(seconds: _imagePath.isNotEmpty ? 7 : 0))
+                              Duration(seconds: _imagePath.isNotEmpty ? 7 : 0))
                           .whenComplete(() async {
                         print(
                             'Upload Current time:${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}');
@@ -409,39 +429,40 @@ class _AddBloodDonorScreenState extends State<AddBloodDonorScreen> {
                         await ref.set({
                           AppConstant.nameColumnText: nameController.text,
                           AppConstant.dateOfBirthColumnText:
-                          dateOfBirthController.text,
+                              dateOfBirthController.text,
                           AppConstant.bloodGroupColumnText: selectedBloodGroup,
                           AppConstant.rhFactorColumnText: selectedRhFactor,
                           AppConstant.mobileColumnText:
-                          phoneNumberController.text,
+                              phoneNumberController.text,
                           AppConstant.addressColumnText: addressController.text,
                           AppConstant.lastDateOfBloodDonationColumnText:
-                          lastDateOfBloodDonationController.text,
+                              lastDateOfBloodDonationController.text,
                           AppConstant.profileImageColumnText: downloadUrl,
+                          AppConstant.numberOfBloodDonatedColumnText:
+                              numberOfBloodDonatedController.text,
                         });
                       });
-                    }
-                    else {
+                    } else {
                       DatabaseReference ref = FirebaseDatabase.instance.ref(
                           "${GlobalVar.basePath}/${AppConstant.bloodDonorGroupPath}/${widget.editDonorInfo!.key}");
                       ref.update({
                         AppConstant.nameColumnText: nameController.text,
                         AppConstant.dateOfBirthColumnText:
-                        dateOfBirthController.text,
+                            dateOfBirthController.text,
                         AppConstant.bloodGroupColumnText: selectedBloodGroup,
                         AppConstant.rhFactorColumnText: selectedRhFactor,
                         AppConstant.mobileColumnText:
-                        phoneNumberController.text,
+                            phoneNumberController.text,
                         AppConstant.addressColumnText: addressController.text,
                         AppConstant.lastDateOfBloodDonationColumnText:
-                        lastDateOfBloodDonationController.text,
+                            lastDateOfBloodDonationController.text,
+                        AppConstant.numberOfBloodDonatedColumnText:
+                            numberOfBloodDonatedController.text,
                       });
                     }
                     removeLoader(context);
                     Navigator.pop(context, true);
                   }
-                    print('');
-                  // }
                 })
           ],
         ));

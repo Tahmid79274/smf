@@ -27,66 +27,109 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         style: TextStyle(color: AppColor.white),
       ),
       actions: [
-        GlobalVar.basePath!=''?PopupMenuButton(itemBuilder:(context) {
-          return [PopupMenuItem(
-              onTap: ()async{
-                showDialog(context: context, builder: (context) {
-                  return AlertDialog(title: Text('Enter your New Password'),
-                    content: CustomTextFormField(
-                      controller: newPasswordController,
-                      keyboardInputType: TextInputType.text,
-                      hint: 'Password',
-                    ),
-                    actions: [
-                      TextButton(onPressed: ()async{
-                        showLoader(context);
-                        final user = FirebaseAuth.instance.currentUser;
-                        if (user != null) {
-                          // Get the new password from a text field or other input source
+        GlobalVar.basePath != ''
+            ? PopupMenuButton(
+                itemBuilder: (context) {
+                  return [
+                    PopupMenuItem(
+                        onTap: () async {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: Text('Enter your New Password'),
+                                content: CustomTextFormField(
+                                  controller: newPasswordController,
+                                  keyboardInputType: TextInputType.text,
+                                  hint: 'Password',
+                                ),
+                                actions: [
+                                  TextButton(
+                                      onPressed: () async {
+                                        showLoader(context);
+                                        final user =
+                                            FirebaseAuth.instance.currentUser;
+                                        if (user != null) {
+                                          // Get the new password from a text field or other input source
 
-                          try {
-                            await user.updatePassword(newPasswordController.text);
-                            print('Password updated successfully!');
-                            // Optionally, navigate to a success screen or display a confirmation message
-                          } on FirebaseAuthException catch (e) {
-                            // Handle errors related to password update
-                            if (e.code == 'weak-password') {
-                              print('The password is too weak.');
-                              showErrorSnackBar('The password is too weak.',context);
-                            } else if (e.code == 'requires-recent-login') {
-                              print('This operation requires recent login. Please sign in again before changing your password.');
-                              showErrorSnackBar('This operation requires recent login. Please sign in again before changing your password.',context);
-                            } else {
-                              print("Error updating password: ${e.code}");
-                              showErrorSnackBar("Error updating password: ${e.code}",context);
-                            }
-                          } catch (e) {
-                            // Handle other unexpected errors
-                            print("An unexpected error occurred: ${e}");
-                            showErrorSnackBar("An unexpected error occurred: ${e}",context);
-                          }
-                        } else {
-                          print('No user signed in. Please sign in first.');
-                          showErrorSnackBar('No user signed in. Please sign in first.',context);
-                          // Optionally, navigate to a sign-in screen
-                        }
-                        removeLoader(context);
-                        Navigator.of(context,rootNavigator: true).pop();
-                        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>LoginScreen()), (route) => false);
-                      }, child: Text('Update'))
-                    ],
-                  );
-                },);
-              },
-              child: Text('Change Password')),
-            PopupMenuItem(
-                onTap: ()async{
-                  await FirebaseAuth.instance.signOut().whenComplete(() => GlobalVar.basePath='');
-                  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>WelcomeScreen()), (route) => true);
+                                          try {
+                                            await user.updatePassword(
+                                                newPasswordController.text);
+                                            print(
+                                                'Password updated successfully!');
+                                            // Optionally, navigate to a success screen or display a confirmation message
+                                          } on FirebaseAuthException catch (e) {
+                                            // Handle errors related to password update
+                                            if (e.code == 'weak-password') {
+                                              print(
+                                                  'The password is too weak.');
+                                              showErrorSnackBar(
+                                                  'The password is too weak.',
+                                                  context);
+                                            } else if (e.code ==
+                                                'requires-recent-login') {
+                                              print(
+                                                  'This operation requires recent login. Please sign in again before changing your password.');
+                                              showErrorSnackBar(
+                                                  'This operation requires recent login. Please sign in again before changing your password.',
+                                                  context);
+                                            } else {
+                                              print(
+                                                  "Error updating password: ${e.code}");
+                                              showErrorSnackBar(
+                                                  "Error updating password: ${e.code}",
+                                                  context);
+                                            }
+                                          } catch (e) {
+                                            // Handle other unexpected errors
+                                            print(
+                                                "An unexpected error occurred: ${e}");
+                                            showErrorSnackBar(
+                                                "An unexpected error occurred: ${e}",
+                                                context);
+                                          }
+                                        } else {
+                                          print(
+                                              'No user signed in. Please sign in first.');
+                                          showErrorSnackBar(
+                                              'No user signed in. Please sign in first.',
+                                              context);
+                                          // Optionally, navigate to a sign-in screen
+                                        }
+                                        removeLoader(context);
+                                        Navigator.of(context,
+                                                rootNavigator: true)
+                                            .pop();
+                                        Navigator.pushAndRemoveUntil(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    LoginScreen()),
+                                            (route) => false);
+                                      },
+                                      child: Text('Update'))
+                                ],
+                              );
+                            },
+                          );
+                        },
+                        child: Text('Change Password')),
+                    PopupMenuItem(
+                        onTap: () async {
+                          await FirebaseAuth.instance
+                              .signOut()
+                              .whenComplete(() => GlobalVar.basePath = '');
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => WelcomeScreen()),
+                              (route) => true);
+                        },
+                        child: Text('Logout')),
+                  ];
                 },
-                child: Text('Logout')),
-          ];
-        },):Container()
+              )
+            : Container()
       ],
     );
   }
@@ -147,9 +190,9 @@ class CustomButton extends StatelessWidget {
             backgroundColor: MaterialStateProperty.all<Color>(backgroundColor),
             minimumSize: MaterialStateProperty.all(
                 Size(MediaQuery.of(context).size.width - 40, 40)),
-              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                  RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5)))));
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5)))));
   }
 }
 
@@ -196,22 +239,64 @@ class MyBusinessTileUi extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTapAction,
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 10),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: AppColor.white,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          mainAxisSize: MainAxisSize.min,
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 10),
+      margin: EdgeInsets.symmetric(vertical: 10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: AppColor.white,
+      ),
+      child: InkWell(
+        onTap: onTapAction,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          // crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisSize: MainAxisSize.max,
           children: [
+            Flexible(
+              child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(
+                        left: 10,
+                        top: 10,
+                        bottom: 10,
+                      ),
+                      width: 40,
+                      height: 40,
+                      decoration: imagePath.isNotEmpty
+                          ? BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                  image: NetworkImage(
+                                    imagePath,
+                                  ),
+                                  fit: BoxFit.fill))
+                          : BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: AppColor.sepiaBlack,
+                            ),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Expanded(
+                      child: Text(
+                        title,
+                        overflow: TextOverflow.fade,
+                        maxLines: 3,
+                        style: TextStyle(fontSize: 15),
+                      ),
+                    )
+                  ]),
+            ),
             PopupMenuButton(
               padding: EdgeInsets.zero,
               offset: Offset.zero,
-              icon: Icon(Icons.more_horiz),
+              icon: Icon(Icons.more_vert),
               color: AppColor.white,
               itemBuilder: (context) {
                 return [
@@ -250,43 +335,6 @@ class MyBusinessTileUi extends StatelessWidget {
                 ];
               },
             ),
-            Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(
-                      left: 10,
-                      top: 10,
-                      bottom: 10,
-                    ),
-                    width: 40,
-                    height: 40,
-                    decoration: imagePath.isNotEmpty
-                        ? BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                                image: NetworkImage(
-                                  imagePath,
-                                ),
-                                fit: BoxFit.fill))
-                        : BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: AppColor.sepiaBlack,
-                          ),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Expanded(
-                      child: Text(
-                    title,
-                    overflow: TextOverflow.fade,
-                    maxLines: 2,
-                    style: TextStyle(fontSize: 20),
-                  ))
-                ])
           ],
         ),
       ),
@@ -437,7 +485,10 @@ class ReportStatusDetailsUi extends StatelessWidget {
 
 class CardAquaHazeWithColumnIconAndTitle extends StatelessWidget {
   CardAquaHazeWithColumnIconAndTitle(
-      {super.key, required this.title, required this.action, required this.longPressAction});
+      {super.key,
+      required this.title,
+      required this.action,
+      required this.longPressAction});
   String title;
   VoidCallback action;
   VoidCallback longPressAction;
@@ -461,18 +512,20 @@ class CardAquaHazeWithColumnIconAndTitle extends StatelessWidget {
               children: [
                 Image.asset(
                   AppConstant.imageBasePath + AppConstant.manPowerGroupLogoPath,
-                  width: 30,
-                  height: 30,
+                  width: 20,
+                  height: 20,
                 ),
                 SizedBox(
                   width: 10,
                 ),
-                Text(
-                  title,
-                  textAlign: TextAlign.center,
-                  maxLines: 2,
-                  style: TextStyle(fontSize: 17),
-                  overflow: TextOverflow.visible,
+                Expanded(
+                  child: Text(
+                    title,
+                    textAlign: TextAlign.start,
+                    maxLines: 2,
+                    style: TextStyle(fontSize: 15),
+                    overflow: TextOverflow.visible,
+                  ),
                 )
               ],
             ),
@@ -485,7 +538,10 @@ class CardAquaHazeWithColumnIconAndTitle extends StatelessWidget {
 
 class CardAquaHazeWithColumnIconAndTitle2 extends StatelessWidget {
   CardAquaHazeWithColumnIconAndTitle2(
-      {super.key, required this.title, required this.action, required this.deleteAction});
+      {super.key,
+      required this.title,
+      required this.action,
+      required this.deleteAction});
   String title;
   VoidCallback action;
   VoidCallback deleteAction;
@@ -493,7 +549,7 @@ class CardAquaHazeWithColumnIconAndTitle2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.zero,
+      margin: EdgeInsets.symmetric(vertical: 8),
       clipBehavior: Clip.antiAliasWithSaveLayer,
       color: AppColor.aquaHaze,
       child: InkWell(
@@ -502,28 +558,34 @@ class CardAquaHazeWithColumnIconAndTitle2 extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Image.asset(
-                    AppConstant.imageBasePath + AppConstant.manPowerGroupLogoPath,
-                    width: 30,
-                    height: 30,
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    title,
-                    textAlign: TextAlign.center,
-                    maxLines: 2,
-                    style: TextStyle(fontSize: 17),
-                    overflow: TextOverflow.visible,
-                  )
-                ],
+              Flexible(
+                flex: 2,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Image.asset(
+                      AppConstant.imageBasePath +
+                          AppConstant.manPowerGroupLogoPath,
+                      width: 20,
+                      height: 20,
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Expanded(
+                      child: Text(
+                        title,
+                        textAlign: TextAlign.start,
+                        maxLines: 3,
+                        style: TextStyle(fontSize: 15),
+                        overflow: TextOverflow.visible,
+                      ),
+                    )
+                  ],
+                ),
               ),
               //SizedBox(width: 10,),
               PopupMenuButton(
@@ -653,10 +715,11 @@ class BusinessTitleWithIcon extends StatelessWidget {
             const SizedBox(
               width: 10,
             ),
-            Text(
+            Expanded(
+                child: Text(
               title,
               style: const TextStyle(fontSize: 20),
-            )
+            )),
           ]),
     );
   }
@@ -797,8 +860,9 @@ class BloodDonorInformationTab extends StatelessWidget {
     required this.photo,
     required this.deleteFunction,
     required this.editFunction,
+    required this.numberOfBloodDonated,
   });
-  String donorName, bloodGroupWithRh, photo;
+  String donorName, bloodGroupWithRh, photo, numberOfBloodDonated;
   bool isEligible;
   VoidCallback deleteFunction, editFunction;
 
@@ -901,6 +965,20 @@ class BloodDonorInformationTab extends StatelessWidget {
             width: 0.5,
             height: 70,
           ),
+          Expanded(
+              flex: 1,
+              child: Text(
+                numberOfBloodDonated == 'null'
+                    ? GlobalVar.englishNumberToBengali('0')
+                    : GlobalVar.englishNumberToBengali(numberOfBloodDonated),
+                textAlign: TextAlign.center,
+                style: TextStyle(fontWeight: FontWeight.bold),
+              )),
+          Container(
+            color: AppColor.grey,
+            width: 0.5,
+            height: 70,
+          ),
           PopupMenuButton(
             padding: EdgeInsets.zero,
             itemBuilder: (context) {
@@ -959,7 +1037,7 @@ class CustomCalendar extends StatelessWidget {
       required this.range,
       required this.dateChangeFunction,
       required this.saveFunction});
-  String today,range;
+  String today, range;
   void Function(DateTime? selectedDate) dateChangeFunction;
   VoidCallback saveFunction;
 
@@ -1029,8 +1107,7 @@ class CustomCalendar extends StatelessWidget {
   }
 }
 
-void showErrorSnackBar(
-    String msg, BuildContext context) {
+void showErrorSnackBar(String msg, BuildContext context) {
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
     content: Text(
       msg,
@@ -1040,10 +1117,14 @@ void showErrorSnackBar(
   ));
 }
 
-void showLoader(BuildContext context){
-  showDialog(context: context, builder: (context)=>Center(child: CircularProgressIndicator(),));
+void showLoader(BuildContext context) {
+  showDialog(
+      context: context,
+      builder: (context) => Center(
+            child: CircularProgressIndicator(),
+          ));
 }
 
-void removeLoader(BuildContext context){
-  Navigator.of(context,rootNavigator: true).pop();
+void removeLoader(BuildContext context) {
+  Navigator.of(context, rootNavigator: true).pop();
 }

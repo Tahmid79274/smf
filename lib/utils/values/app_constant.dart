@@ -52,7 +52,7 @@ abstract class AppConstant{
   static String manpowerListPlainText = 'জনশক্তির তালিকা';
   static String manpowerGroupListPlainText = 'জনশক্তির গ্রুপ সমূহ';
   static String locationPlainText = 'লোকেশান';
-  static String nameOrNumberPlainText = 'নাম বা নাম্বার';
+  static String nameOrVillagePlainText = 'নাম বা গ্রাম';
   static String addManpowerPlainText = 'জনশক্তি যুক্ত করুন';
   static String addPicturePlainText = 'ছবি যুক্ত করুন';
   static String addPlainText = 'যুক্ত করুন';
@@ -76,6 +76,7 @@ abstract class AppConstant{
   static String abilityToDonateBloodPlainText = 'রক্তদানের ক্ষমতা';
   static String lastDateOfBloodDonationPlainText = 'শেষ রক্তদানের তারিখ';
   static String changePlainText = 'পরিবর্তন করুন';
+  static String numberOfBloodDonatedPlainText = 'মোট রক্তদান সংখ্যা ';
 
   //image_path
 
@@ -117,6 +118,7 @@ abstract class AppConstant{
   static String lastDateOfBloodDonationColumnText = 'last_date_of_blood_donation';
   static String profileImageColumnText = 'profile_image';
   static String companyNameColumnText = 'company_name';
+  static String numberOfBloodDonatedColumnText = 'number_of_blood_donated';
   static String addressColumnText = 'address';
   static String ownershipColumnText = 'ownership';
   static String businessLogoColumnText = 'logo';

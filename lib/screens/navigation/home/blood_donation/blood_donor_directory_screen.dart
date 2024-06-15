@@ -17,6 +17,7 @@ class BloodDonorDirectoryScreen extends StatefulWidget {
 }
 
 class _BloodDonorDirectoryScreenState extends State<BloodDonorDirectoryScreen> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   TextEditingController searchController = TextEditingController();
 
   bool loadData = true;
@@ -28,7 +29,7 @@ class _BloodDonorDirectoryScreenState extends State<BloodDonorDirectoryScreen> {
     'A',
     'AB',
     'B',
-    '0',
+    'O',
   ];
   String selectedBloodGroup = '';
   List<String> rhFactorList = ['+', '-'];
@@ -140,7 +141,11 @@ class _BloodDonorDirectoryScreenState extends State<BloodDonorDirectoryScreen> {
                     .toString(),
                 isAbleToDonateBlood: GlobalVar.bloodDonorStatus(groupData[key]
                         [AppConstant.lastDateOfBloodDonationColumnText]
-                    .toString())));
+                    .toString()),
+              numberOfBloodDonated: groupData[key]
+              [AppConstant.numberOfBloodDonatedColumnText]
+                  .toString()
+            ));
           });
         }
       } else {
@@ -177,6 +182,7 @@ class _BloodDonorDirectoryScreenState extends State<BloodDonorDirectoryScreen> {
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
     return BasicAquaHazeBGUi(
+      key: _scaffoldKey,
         appBarTitle: AppConstant.searchBloodDonorPlainText,
         child: SingleChildScrollView(child: initBuildUi()));
   }
@@ -277,7 +283,7 @@ class _BloodDonorDirectoryScreenState extends State<BloodDonorDirectoryScreen> {
                 onTap: () {},
                 // onChanged: ,
                 onChanged: (value) {
-                  print(value);
+                  //print(value);
                   setState(() {
                     if (value.length > 2) {
                       showSuggestion = true;
@@ -320,7 +326,16 @@ class _BloodDonorDirectoryScreenState extends State<BloodDonorDirectoryScreen> {
                     itemBuilder: (context, index) {
                       return BloodDonorInformationTab(
                         deleteFunction: () {},
-                        editFunction: () {},
+                        editFunction: () {
+                          // print('Edit Pressed');
+                          Navigator.push(
+                              _scaffoldKey.currentContext!,
+                              MaterialPageRoute(
+                                  builder: (context) => AddBloodDonorScreen(
+                                    editDonorInfo:
+                                    snapshot.data![index],
+                                  )));
+                        },
                         photo: snapshot.data![index].photoUrl,
                         isEligible:
                         snapshot.data![index].isAbleToDonateBlood,
@@ -328,6 +343,7 @@ class _BloodDonorDirectoryScreenState extends State<BloodDonorDirectoryScreen> {
                         bloodGroupWithRh:
                         snapshot.data![index].bloodGroup +
                             snapshot.data![index].rhFactor,
+                        numberOfBloodDonated: snapshot.data![index].numberOfBloodDonated??'0',
                       );
                     },
                   );
@@ -365,7 +381,7 @@ class _BloodDonorDirectoryScreenState extends State<BloodDonorDirectoryScreen> {
               } else {
                 return ListView.builder(
                   shrinkWrap: true,
-                  physics: AlwaysScrollableScrollPhysics(),
+                  physics: NeverScrollableScrollPhysics(),
                   itemCount: snapshot.data!.length,
                   itemBuilder: (context, index) {
                     int digit = index+1;
@@ -376,15 +392,20 @@ class _BloodDonorDirectoryScreenState extends State<BloodDonorDirectoryScreen> {
                           '${snapshot.data![index].bloodGroup}${snapshot.data![index].rhFactor}',
                       isEligible:
                       snapshot.data![index].isAbleToDonateBlood,
-                      editFunction: () {
+                      numberOfBloodDonated: snapshot.data![index].numberOfBloodDonated??'0',
+                      editFunction: () async {
                         // print('Edit Pressed');
-                        Navigator.push(
+                        loadData = await Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => AddBloodDonorScreen(
                                       editDonorInfo:
                                       snapshot.data![index],
                                     )));
+                        if (loadData) {
+                          donorList =
+                              getBloodDonorList();
+                        }
                       },
                       deleteFunction: ()  {
                         showDialog(context: context, builder: (context)=>AlertDialog(

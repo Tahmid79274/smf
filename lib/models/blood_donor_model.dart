@@ -8,6 +8,7 @@ class BloodDonorModel {
   address,
       lastDateOfBloodDonated,
       nextDateOfBloodDonated,
+      numberOfBloodDonated,
       photoUrl;
   bool isAbleToDonateBlood;
 
@@ -23,5 +24,6 @@ class BloodDonorModel {
       required this.lastDateOfBloodDonated,
       required this.isAbleToDonateBlood,
       required this.phoneNumber,
+      required this.numberOfBloodDonated,
       });
 }

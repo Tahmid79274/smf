@@ -233,7 +233,7 @@ class _ManPowerGroupScreenState extends State<ManPowerGroupScreen> {
               //print('Snapshot values:${snapshot.data!}');
               return ListView.builder(padding: EdgeInsets.all(10),
                 itemCount: groups.length,
-                physics: AlwaysScrollableScrollPhysics(),
+                physics: NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 // gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 //     crossAxisCount: 3,
@@ -243,7 +243,46 @@ class _ManPowerGroupScreenState extends State<ManPowerGroupScreen> {
                 itemBuilder: (context, index) {
                 int digit = index+1;
                   return CardAquaHazeWithColumnIconAndTitle2(
+                    /*editAction: () async{
+                      // print('Selected Group is: ${groups[index]}');
 
+                      String realName = groupMap[groups[index]]!.split('?').last;
+                      groupNameController.text = groups[index];
+                      showDialog(context: context, builder: (context) {
+                        return AlertDialog(
+                          title: Text(
+                              '${AppConstant.manpowerGroupListPlainText} ${AppConstant.addPlainText}'),
+                          content: TextFormField(
+                            controller: groupNameController,
+                          ),
+                          actions: [
+                            TextButton(
+                                onPressed: () async {
+                                  showDialog(context: context, builder: (context){
+                                    return Center(child: CircularProgressIndicator(),);
+                                  });
+                                  // String groupName = "${groupNameController.text.replaceAll(' ', '_')}?${DateTime.now().toString().replaceAll(' ', '@').replaceAll('.', ':')}";
+                                  String groupName = "${groupNameController.text.replaceAll(' ', '_')}?$realName";
+                                  print('Group Name is: $groupName');
+                                  FirebaseDatabase database = FirebaseDatabase.instance;
+
+                                  DatabaseReference ref = database.ref(
+                                      "${GlobalVar.basePath}/${AppConstant.manPowerGroupPath}/$groupName/people0");
+
+                                  await ref.set({
+                                    "name": "",
+                                  });
+                                  _groupsFuture = getGroupList();
+                                  Navigator.of(context,rootNavigator: true).pop();
+                                  Navigator.of(context,rootNavigator: true).pop();
+                                  groupNameController.clear();
+                                  print('');
+                                },
+                                child: Text(AppConstant.addPlainText))
+                          ],
+                        );
+                      },);
+                    },*/
                     deleteAction: ()async{
                       // showDialog(context: context, builder: (context)=>Center(child: CircularProgressIndicator(),));
                       //
