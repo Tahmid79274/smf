@@ -405,7 +405,7 @@ class _BusinessAccountInformationScreenState
             return ListView.builder(
               itemCount: snapshot.data!.length,
               shrinkWrap: true,
-              physics: const AlwaysScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               // gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               //     crossAxisCount: 3, mainAxisSpacing: 10, crossAxisSpacing: 10),
               padding: const EdgeInsets.all(10),
